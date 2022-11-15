@@ -1,0 +1,5 @@
+site_name: Doc
+site_url: https://example.com/
+theme: readthedocs
+docs_dir: src
+site_dir: site
