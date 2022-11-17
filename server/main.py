@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import time
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+
 import uvicorn
 from app.router import router
 
@@ -22,6 +24,9 @@ async def add_process_time_header(request: Request, call_next):
     process_time = time.time() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     return response
+
+
+app.mount("/asset", StaticFiles(directory="asset"), name="asset")
 
 
 app.include_router(router, prefix='/api')

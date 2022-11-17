@@ -3,8 +3,9 @@ from pydantic import BaseModel
 
 class DatumSchema(BaseModel):
     title: str
-    name: str
-    file: str
+    file_name: str | None = None
+    url: str | None = None
+    file_path: str | None = None
 
     class Config:
         orm_mode = True

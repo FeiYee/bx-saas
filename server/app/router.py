@@ -10,7 +10,9 @@ from app.search.controller import keyword_controller
 
 
 from app.stats.controller import stats_controller
+
 from app.datum.controller import datum_controller
+from app.datum.controller import article_controller
 
 router = APIRouter()
 
@@ -25,4 +27,4 @@ router.include_router(keyword_controller.router)
 router.include_router(stats_controller.router)
 
 router.include_router(datum_controller.router)
-
+router.include_router(article_controller.router)

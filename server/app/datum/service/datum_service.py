@@ -3,6 +3,7 @@ from fastapi import File, Form, UploadFile
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from config import BASE_DIR
 from ..model.datum import Datum
 from ..schema.datum_schema import DatumSchema
 
@@ -15,14 +16,22 @@ class DatumService:
     def __init__(self, model: Type[DatumModelType]):
         self.model = model
 
-    def find(self, datum_schema: DatumSchema, db: Session) -> list[tuple[Datum]]:
-        data = jsonable_encoder(datum_schema, exclude_unset=True)
+    def find(self, db: Session) -> list[tuple[Datum]]:
         datums = db.query(self.model).all()
         return datums
 
-    def create(self, file: UploadFile, path: str, db: Session) -> Datum:
-        # data = jsonable_encoder(datum_schema)
+    async def create(self, file: UploadFile, title: str, db: Session) -> Datum:
+        content = await file.read()
+        file_path = BASE_DIR / 'asset' / file.filename
+        file_path.write_bytes(content)
+
         datum = self.model()
+        datum.title = title
+        datum.file_name = file.filename
+        datum.url = str('/' / file_path.relative_to(BASE_DIR))
+        datum.file_path = str(file_path)
+        # datum.file_size = file_path.stat().st_size()
+
         db.add(datum)
         db.commit()
         db.refresh(datum)

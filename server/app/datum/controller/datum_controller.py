@@ -9,13 +9,13 @@ router = APIRouter()
 
 
 @router.get("/datum", response_model=list[DatumSchema], tags=["datum"])
-async def get(datum_schema: DatumSchema, db: Session = Depends(get_db)):
-    return datum_service.find(datum_schema=datum_schema, db=db)
+async def get(db: Session = Depends(get_db)):
+    return datum_service.find(db=db)
 
 
 @router.post("/datum", response_model=DatumSchema, tags=["datum"])
-async def create(file: UploadFile = File(), path: str = Form(), db: Session = Depends(get_db)):
-    return datum_service.create(file=file, path=path, db=db)
+async def create(file: UploadFile = File(), title: str = Form(), db: Session = Depends(get_db)):
+    return await datum_service.create(file=file, title=title, db=db)
 
 
 @router.put("/datum/{datum_id}", response_model=DatumSchema, tags=["datum"])
