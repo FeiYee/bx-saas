@@ -23,5 +23,6 @@ router.include_router(search_controller.router)
 router.include_router(keyword_controller.router)
 
 router.include_router(stats_controller.router)
+
 router.include_router(datum_controller.router)
 

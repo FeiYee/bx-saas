@@ -28,6 +28,16 @@ async def delete(datum_id: str, db: Session = Depends(get_db)):
     return datum_service.delete(datum_id=datum_id, db=db)
 
 
+@router.get("/datum/download", tags=["datum"])
+async def download(title: str, name: str):
+    return datum_service.download(title=title, name=name)
+
+
+@router.get("/datum/download/excel", tags=["datum"])
+async def download(title: str, name: str):
+    return datum_service.download_excel(title=title, name=name)
+
+
 @router.post("/datum/upload", tags=["datum"])
 async def upload(file: bytes = File(), path: str = Form()):
     return {

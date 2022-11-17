@@ -5,13 +5,13 @@ from pydantic import BaseModel
 
 
 class UserSchema(BaseModel):
-    id: str
+    id: str | None = None
     username: str
     password: str
     name: str
-    email: str
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    email: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     class Config:
         orm_mode = True

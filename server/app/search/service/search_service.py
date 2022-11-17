@@ -16,5 +16,21 @@ class SearchService:
         # db.refresh(search)
         return search
 
+    def search_graph(self, keyword: str, db: Session):
+        data = jsonable_encoder({'keyword': keyword})
+        search = self.model(**data)
+        # db.add(search)
+        # db.commit()
+        # db.refresh(search)
+        return search
+
+    def search_article(self, keyword: str, db: Session):
+        data = jsonable_encoder({'keyword': keyword})
+        search = self.model(**data)
+        # db.add(search)
+        # db.commit()
+        # db.refresh(search)
+        return search
+
 
 search_service = SearchService(Search)

@@ -16,6 +16,12 @@ DATABASE_PASSWORD = 'Emzujju12!'
 DATABASE_DB = 'bx_saas'
 
 
+MINIO_HOST = 'minio'
+MINIO_PORT = '7687'
+MINIO_USER = 'minio'
+MINIO_PASSWORD = 'Emzujju12!'
+
+
 NEO4J_HOST = 'neo4j'
 NEO4J_PORT = '7687'
 NEO4J_USER = 'neo4j'

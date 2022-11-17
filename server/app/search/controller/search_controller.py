@@ -10,15 +10,15 @@ router = APIRouter()
 
 
 @router.get("/search", response_model=SearchResultSchema, tags=["search"])
-async def search(db: Session = Depends(get_db)):
-    return search_service.search(db=db, keyword='你好')
+async def search(keyword: str, db: Session = Depends(get_db)):
+    return search_service.search(db=db, keyword=keyword)
 
 
-@router.get("/search/keyword", tags=["search"])
-async def read_user_me():
-    return {"username": "fakecurrentuser"}
+@router.get("/search/graph", tags=["search"])
+async def search_graph(keyword: str, db: Session = Depends(get_db)):
+    return search_service.search_graph(keyword=keyword, db=db)
 
 
-@router.get("/search/{username}", tags=["search"])
-async def read_user(username: str):
-    return {"username": username}
+@router.get("/search/article", tags=["search"])
+async def search_article(keyword: str, db: Session = Depends(get_db)):
+    return search_service.search_article(keyword=keyword, db=db)

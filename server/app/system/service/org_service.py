@@ -13,8 +13,8 @@ class OrgService:
     def __init__(self, model: Type[OrgModelType]):
         self.model = model
 
-    def find(self, org_schema: OrgSchema, db: Session) -> list[tuple[Org]]:
-        data = jsonable_encoder(org_schema, exclude_unset=True)
+    def find(self, db: Session) -> list[tuple[Org]]:
+        # data = jsonable_encoder(org_schema, exclude_unset=True)
         orgs = db.query(self.model).all()
         return orgs
 

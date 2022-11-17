@@ -8,8 +8,8 @@ class Datum(BaseModel):
     __tablename__ = "datum"
 
     title = Column(String, index=True, comment='标题')
-    name = Column(String, index=True, comment='名称')
     url = Column(String, unique=True, comment='URL')
-    path = Column(String, comment='路径')
-    type = Column(String, comment='类型')
-    size = Column(String, comment='大小')
+    file_name = Column(String, index=True, comment='文件名称')
+    file_path = Column(String, comment='文件路径')
+    file_type = Column(String, comment='文件类型')
+    file_size = Column(String, comment='文件大小')

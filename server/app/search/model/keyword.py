@@ -8,6 +8,6 @@ class Keyword(BaseModel):
     __tablename__ = "keyword"
 
     keyword = Column(String, index=True)
-    user = Column(String)
-    org = Column(String)
-    is_preset = Column(Boolean, default=False)
+    user_id = Column(String)
+    org_id = Column(String)
+    is_preset = Column(Boolean, default=True)

@@ -49,5 +49,14 @@ class DatumService:
         db.commit()
         return datum
 
+    def download(self, *, title: str, name: str, db: Session) -> Datum:
+        datum = db.query(self.model).filter(self.model.title == title).first()
+        return datum
+
+    def download_excel(self, *, title: str) -> any:
+        datum = {"title", title}
+
+        return datum
+
 
 datum_service = DatumService(Datum)

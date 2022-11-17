@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 @router.get("/user", response_model=list[UserSchema], tags=["user"])
-async def get(user_schema: UserSchema, db: Session = Depends(get_db)):
-    return user_service.find(user_schema=user_schema, db=db)
+async def get(db: Session = Depends(get_db)):
+    return user_service.find(db=db)
 
 
 @router.post("/user", response_model=UserSchema, tags=["user"])

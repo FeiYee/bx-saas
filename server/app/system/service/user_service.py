@@ -14,8 +14,8 @@ class UserService:
     def __init__(self, model: Type[UserModelType]):
         self.model = model
 
-    def find(self, user_schema: UserSchema, db: Session) -> list[tuple[User]]:
-        data = jsonable_encoder(user_schema, exclude_unset=True)
+    def find(self, db: Session) -> list[tuple[User]]:
+        # data = jsonable_encoder(user_schema, exclude_unset=True)
         users = db.query(self.model).all()
         return users
 

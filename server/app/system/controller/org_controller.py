@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 @router.get("/org", response_model=list[OrgSchema], tags=["org"])
-async def get(org_schema: OrgSchema, db: Session = Depends(get_db)):
-    return org_service.find(org_schema=org_schema, db=db)
+async def get(db: Session = Depends(get_db)):
+    return org_service.find(db=db)
 
 
 @router.post("/org", response_model=OrgSchema, tags=["org"])

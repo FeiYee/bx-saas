@@ -7,6 +7,8 @@
 ## 文章数据
 + 关键词获取文章数据
     + param: `keyword: str`
++ 获取文章title列表
+    + param: `keyword: str`
 
 ## 统计数据
 + 节点类型统计数据(无参)

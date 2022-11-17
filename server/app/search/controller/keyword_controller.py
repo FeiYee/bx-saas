@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 @router.get("/keyword", response_model=list[KeywordSchema], tags=["keyword"])
-async def get(keyword_schema: KeywordSchema, db: Session = Depends(get_db)):
-    return keyword_service.find(keyword_schema=keyword_schema, db=db)
+async def get(db: Session = Depends(get_db)):
+    return keyword_service.find(db=db)
 
 
 @router.post("/keyword", response_model=KeywordSchema, tags=["keyword"])
@@ -28,6 +28,6 @@ async def delete(keyword_id: str, db: Session = Depends(get_db)):
     return keyword_service.delete(keyword_id=keyword_id, db=db)
 
 
-@router.get("/keyword/user/{user_id}", response_model=list[KeywordSchema], tags=["keyword"])
+@router.get("/keyword/user/{user_id}", response_model=list[str], tags=["keyword"])
 async def get(user_id: str, db: Session = Depends(get_db)):
     return keyword_service.find_by_user(user_id=user_id, db=db)

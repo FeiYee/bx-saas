@@ -12,8 +12,8 @@ class KeywordService:
     def __init__(self, model: Type[KeywordModelType]):
         self.model = model
 
-    def find(self, keyword_schema: KeywordSchema, db: Session) -> list[tuple[Keyword]]:
-        data = jsonable_encoder(keyword_schema, exclude_unset=True)
+    def find(self, db: Session) -> list[tuple[Keyword]]:
+        # data = jsonable_encoder(keyword_schema, exclude_unset=True)
 
         keywords = db.query(self.model).all()
         return keywords
@@ -48,9 +48,12 @@ class KeywordService:
         db.commit()
         return keyword
 
-    def find_by_user(self, user_id: str, db: Session):
+    def find_by_user(self, user_id: str, db: Session) -> List[str]:
         keywords = db.query(self.model).filter(self.model.user == user_id).all()
-        return keywords
+        keyword_list = []
+        for k in keywords:
+            keyword_list.append(k.keyword)
+        return keyword_list
 
 
 keyword_service = KeywordService(Keyword)
