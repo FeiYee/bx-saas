@@ -98,5 +98,5 @@ coverage
 site/
 
 # data
-data/
+# data/
 *.db
