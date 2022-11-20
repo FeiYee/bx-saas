@@ -9,6 +9,6 @@ class StatsDownload(BaseModel):
 
     __tablename__ = "stats_download"
 
-    title = Column(String, index=True)
-    description = Column(String, index=True)
+    title = Column(String(255), index=True)
+    description = Column(String(255), index=True)
     total = Column(Integer)

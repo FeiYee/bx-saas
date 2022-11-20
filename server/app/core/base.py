@@ -14,13 +14,13 @@ class BaseModel(Base):
 
     id = Column(String(32), primary_key=True, index=True, default=get_uuid)
     is_valid = Column(Boolean, default=True, comment='是否可用')
-    remark = Column(String, comment='备注')
-    created_by = Column(String, comment='创建人ID')
+    remark = Column(String(255), comment='备注')
+    created_by = Column(String(32), comment='创建人ID')
     created_at = Column(DateTime, server_default=func.now(), comment='创建时间')
-    updated_by = Column(String, comment='更新人ID')
+    updated_by = Column(String(32), comment='更新人ID')
     updated_at = Column(DateTime, onupdate=func.now(), comment='更新时间')
-    updated_count = Column(String, comment='更新次数')
-    deleted_by = Column(String, comment='删除人ID')
+    updated_count = Column(String(255), comment='更新次数')
+    deleted_by = Column(String(32), comment='删除人ID')
     deleted_at = Column(DateTime, comment='删除时间')
 
     def set_id(self):

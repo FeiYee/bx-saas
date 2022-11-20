@@ -8,7 +8,7 @@ class Org(BaseModel):
 
     __tablename__ = "org"
 
-    code = Column(String, index=True, comment='编码')
-    name = Column(String, comment='名称')
-    logo = Column(String, comment='Logo, Base64编码图片')
-    abbreviation = Column(String, comment='简称')
+    code = Column(String(255), index=True, comment='编码')
+    name = Column(String(255), comment='名称')
+    logo = Column(String(255), comment='Logo, Base64编码图片')
+    abbreviation = Column(String(255), comment='简称')

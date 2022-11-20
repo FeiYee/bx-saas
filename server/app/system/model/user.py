@@ -9,8 +9,8 @@ from app.core.base import BaseModel
 class User(BaseModel):
     __tablename__ = "user"
 
-    username = Column(String, unique=True, index=True, comment='用户名')
-    password = Column(String, comment='密码')
-    name = Column(String, comment='名称')
-    email = Column(String, index=True, comment='邮箱')
+    username = Column(String(255), unique=True, index=True, comment='用户名')
+    password = Column(String(255), comment='密码')
+    name = Column(String(255), comment='名称')
+    email = Column(String(255), index=True, comment='邮箱')
     is_admin = Column(Boolean, default=False, comment="是否管理员")

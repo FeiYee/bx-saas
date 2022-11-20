@@ -9,6 +9,7 @@ from ..model.search_record import SearchRecord
 from ..schema.search_schema import SearchResultSchema
 from app.graph.service.graph_service import GraphNeo
 from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
+import simplejson
 
 
 KeywordModelType = TypeVar("KeywordModelType", bound=Keyword)
@@ -81,11 +82,17 @@ class SearchService:
         db.commit()
 
         # data = jsonable_encoder({'keyword': keyword_text})
+        print('------------start----------')
         try:
             data = graph_service.get_seach_graphs(text=keyword_text)
+            print(data)
+
         except Exception as err:
-            data = []
-        return data
+            print(err)
+            data = None
+        print('------------end----------')
+
+        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_article(self, keyword_text: str, current_user: User, db: Session) -> Any:
         keyword = db.query(self.keyword_model).filter(
@@ -135,8 +142,8 @@ class SearchService:
         try:
             data = graph_service.get_search_table(text=keyword_text)
         except Exception as err:
-            data = []
-        return data
+            data = {}
+        return simplejson.dumps(data, ignore_nan=True)
 
 
 search_service = SearchService(keyword_model=Keyword, search_model=Search, search_record_model=SearchRecord)
