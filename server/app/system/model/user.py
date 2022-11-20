@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Column, String, Boolean
 
 from app.core.base import BaseModel
 
@@ -12,4 +12,5 @@ class User(BaseModel):
     username = Column(String, unique=True, index=True, comment='用户名')
     password = Column(String, comment='密码')
     name = Column(String, comment='名称')
-    email = Column(String, unique=True, index=True, comment='邮箱')
+    email = Column(String, index=True, comment='邮箱')
+    is_admin = Column(Boolean, default=False, comment="是否管理员")

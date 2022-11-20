@@ -4,22 +4,19 @@ from pydantic import BaseModel
 
 
 class SearchSchema(BaseModel):
-    id: str
+    id: str | None = None
     keyword: str
-    user: str
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    user_id: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     class Config:
         orm_mode = True
 
 
 class SearchResultSchema(BaseModel):
-    # id: str
     keyword: str
-    data: Optional[list] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    data: list | None = None
 
     class Config:
         orm_mode = True

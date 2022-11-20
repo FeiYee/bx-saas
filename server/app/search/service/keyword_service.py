@@ -2,6 +2,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func
 from sqlalchemy.orm import Session
+from app.system.model.user import User
 from ..model.keyword import Keyword
 from ..schema.keyword_schema import KeywordSchema
 
@@ -50,6 +51,16 @@ class KeywordService:
 
     def find_by_user(self, user_id: str, db: Session) -> List[str]:
         keywords = db.query(self.model).filter(self.model.user == user_id).all()
+        keyword_list = []
+        for k in keywords:
+            keyword_list.append(k.keyword)
+        return keyword_list
+
+    def find_user_keywords(self, keyword_type: int, current_user: User, db: Session) -> List[str]:
+        keywords = db.query(self.model).filter(
+            self.model.type == keyword_type,
+            self.model.user_id == current_user.id
+        ).order_by(self.model.weight.desc()).all()
         keyword_list = []
         for k in keywords:
             keyword_list.append(k.keyword)

@@ -1,5 +1,7 @@
 import logging
+from sqlalchemy.orm import Session
 from app.core.database import engine, Base, DBSession
+from app.system.model.user import User
 import app.datum.model.datum
 import app.search.model.keyword
 import app.search.model.search
@@ -8,12 +10,21 @@ import app.stats.model.stats_download
 import app.system.model.user
 import app.system.model.org
 import app.system.model.org_user
-import app.system.model.menu
-import app.system.model.website
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def init_user(db: Session):
+    username = 'admin'
+    user = db.query(User).filter(
+        username == username
+    ).first()
+    if not user:
+        user = User(username=username, password='123', is_admin=True, name='Admin')
+        db.add(user)
+        db.commit()
 
 
 def migrate():
@@ -23,6 +34,7 @@ def migrate():
 
     try:
         db = DBSession()
+        init_user(db)
         # Try to create session to check if DB is awake
         db.execute("SELECT 1")
     except Exception as e:

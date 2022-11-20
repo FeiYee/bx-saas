@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.dependence import get_db
+from app.system.model.user import User
+from app.home.security.auth import get_current_user
 from ..service.keyword_service import keyword_service
 from ..schema.keyword_schema import KeywordSchema
 
@@ -31,3 +33,8 @@ async def delete(keyword_id: str, db: Session = Depends(get_db)):
 @router.get("/keyword/user/{user_id}", response_model=list[str], tags=["keyword"])
 async def get(user_id: str, db: Session = Depends(get_db)):
     return keyword_service.find_by_user(user_id=user_id, db=db)
+
+
+@router.get("/keyword/type/{keyword_type}/user", response_model=list[str], tags=["keyword"])
+async def get(keyword_type: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return keyword_service.find_user_keywords(keyword_type=keyword_type, current_user=current_user, db=db)

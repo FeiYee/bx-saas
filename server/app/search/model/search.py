@@ -7,8 +7,8 @@ from app.core.base import BaseModel
 class Search(BaseModel):
     __tablename__ = "search"
 
-    keyword = Column(String, index=True)
-    user = Column(String)
-    count = Column(Integer, default=0)
-    search_date = Column(DateTime, onupdate=func.now(), comment='搜索日期')
+    keyword = Column(String, index=True, comment='关键词')
+    count = Column(Integer, default=1, comment='搜索次数')
+    type = Column(Integer, default=0, comment="0:图谱, 1:文章")
+    user_id = Column(String, comment='用户ID')
 

@@ -4,13 +4,15 @@ from pydantic import BaseModel
 
 
 class KeywordSchema(BaseModel):
-    id: Optional[str] = None
+    id: str | None = None
     keyword: str
-    user_id: Optional[str] = None
-    org_id: Optional[str] = None
-    is_preset: Optional[bool] = False
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    weight: int | None = None
+    type: int | None = None
+    is_preset: bool | None = False
+    user_id: str | None = None
+    org_id: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     class Config:
         orm_mode = True
