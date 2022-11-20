@@ -1,5 +1,5 @@
 from py2neo import Graph
-# from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
+from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
 import pandas as pd
 import pickle
 import _thread
