@@ -84,7 +84,7 @@ class SearchService:
         # data = jsonable_encoder({'keyword': keyword_text})
         print('------------start----------')
         try:
-            data = graph_service.get_seach_graphs(text=keyword_text)
+            data = graph_service.search_graph(text=keyword_text)
             print(data)
 
         except Exception as err:
@@ -140,7 +140,7 @@ class SearchService:
 
         # data = jsonable_encoder({'keyword': keyword_text})
         try:
-            data = graph_service.get_search_table(text=keyword_text)
+            data = graph_service.search_table(text=keyword_text)
         except Exception as err:
             data = {}
         return simplejson.dumps(data, ignore_nan=True)
