@@ -5,7 +5,7 @@ import pickle
 import _thread
 import os
 import numpy as np
-
+import json
 
 def mkdir(path):
     folder = os.path.exists(path)
@@ -73,6 +73,12 @@ class GraphNeo():
             self.save_cache(pd.DataFrame(temp_dict),self.cache_table)
             self.total_table = self.load_cache(self.cache_table)
 
+    def table2dict(self,table):
+        temp_dict = {}
+        table = table.replace(np.nan, "")
+        for line in table.keys():
+            temp_dict[line] = list(table[line].values)
+        return temp_dict
 
     def save_cache(self,data,name):
         mkdir(self.cache_path)
@@ -131,7 +137,7 @@ class GraphNeo():
                 indexs_n.append(True)
             else:
                 indexs_n.append(False)
-        return {"table":self.total_table[indexs_n],"number_article":np.sum(indexs_n)}
+        return {"table":self.table2dict(self.total_table[indexs_n]),"number_article":np.sum(indexs_n)}
 
 if __name__ == '__main__':
     '''
@@ -146,11 +152,8 @@ if __name__ == '__main__':
     graph.total_table["table"]["Title"].values
     # 检索图谱（图结构）
     result = graph.search_graph("检索内容")
+    print(json.dumps(result["nodes"]))
+    print(json.dumps(result["links"]))
     # 检索文章数据（表格）
     result = graph.search_table("检索内容")
-
-    '''
-    
-    '''
-    # while 1:
-    #     pass
+    print(json.dumps(result["table"]))
