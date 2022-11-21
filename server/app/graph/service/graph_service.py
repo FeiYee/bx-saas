@@ -123,7 +123,7 @@ class GraphNeo():
 
 
         num_article = self.search_table(text)["number_article"]
-        return {"nodes": nodes, "links": links,"number_nodes":len(nodes),"number_links":len(links),"number_article":num_article}
+        return {"nodes": nodes, "links": links,"number_nodes":float(len(nodes)),"number_links":float(len(links)),"number_article":float(num_article)}
 
 
 
@@ -137,7 +137,7 @@ class GraphNeo():
                 indexs_n.append(True)
             else:
                 indexs_n.append(False)
-        return {"table":self.table2dict(self.total_table[indexs_n]),"number_article":np.sum(indexs_n)}
+        return {"table":self.table2dict(self.total_table[indexs_n]),"number_article":float(np.sum(indexs_n))}
 
 if __name__ == '__main__':
     '''
