@@ -4,6 +4,7 @@ import pandas as pd
 import pickle
 import _thread
 import os
+import numpy as np
 
 
 def mkdir(path):
@@ -23,8 +24,8 @@ class GraphNeo():
         self.total_graph = self.load_cache(self.cache_graph)
         self.total_table = self.load_cache(self.cache_table)
         try:
-            _thread.start_new_thread(self.get_seach_graphs,("图谱异步加载",))
-            _thread.start_new_thread(self.get_search_table,("表格异步加载",))
+            _thread.start_new_thread(self.get_graphs,("图谱异步加载",))
+            _thread.start_new_thread(self.get_table,("表格异步加载",))
         except:
             print("异步错误")
 
@@ -81,9 +82,9 @@ class GraphNeo():
 
     def load_cache(self,name):
         try:
-            print(name + "服务器成功加载")
             with open(self.cache_path + "/" + name + ".pickle", 'rb') as f:
                 data = pickle.load(f)
+            print(name + "服务器成功加载")
             return data
         except:
             print(name + "服务器正在初始化")
@@ -96,6 +97,13 @@ class GraphNeo():
         text = text.lower()
         for line in self.total_graph["nodes"]:
             try:
+                if text in line["data"]['Abstract'].lower():
+                    ids.append(line["data"]['id'])
+                    nodes.append(line)
+                    pass
+            except:
+                None
+            try:
                 if text in line["data"]['name'].lower() or text in line["data"]['title'].lower():
                     ids.append(line["data"]['id'])
                     nodes.append(line)
@@ -104,18 +112,26 @@ class GraphNeo():
                     ids.append(line["data"]['id'])
                     nodes.append(line)
         for line in self.total_graph["links"]:
-            if line["data"]['source'] in ids and line["data"]["target"] in ids:
+            if str(line["data"]['source']) in ids and str(line["data"]["target"]) in ids:
                 links.append(line)
-        return {"nodes": nodes, "links": links}
+
+
+        num_article = self.search_table(text)["number_article"]
+        return {"nodes": nodes, "links": links,"number_nodes":len(nodes),"number_links":len(links),"number_article":num_article}
+
+
+
     def search_table(self,text):
         indexs_n = []
         text = text.lower()
-        for line in self.total_table["Title"].values:
+        self.total_table = self.total_table.replace(np.nan,"")
+        for i, line in enumerate(self.total_table.values):
+            line = " ".join(line)
             if text in line.lower():
                 indexs_n.append(True)
             else:
                 indexs_n.append(False)
-        return self.total_table[indexs_n]
+        return {"table":self.total_table[indexs_n],"number_article":np.sum(indexs_n)}
 
 if __name__ == '__main__':
     '''
@@ -127,7 +143,7 @@ if __name__ == '__main__':
     # 所有文章数据（表格）
     graph.total_table
     # 所有文章名
-    graph.total_table["Title"].values
+    graph.total_table["table"]["Title"].values
     # 检索图谱（图结构）
     result = graph.search_graph("检索内容")
     # 检索文章数据（表格）
