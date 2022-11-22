@@ -14,6 +14,6 @@ async def get_article(title: str):
 
 
 @router.get("/article/title", tags=["article"])
-async def get_article_title(title: str):
+async def get_article_title(title: str = ''):
     return article_service.get_article_title(title=title)
 

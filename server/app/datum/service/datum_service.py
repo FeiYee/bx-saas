@@ -58,7 +58,7 @@ class DatumService:
         db.commit()
         return datum
 
-    def download(self, *, title: str, name: str, db: Session) -> Datum:
+    def download(self, *, title: str, db: Session) -> Datum:
         datum = db.query(self.model).filter(self.model.title == title).first()
         return datum
 

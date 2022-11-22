@@ -29,8 +29,8 @@ async def delete(datum_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/datum/download", tags=["datum"])
-async def download(title: str, name: str):
-    return datum_service.download(title=title, name=name)
+async def download(title: str, db: Session = Depends(get_db)):
+    return datum_service.download(title=title, db=db)
 
 
 @router.get("/datum/download/excel", tags=["datum"])

@@ -82,16 +82,12 @@ class SearchService:
         db.commit()
 
         # data = jsonable_encoder({'keyword': keyword_text})
-        print('------------start----------')
         try:
             data = graph_service.search_graph(text=keyword_text)
-            print(data)
-
         except Exception as err:
-            print(err)
             data = None
-        print('------------end----------')
 
+        # return data
         return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_article(self, keyword_text: str, current_user: User, db: Session) -> Any:
@@ -142,8 +138,9 @@ class SearchService:
         try:
             data = graph_service.search_table(text=keyword_text)
         except Exception as err:
-            data = {}
-        return simplejson.dumps(data, ignore_nan=True)
+            data = None
+        # return data
+        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
 
 search_service = SearchService(keyword_model=Keyword, search_model=Search, search_record_model=SearchRecord)
