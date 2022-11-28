@@ -59,8 +59,9 @@ class KeywordService:
     def find_user_keywords(self, keyword_type: int, current_user: User, db: Session) -> Any:
         keywords = db.query(self.model).filter(
             self.model.type == keyword_type,
-            self.model.user_id == current_user.id
-        ).order_by(self.model.weight.desc()).all()
+            self.model.user_id == current_user.id,
+            self.model.deleted_at.is_(None)
+        ).order_by(self.model.weight.desc()).distinct(self.model.keyword).all()
         keyword_list = []
         for k in keywords:
             keyword_list.append(k)

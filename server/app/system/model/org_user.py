@@ -12,5 +12,5 @@ class OrgUser(BaseModel):
     org_id = Column(String(32), index=True)
     user_id = Column(String(32))
 
-    # org = relationship("Org", back_populates="org")
+    # org = relationship("Org", primaryjoin="OrgUser.org_id==foreign(Org.id)")
     # user = relationship("User", back_populates="user")

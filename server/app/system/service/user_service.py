@@ -29,7 +29,7 @@ class UserService:
 
     def find(self, db: Session) -> list[tuple[User]]:
         # data = jsonable_encoder(user_schema, exclude_unset=True)
-        users = db.query(self.model).all()
+        users = db.query(self.model).filter(self.model.deleted_at.is_(None)).all()
         return users
 
     def create(self, user_schema: UserSchema, db: Session) -> User:
@@ -61,6 +61,7 @@ class UserService:
     def delete(self, *, user_id: str, db: Session) -> User:
         user = db.query(self.model).get(user_id)
         setattr(user, 'deleted_at', func.now())
+        db.delete(user)
         db.commit()
         return user
 

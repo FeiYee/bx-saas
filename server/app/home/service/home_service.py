@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from config import ACCESS_TOKEN_EXPIRE_MINUTES
 from app.system.model.user import User
 from app.system.service.user_service import user_service
+from app.system.service.org_user_service import org_user_service
 from ..security.auth import create_access_token
 from ..schema.home_schema import Token, UserDetailSchema
 
@@ -44,12 +45,14 @@ class HomeService:
 
     def get_user_detail(self, current_user: User, db: Session) -> Any:
         user = current_user
+
         if user is None:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用户不存在")
         elif not user.is_valid:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="无效用户")
 
-        user_detail = UserDetailSchema(user=user, org=None)
+        org = org_user_service.find_user_org(user_id=user.id, db=db)
+        user_detail = UserDetailSchema(user=user, org=org)
 
         return user_detail
 

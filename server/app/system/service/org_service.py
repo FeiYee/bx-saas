@@ -15,7 +15,7 @@ class OrgService:
 
     def find(self, db: Session) -> list[tuple[Org]]:
         # data = jsonable_encoder(org_schema, exclude_unset=True)
-        orgs = db.query(self.model).all()
+        orgs = db.query(self.model).filter(self.model.deleted_at.is_(None)).all()
         return orgs
 
     def create(self, org_schema: OrgSchema, db: Session) -> Org:
@@ -38,6 +38,7 @@ class OrgService:
     def delete(self, *, org_id: str, db: Session) -> Org:
         org = db.query(self.model).get(org_id)
         setattr(org, 'deleted_at', func.now())
+        db.delete(org)
         db.commit()
         return org
 
