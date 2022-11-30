@@ -41,12 +41,12 @@ class SearchService:
     def search_graph(self, keyword_text: str, current_user: User, db: Session) -> Any:
         keyword = db.query(self.keyword_model).filter(
             self.keyword_model.keyword == keyword_text,
-            self.keyword_model.type == 0,
+            # self.keyword_model.type == 0,
             self.keyword_model.user_id == current_user.id,
         ).first()
         search = db.query(self.search_model).filter(
             self.search_model.keyword == keyword_text,
-            self.keyword_model.type == 0,
+            # self.keyword_model.type == 0,
             self.keyword_model.user_id == current_user.id,
         ).first()
         search_record = self.search_record_model()
@@ -55,7 +55,7 @@ class SearchService:
             keyword = self.keyword_model()
             keyword.keyword = keyword_text
             keyword.weight = 1
-            keyword.type = 0
+            # keyword.type = 0
             keyword.is_preset = False
             keyword.user_id = current_user.id
         else:
@@ -65,7 +65,7 @@ class SearchService:
             search = self.search_model()
             search.id = get_uuid()
             search.keyword = keyword_text
-            search.type = 0
+            # search.type = 0
             search.count = 1
             search.user_id = current_user.id
         else:
@@ -93,13 +93,13 @@ class SearchService:
     def search_article(self, keyword_text: str, current_user: User, db: Session) -> Any:
         keyword = db.query(self.keyword_model).filter(
             self.keyword_model.keyword == keyword_text,
-            self.keyword_model.type == 1,
+            # self.keyword_model.type == 1,
             self.keyword_model.user_id == current_user.id,
         ).first()
 
         search = db.query(self.search_model).filter(
             self.search_model.keyword == keyword_text,
-            self.search_model.type == 1,
+            # self.search_model.type == 1,
             self.search_model.user_id == current_user.id,
         ).first()
         search_record = self.search_record_model()
@@ -108,7 +108,7 @@ class SearchService:
             keyword = self.keyword_model()
             keyword.keyword = keyword_text
             keyword.weight = 1
-            keyword.type = 1
+            # keyword.type = 1
             keyword.is_preset = False
             keyword.user_id = current_user.id
         else:
@@ -118,7 +118,7 @@ class SearchService:
             search = self.search_model()
             search.id = get_uuid()
             search.keyword = keyword_text
-            search.type = 1
+            # search.type = 1
             search.count = 1
             search.user_id = current_user.id
         else:

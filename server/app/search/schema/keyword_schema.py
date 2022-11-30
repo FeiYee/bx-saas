@@ -7,7 +7,7 @@ class KeywordSchema(BaseModel):
     id: str | None = None
     keyword: str
     weight: int | None = None
-    type: int | None = None
+    # type: int | None = None
     is_preset: bool | None = False
     user_id: str | None = None
     org_id: str | None = None

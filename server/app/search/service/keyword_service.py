@@ -1,8 +1,9 @@
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, func
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, or_
 from sqlalchemy.orm import Session
 from app.system.model.user import User
+from app.system.service.org_user_service import org_user_service
 from ..model.keyword import Keyword
 from ..schema.keyword_schema import KeywordSchema
 
@@ -15,7 +16,6 @@ class KeywordService:
 
     def find(self, db: Session) -> list[tuple[Keyword]]:
         # data = jsonable_encoder(keyword_schema, exclude_unset=True)
-
         keywords = db.query(self.model).all()
         return keywords
 
@@ -38,8 +38,8 @@ class KeywordService:
 
     def delete(self, *, keyword_id: str, db: Session) -> Keyword:
         keyword = db.query(self.model).get(keyword_id)
-        # db.delete(keyword)
         setattr(keyword, 'deleted_at', func.now())
+        db.delete(keyword)
         db.commit()
         return keyword
 
@@ -56,12 +56,13 @@ class KeywordService:
             keyword_list.append(k.keyword)
         return keyword_list
 
-    def find_user_keywords(self, keyword_type: int, current_user: User, db: Session) -> Any:
-        keywords = db.query(self.model).filter(
-            self.model.type == keyword_type,
-            self.model.user_id == current_user.id,
-            self.model.deleted_at.is_(None)
-        ).order_by(self.model.weight.desc()).distinct(self.model.keyword).all()
+    def find_user_keywords(self, current_user: User, db: Session) -> Any:
+        org = org_user_service.find_user_org(user_id=current_user.id, db=db)
+        filters = [self.model.user_id == current_user.id]
+        if org is not None:
+            filters = [or_(self.model.org_id == org.id, self.model.user_id == current_user.id)]
+        keywords = db.query(self.model).filter(*filters).order_by(self.model.weight.desc()).distinct(self.model.keyword).all()
+
         keyword_list = []
         for k in keywords:
             keyword_list.append(k)
