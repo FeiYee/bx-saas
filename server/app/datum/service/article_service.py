@@ -25,12 +25,12 @@ class ArticleService:
         return datums
 
     def get_article(self, *, title: str = '') -> List[str]:
-        title_list = graph_service.total_table["table"]["Title"].values
+        title_list = graph_service.total_table["Title"].values
         return title_list
 
     def get_article_title(self, *, title: str) -> List[str]:
         print(graph_service.total_table)
-        title_list = graph_service.total_table["table"]["Title"].values
+        title_list = list(graph_service.total_table["Title"].values)
         return title_list
 
 
