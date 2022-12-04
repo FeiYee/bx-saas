@@ -7,6 +7,9 @@ import os
 import numpy as np
 import json
 
+import time
+import datetime
+
 def mkdir(path):
     folder = os.path.exists(path)
 
@@ -20,6 +23,7 @@ class GraphNeo():
         self.cache_path = "cache"
         self.cache_graph = "graph"
         self.cache_table = "table"
+        self.en2ch = {"Title":"文献","Drugs":"药物/成分","Pathway_Target":"通路/靶标","Result":"结论","Group":"分组","Indicator":"指标","Molecular":"机制"}
 
         self.total_graph = self.load_cache(self.cache_graph)
         self.total_table = self.load_cache(self.cache_table)
@@ -101,6 +105,7 @@ class GraphNeo():
         nodes = []
         links = []
         text = text.lower()
+        num_article = 0
         for line in self.total_graph["nodes"]:
             try:
                 if text in line["data"]['Abstract'].lower():
@@ -121,10 +126,30 @@ class GraphNeo():
             if str(line["data"]['source']) in ids and str(line["data"]["target"]) in ids:
                 links.append(line)
 
-
-        num_article = self.search_table(text)["number_article"]
-        return {"nodes": nodes, "links": links,"number_nodes":float(len(nodes)),"number_links":float(len(links)),"number_article":float(num_article)}
-
+        for line in nodes:
+            if "Abstract" in line["data"].keys():
+                num_article += 1 
+        today = str(datetime.date.today().strftime('%y-%m'))
+        year = str(today.split("-")[0])
+        month = int(today.split("-")[1])
+        
+        up_date = {}
+        for i in range(6):
+            if month - i < 0:
+                year = str(int(year) - 1)
+                month += i
+            up_date[year + "-" + str(month)] = 0
+        classin = {}
+        for line in nodes:
+            if line not in classin.keys():
+                classin[self.en2ch[line["label"]]] = 0.0
+            classin[self.en2ch[line["label"]]] += 1.0
+            try:
+                up_date[line["up_date"]] += 1
+            except:
+                None
+        classin = {"name":list(classin.keys()),"count":list(classin.values())}
+        return {"nodes": nodes, "links": links,"number_nodes":float(len(nodes)),"number_links":float(len(links)),"number_article":float(num_article),"nodes_count":classin,"up_date":up_date}
 
 
     def search_table(self,text):
@@ -137,7 +162,10 @@ class GraphNeo():
                 indexs_n.append(True)
             else:
                 indexs_n.append(False)
-        return {"table":self.table2dict(self.total_table[indexs_n]),"number_article":float(np.sum(indexs_n))}
+                
+        file_name = self.cache_path + "/SearchResult" + str(int(time.time()*100000000000)) + ".xlsx"
+        self.total_table[indexs_n].to_excel(file_name,index=None)
+        return {"table":[list(a) for a in self.total_table[indexs_n].values],"number_article":float(np.sum(indexs_n)),"file_name":file_name}
 
 if __name__ == '__main__':
     '''
@@ -157,3 +185,17 @@ if __name__ == '__main__':
     # 检索文章数据（表格）
     result = graph.search_table("检索内容")
     print(json.dumps(result["table"]))
+
+    # 2022/12/04 更新
+    '''
+    1、文章搜索返回的数据按一条一条的list返回 已完成
+    2、Excel下载：  已完成
+        先调用 graph.search_table 函数获取所有文章数据，返回值当中包含 file_name 字段，该字段指向保存好的excel文件位置以及文件名“cache文件夹下”
+        前端调用该excel即可
+    3、获取文章题目列表  已完成
+        所有文章题目列表方法：list(graph.total_table["table"]["Title"].values)
+    4、更新统计  已完成
+        集成在 graph.search_graph 函数当中，返回字段为 up_date
+    5、节点类型统计  已完成
+        集成在 graph.search_graph 函数当中，返回字段为 nodes_count
+    '''
