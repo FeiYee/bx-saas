@@ -194,7 +194,7 @@ if __name__ == '__main__':
         先调用 graph.search_table 函数获取所有文章数据，返回值当中包含 file_name 字段，该字段指向保存好的excel文件位置以及文件名“cache文件夹下”
         前端调用该excel即可
     3、获取文章题目列表  已完成
-        所有文章题目列表方法：list(graph.total_table["table"]["Title"].values)
+        所有文章题目列表方法：list(graph.total_table["Title"].values)
     4、更新统计  已完成
         集成在 graph.search_graph 函数当中，返回字段为 up_date
     5、节点类型统计  已完成
