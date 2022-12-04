@@ -141,14 +141,15 @@ class GraphNeo():
             up_date[year + "-" + str(month)] = 0
         classin = {}
         for line in nodes:
-            if self.en2ch[line["label"]] not in classin.keys():
-                classin[self.en2ch[line["label"]]] = 0.0
-            classin[self.en2ch[line["label"]]] += 1.0
+            if self.en2ch[line["data"]["label"]] not in classin.keys():
+                classin[self.en2ch[line["data"]["label"]]] = 0.0
+            classin[self.en2ch[line["data"]["label"]]] += 1.0
             try:
                 up_date[line["up_date"]] += 1
             except:
                 None
         classin = {"name":list(classin.keys()),"count":list(classin.values())}
+        up_date = {"date":list(up_date.keys()),"count":list(up_date.values())}
         return {"nodes": nodes, "links": links,"number_nodes":float(len(nodes)),"number_links":float(len(links)),"number_article":float(num_article),"nodes_count":classin,"up_date":up_date}
 
 
