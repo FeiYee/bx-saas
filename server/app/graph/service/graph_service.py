@@ -166,7 +166,7 @@ class GraphNeo():
                 
         file_name = self.cache_path + "/SearchResult" + str(int(time.time()*100000000000)) + ".xlsx"
         self.total_table[indexs_n].to_excel(file_name,index=None)
-        return {"table":[list(a) for a in self.total_table[indexs_n].values],"number_article":float(np.sum(indexs_n)),"file_name":file_name}
+        return {"table":[{na:a[i] for i, na in enumerate(list(self.total_table.keys()))} for a in self.total_table[indexs_n].values],"number_article":float(np.sum(indexs_n)),"file_name":file_name}
 
 if __name__ == '__main__':
     '''
