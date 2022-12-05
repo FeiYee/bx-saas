@@ -49,6 +49,7 @@ class DatumService:
     def delete(self, *, datum_id: str, db: Session) -> Datum:
         datum = db.query(self.model).get(datum_id)
         setattr(datum, 'deleted_at', func.now())
+        db.delete(datum)
         db.commit()
         return datum
 

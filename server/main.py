@@ -27,6 +27,7 @@ async def add_process_time_header(request: Request, call_next):
 
 
 app.mount("/asset", StaticFiles(directory="asset"), name="asset")
+app.mount("/cache", StaticFiles(directory="cache"), name="cache")
 
 
 app.include_router(router, prefix='/api')
