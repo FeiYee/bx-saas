@@ -73,7 +73,7 @@ class GraphNeo():
             nodes_result = self.graph.run(search_nodes_sql).data()
 
             nodes_result = list(map(self.build_nodes, nodes_result))
-            temp_dict = {"id":[],"Drugs":[],"Group":[],"Abstract":[],"Title":[],"Molecular":[],"Indicator":[],"Result":[],"Side Effect":[],"Pathway/Target":[],"Year":[],"Sample count":[],"Author":[]}
+            temp_dict = {"id":[],"Drugs":[],"Group":[],"Abstract":[],"Title":[],"Curative":[],"Indicator":[],"Disease":[],"Cell":[],"Pathway/Target":[],"Year":[],"Microorganism":[],"Author":[]}
             for line in nodes_result:
                 for sub_line in temp_dict.keys():
                     temp_dict[sub_line].append(line["data"][sub_line])
