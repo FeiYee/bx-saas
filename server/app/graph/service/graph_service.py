@@ -23,8 +23,11 @@ class GraphNeo():
         self.cache_path = "cache"
         self.cache_graph = "graph"
         self.cache_table = "table"
-        self.en2ch = {"SampleCount":"样本量","Title":"文献","Drugs":"药物/成分","Pathway_Target":"通路/靶标","Result":"结论","Group":"分组","Indicator":"指标","Molecular":"机制"}
+        # self.en2ch = {"SampleCount":"样本量","Title":"文献","Drugs":"药物/成分","Pathway_Target":"通路/靶标","Result":"结论","Group":"分组","Indicator":"指标","Molecular":"机制"}
 
+        self.en2ch = {"Title":"文献","Drugs":"药物/成分","Pathway_Target":"通路/靶标",
+                      "Result":"结论","Group":"分组","Indicator":"指标","Molecular":"机制",
+                     "Disease":"疾病","Cell":"细胞","Curative":"疗效","Microorganism":"微生物"}
         self.total_graph = self.load_cache(self.cache_graph)
         self.total_table = self.load_cache(self.cache_table)
         try:
