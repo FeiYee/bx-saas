@@ -182,23 +182,22 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('stroke', '#d1edc4')
     .attr('stroke', d => {
       let color = '#d1edc4'
-      // if (d.Type === 'Artificial') {
-      //   // color = ''
-      // } else if (d.Type === 'Machine') {
-      //   color = '#a0cfff'
-      // }
+      if (d.Type === 'Artificial') {
+        // color = ''
+      } else if (d.Type === 'Machine') {
+        color = '#a0cfff'
+      }
       return color
     })
     .attr('stroke-width', 6)
     .attr('fill', color)
     .attr('fill', d => {
-      console.log(d)
       let color = '#67c23a'
-      // if (d.Type === 'Artificial') {
-      //   // color = ''#ecf5ff
-      // } else if (d.Type === 'Machine') {
-      //   color = '#409eff'
-      // }
+      if (d.Type === 'Artificial') {
+        // color = ''
+      } else if (d.Type === 'Machine') {
+        color = '#409eff'
+      }
       return color
     })
 
@@ -206,9 +205,9 @@ export const relationChart = (data, handleNodeClick) => {
     .style("cursor", "pointer")
     .attr('r', d => {
       let radius = 56
-      // if (d.Year) {
-      //   radius = 45
-      // }
+      if (d.Year) {
+        radius = 45
+      }
       return radius
     })
     // .selectAll('circle')
