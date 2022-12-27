@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 
 export const relationChart = (data, handleNodeClick) => {
-  let nodes = data.nodess || [
+  let nodes = data.nodes || [
     {
       id: "0",
       label: "Drugs",
