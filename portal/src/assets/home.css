@@ -1,0 +1,16 @@
+
+.align-right {
+  text-align: right;
+}
+
+.view-title {
+  margin-bottom: 10px;
+  height: 100%;
+  justify-items: center;
+  align-items: center;
+}
+
+.layout-header {
+  color: var(--color-white);
+  background-color: var(--color-primary);
+}
