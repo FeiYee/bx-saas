@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get("/keyword", response_model=list[KeywordSchema], tags=["keyword"])
-async def get(db: Session = Depends(get_db)):
+async def get(page_current: int = 1, page_size: int = 10, db: Session = Depends(get_db)):
     return keyword_service.find(db=db)
 
 

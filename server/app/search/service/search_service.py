@@ -30,15 +30,7 @@ class SearchService:
         self.search_model = search_model
         self.search_record_model = search_record_model
 
-    def search(self, db: Session, keyword: str) -> SearchResultSchema:
-        data = jsonable_encoder({'keyword': keyword})
-        search = self.model(**data)
-        # db.add(search)
-        # db.commit()
-        # db.refresh(search)
-        return search
-
-    def search_graph(self, keyword_text: str, current_user: User, db: Session) -> Any:
+    def search(self, keyword_text: str, current_user: User, db: Session):
         keyword = db.query(self.keyword_model).filter(
             self.keyword_model.keyword == keyword_text,
             # self.keyword_model.type == 0,
@@ -58,7 +50,7 @@ class SearchService:
             # keyword.type = 0
             keyword.is_preset = False
             keyword.user_id = current_user.id
-        else:
+        elif not keyword.is_preset:
             keyword.weight = keyword.weight + 1
 
         if search is None:
@@ -80,6 +72,10 @@ class SearchService:
         db.add(search_record)
 
         db.commit()
+        return None
+
+    def search_graph(self, keyword_text: str, current_user: User, db: Session) -> Any:
+        self.search(keyword_text=keyword_text, current_user=current_user, db=db)
 
         # data = jsonable_encoder({'keyword': keyword_text})
         try:
@@ -90,55 +86,21 @@ class SearchService:
         # return data
         return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
-    def search_article(self, keyword_text: str, current_user: User, db: Session) -> Any:
-        keyword = db.query(self.keyword_model).filter(
-            self.keyword_model.keyword == keyword_text,
-            # self.keyword_model.type == 1,
-            self.keyword_model.user_id == current_user.id,
-        ).first()
-
-        search = db.query(self.search_model).filter(
-            self.search_model.keyword == keyword_text,
-            # self.search_model.type == 1,
-            self.search_model.user_id == current_user.id,
-        ).first()
-        search_record = self.search_record_model()
-
-        if keyword is None:
-            keyword = self.keyword_model()
-            keyword.keyword = keyword_text
-            keyword.weight = 1
-            # keyword.type = 1
-            keyword.is_preset = False
-            keyword.user_id = current_user.id
-        else:
-            keyword.weight = keyword.weight + 1
-
-        if search is None:
-            search = self.search_model()
-            search.id = get_uuid()
-            search.keyword = keyword_text
-            # search.type = 1
-            search.count = 1
-            search.user_id = current_user.id
-        else:
-            search.count = search.count + 1
-
-        search_record.keyword = keyword_text
-        search_record.search_id = search.id
-        search_record.user_id = current_user.id
-
-        db.add(keyword)
-        db.add(search)
-        db.add(search_record)
-
-        db.commit()
+    def search_article(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
+        self.search(keyword_text=keyword_text, current_user=current_user, db=db)
 
         # data = jsonable_encoder({'keyword': keyword_text})
+        data = None
         try:
-            data = graph_service.search_table(text=keyword_text)
+            result = graph_service.search_table(text=keyword_text)
         except Exception as err:
-            data = None
+            result = None
+
+        if result is not None:
+            data = result
+            if top_level != 0:
+                data['table'] = result['table'][0:top_level]
+
         # return data
         return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
