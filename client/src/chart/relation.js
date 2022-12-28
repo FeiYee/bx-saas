@@ -22,6 +22,7 @@ export const relationChart = (data, handleNodeClick) => {
     {
       id: "3",
       label: "Mechanism",
+      Type: "Artificial",
       name: "人工冬虫夏草"
     },
   ]
@@ -36,8 +37,8 @@ export const relationChart = (data, handleNodeClick) => {
   let selector = '#chartRelationship'
   d3.select(selector).selectAll('*').remove();
 
-  const width = 6000
-  const height = 3000
+  const width = 1030
+  const height = 500
   const color = '#67c23a'
 
   // 碰撞作用力，为节点指定一个radius区域来防止节点重叠，设置碰撞力的强度，范围[0,1], 默认为0.7。设置迭代次数，默认为1，迭代次数越多最终的布局效果越好，但是计算复杂度更高
@@ -53,8 +54,8 @@ export const relationChart = (data, handleNodeClick) => {
   // 万有引力
   const charge = d3
     .forceManyBody()
-    .strength(-500)
-    .distanceMax(400)
+    .strength(-1000)
+    .distanceMax(300)
 
   const simulation = d3
     .forceSimulation(nodes)
@@ -69,15 +70,15 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('viewBox', [0, 0, width, height])
     .attr('class', 'd3')
     .call(
-      d3.zoom().scaleExtent([0.5, 5]).on('zoom', function (event) {
+      d3.zoom().scaleExtent([0.1, 2]).on('zoom', function (event) {
         // svg.attr('transform', event.transform)
         // if (event.transform.k > 1) {
         //   svg.attr('transform', event.transform)
         // } else {
         //   svg.attr("transform", "scale(" + event.transform.k + ")");
         // }
-        svg.attr("transform", "scale(" + event.transform.k + ")");
-
+        // svg.attr("transform", "scale(" + event.transform.k + ")");
+        svg.selectAll("g").attr('transform', event.transform)
       })
     )
     .on('dblclick.zoom', () => { }) // 禁止双击放大
@@ -137,11 +138,11 @@ export const relationChart = (data, handleNodeClick) => {
     }
   }
   const node = svg
-    .append('g')
-    .attr('class', 'content')
-    .attr("width", width)
-    .attr("height", height)
-    .selectAll('g')
+    // .append('g')
+    // .attr('class', 'content')
+    // .attr("width", width)
+    // .attr("height", height)
+    .selectAll('circle')
     // .data(nodes, d => d.name)
     .data(nodes)
     .enter()
@@ -183,7 +184,7 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('stroke', d => {
       let color = '#d1edc4'
       if (d.Type === 'Artificial') {
-        // color = ''
+        color = '#f3d19e'
       } else if (d.Type === 'Machine') {
         color = '#a0cfff'
       }
@@ -192,11 +193,11 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('stroke-width', 6)
     .attr('fill', color)
     .attr('fill', d => {
-      let color = '#67c23a'
+      let color = '#67c23a' // 绿色
       if (d.Type === 'Artificial') {
-        // color = ''
+        color = '#e6a23c'   // 黄色
       } else if (d.Type === 'Machine') {
-        color = '#409eff'
+        color = '#409eff'   // 蓝色
       }
       return color
     })
