@@ -13,7 +13,7 @@ export const downloadFile = function (url, fileName) {
 
 export const downloadExcelFile = function (url, fileName) {
   const ele = document.createElement('a')
-  ele.href = '/file' + url
+  ele.href = '/file/' + url
   ele.setAttribute('download', fileName || '')
   ele.style.display = 'none'
   document.body.appendChild(ele)

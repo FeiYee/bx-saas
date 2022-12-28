@@ -135,6 +135,12 @@ let articleCount = ref(0)
 let linkCount = ref(0)
 let nodeCount = ref(0)
 
+const chartRelationshipDomId = 'chartRelationship'
+const chartBarDomId = 'chartBar'
+const chartPieDomId = 'chartPie'
+let chartBar = null
+let chartPie = null
+let chartRelationship = null
 
 const onSearch = async (keyword) => {
   isSearchDone.value = false
@@ -151,17 +157,20 @@ const onSearch = async (keyword) => {
       articleCount.value = data.number_article
       linkCount.value = data.number_links
       nodeCount.value = data.number_nodes
+      let nodesCount = data.nodes_count
+      let upData = data.up_date
 
       let relationData = getRelationData(data)
-      console.log(relationData)
 
       if (chartRelationship) {
         chartRelationship.dispose()
       }
       // chartRelationship = setChartRelation(relationData, chartRelationshipDomId, handleNodeClick)
       relationChart(relationData, handleNodeClick)
-      isSearchDone.value = true
+      chartPie = setChartPie(chartPieDomId, nodesCount)
+      chartBar = setChartBar(chartBarDomId, upData)
 
+      isSearchDone.value = true
     } else {
       ElMessage({
         message: '未找到数据',
@@ -240,19 +249,12 @@ const handleNodeClick = (node) => {
 //   }
 // }
 
-const chartRelationshipDomId = 'chartRelationship'
-const chartBarDomId = 'chartBar'
-const chartPieDomId = 'chartPie'
-let chartBar = null
-let chartPie = null
-let chartRelationship = null
 
 
 onMounted(() => {
   // chartRelationship = setChartRelation(null, chartRelationshipDomId, handleNodeClick)
   chartBar = setChartBar(chartBarDomId)
   chartPie = setChartPie(chartPieDomId)
-  console.log('onMounted')
 
 // relationChart({}, handleNodeClick)
 })

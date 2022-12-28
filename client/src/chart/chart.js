@@ -239,9 +239,29 @@ export const setChartRelation = function (data, domId, clickFn) {
 
 
 
-export const setChartPie = function (domId) {
+export const setChartPie = function (domId, data) {
   const chartDom = document.getElementById(domId);
   let chartPie = echarts.init(chartDom);
+
+  let datas = [
+    { value: 1048, name: 'Search Engine' },
+    { value: 735, name: 'Direct' },
+    { value: 580, name: 'Email' },
+    { value: 484, name: 'Union Ads' },
+    { value: 300, name: 'Video Ads' }
+  ]
+  if (data) {
+    let names = data.name
+    let counts = data.count
+    let list = []
+    names.forEach((item, index) => {
+      list.push({
+        name: item,
+        value: counts[index],
+      })
+    })
+    datas = list
+  }
 
   var option = {
     // title: {
@@ -258,16 +278,10 @@ export const setChartPie = function (domId) {
     },
     series: [
       {
-        name: 'Access From',
+        name: '节点类型',
         type: 'pie',
         radius: '50%',
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
-        ],
+        data: datas,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -286,21 +300,28 @@ export const setChartPie = function (domId) {
 
 
 
-export const setChartBar = function (domId) {
+export const setChartBar = function (domId, data) {
   var chartDom = document.getElementById(domId);
   let chartBar = echarts.init(chartDom);
+
+  let xDatas = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  let datas = [120, 200, 150, 80, 70, 110, 130]
+  if (data) {
+    xDatas = data.date
+    datas = data.count
+  }
 
   const option = {
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: xDatas
     },
     yAxis: {
       type: 'value'
     },
     series: [
       {
-        data: [120, 200, 150, 80, 70, 110, 130],
+        data: datas,
         type: 'bar'
       }
     ]

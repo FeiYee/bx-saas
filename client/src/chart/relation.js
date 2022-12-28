@@ -184,7 +184,7 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('stroke', d => {
       let color = '#d1edc4'
       if (d.Type === 'Artificial') {
-        color = '#f3d19e'
+        // color = '#f3d19e'
       } else if (d.Type === 'Machine') {
         color = '#a0cfff'
       }
@@ -195,19 +195,25 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('fill', d => {
       let color = '#67c23a' // 绿色
       if (d.Type === 'Artificial') {
-        color = '#e6a23c'   // 黄色
+        // color = '#e6a23c'   // 黄色
       } else if (d.Type === 'Machine') {
         color = '#409eff'   // 蓝色
       }
       return color
     })
-
     .attr("opacity", "0.6")
     .style("cursor", "pointer")
     .attr('r', d => {
       let radius = 56
+      let now = new Date()
+      let date = new Date()
       if (d.Year) {
-        radius = 45
+        try {
+          date = new Date(d.Year)
+        } catch (e) {}
+        if (date.getFullYear() + 2 < now.getFullYear()) {
+          radius = 40
+        }
       }
       return radius
     })
@@ -243,8 +249,8 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('x', function (d) {
       const len = 12
       const step = 5
-      let title = d.title || d.Title || ''
-      let titles = title.split(' ')
+      let title = d.title || d.Title || d.name || ''
+      // let titles = title.split(' ')
       let title1 = ''
       let title2 = ''
       let title3 = ''
