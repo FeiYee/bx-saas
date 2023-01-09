@@ -1,9 +1,62 @@
+@use 'variable' as *;
+
+
 .home {
 
 
   .container {
-    display: flex;
+    // display: flex;
 
   }
 
+  .content-primary {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-background-primary, $color-background-primary);
+    justify-content: space-between;
+    height: 610px;
+  }
+
+  .content-graph {
+    width: 50%;
+    width: calc(50% - 8px);
+    height: 100%;
+    background-color: var(--color-white, $color-white);
+
+    .content-stat {
+      // height: 40px;
+
+      // padding: 0 1rem;
+    }
+
+    .graph-box {
+      padding: 0 20px;
+      height: 452px;
+    }
+  }
+  .content-detail {
+    width: calc(50% - 8px);
+    background-color: var(--color-white, $color-white);
+
+  }
+
+  .content-operate {
+    background-color: var(--color-white, $color-white);
+    display: flex;
+    padding: 1rem;
+    justify-content: center;
+    border-top: 2px solid var(--color-background-primary, $color-background-primary);
+    .operate-btn {
+      height: 44px;
+      line-height: 44px;
+      padding: 0 40px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--color-primary, $color-primary);
+      background-color: var(--color-background-primary, $color-background-primary);
+      margin: 0 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  }
 }

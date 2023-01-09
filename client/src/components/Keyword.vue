@@ -23,7 +23,7 @@
 </section>
 </template>
 <script setup>
-import {defineProps, defineEmits} from 'vue'
+import {defineEmits} from 'vue'
 import keywordService from '../services/keyword.js'
 import context from '../core/context.js'
 

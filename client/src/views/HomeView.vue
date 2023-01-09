@@ -1,45 +1,60 @@
 <template>
-  <Search @search="onSearch" :isSearchDone="isSearchDone"/>
+  <Search @search="onSearch" :isSearchDone="isSearchDone" />
   <Nav />
   <!-- <Keyword :keywords="keywords" @click="onKeywordClick" @reload="onKeywordReload"/> -->
   <!-- <div class="containers"></div> -->
   <main class="home content">
     <div class="container">
-      <section class="content-primary">
-        <h3 class="content-title">知识图谱</h3>
-        <div class="content-stat">
-          <div class="content-stat__total">
-            <span>共检索到实体关系数量：{{linkCount}}</span>
-            <span>节点数量：{{nodeCount}}</span>
-            <!-- <span>文章数量：{{articleCount}}</span> -->
+      <div class="content-primary">
+        <section class="content-graph">
+          <h3 class="content-title">知识图谱</h3>
+          <div class="content-stat">
+            <div class="content-stat__total">
+              <span>共检索到文章数量：{{ articleCount }}</span>
+            </div>
           </div>
-          <!-- <div class="content-stat__node">
-            <span>节点: </span>
-            <span class="node-number">{{nodeCount}}</span>
-          </div> -->
-        </div>
-        <div class="content-graph">
-          <div id="chartRelationship"  class="chart-relationship"></div>
-        </div>
+          <div class="graph-box">
+            <div id="chartRelationship" class="chart-relationship"></div>
+          </div>
+        </section>
+        <section class="content-detail">
+          <h3 class="content-title">内容简述</h3>
+          <div>
+
+          </div>
+          <div>
+
+          </div>
+        </section>
+      </div>
+
+      <div class="content-operate">
+        <div class="operate-btn">知识图谱</div>
+        <div class="operate-btn">内容</div>
+        <div class="operate-btn">内容 + 知识图谱</div>
+
+      </div>
+
+      <div>
         <ul class="content-article-list">
           <li class="content-article-item">
             <article class="content-article" v-show="!!article.title">
-              <h3 class="article__title">题目：{{article.title}}</h3>
+              <h3 class="article__title">题目：{{ article.title }}</h3>
               <div class="article__info">
                 <span>
                   <span class="info-title">作者：</span>
-                  <span class="info-content__author" :title="article.Author">{{article.Author}}</span>
+                  <span class="info-content__author" :title="article.Author">{{ article.Author }}</span>
                 </span>
                 <span>
                   <span class="info-title">刊名：</span>
-                  <span class="info-content__name" :title="article.name">{{article.name}}</span></span>
+                  <span class="info-content__name" :title="article.name">{{ article.name }}</span></span>
                 <span>
                   <span class="info-title">日期：</span>
-                  <span class="info-content__year" :title="article.Year">{{article.Year}}</span>
+                  <span class="info-content__year" :title="article.Year">{{ article.Year }}</span>
                 </span>
               </div>
               <div class="article__summary">
-                {{article.Abstract}}
+                {{ article.Abstract }}
               </div>
               <div class="article__link">
                 <button @click="onOriginalArticle">原文获取</button>
@@ -59,36 +74,23 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{article.Drugs}}</td>
-                    <td>{{article.Molecular}}</td>
-                    <td>{{article['Pathway/Target']}}</td>
-                    <td>{{article.Indicator}}</td>
-                    <td>{{article.Result}}</td>
-                    <td v-show="!!article['Side Effect']">{{article['Side Effect']}}</td>
-                    <td v-show="!!article.Group">{{article.Group}}</td>
-                    <td v-show="!!article['Sample count']">{{article['Sample count']}}</td>
+                    <td>{{ article.Drugs }}</td>
+                    <td>{{ article.Molecular }}</td>
+                    <td>{{ article['Pathway/Target']}}</td>
+                    <td>{{ article.Indicator }}</td>
+                    <td>{{ article.Result }}</td>
+                    <td v-show="!!article['Side Effect']">{{ article['Side Effect']}}</td>
+                    <td v-show="!!article.Group">{{ article.Group }}</td>
+                    <td v-show="!!article['Sample count']">{{ article['Sample count'] }}</td>
                   </tr>
                 </tbody>
               </table>
             </article>
           </li>
         </ul>
-      </section>
-      <section class="content-aside">
-        <div>
-          <h3 class="content-title">节点类型统计</h3>
-          <div class="chart-box">
-            <div id="chartPie" class="chart-pie"></div>
-          </div>
-        </div>
-        <div>
-          <h3 class="content-title">每日更新统计</h3>
-          <div class="chart-box">
-            <div id="chartBar" class="chart-bar"></div>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
+
   </main>
 </template>
 <script setup>
@@ -98,14 +100,14 @@ import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
 // import Keyword from '../components/Keyword.vue'
 
-import {downloadFile} from '../core/download.js'
+import { downloadFile } from '../core/download.js'
 
 import searchService from '../services/search.js'
 import keywordService from '../services/keyword.js'
 import datumService from '../services/datum.js'
 
-import {getRelationData, setChartRelation, setChartPie, setChartBar} from '../chart/chart.js'
-import {relationChart} from '../chart/relation.js'
+import { getRelationData, setChartRelation, setChartPie, setChartBar } from '../chart/chart.js'
+import { relationChart } from '../chart/relation.js'
 import context from '../core/context'
 
 // const echarts = inject('echarts')
@@ -167,8 +169,8 @@ const onSearch = async (keyword) => {
       }
       // chartRelationship = setChartRelation(relationData, chartRelationshipDomId, handleNodeClick)
       relationChart(relationData, handleNodeClick)
-      chartPie = setChartPie(chartPieDomId, nodesCount)
-      chartBar = setChartBar(chartBarDomId, upData)
+      // chartPie = setChartPie(chartPieDomId, nodesCount)
+      // chartBar = setChartBar(chartBarDomId, upData)
 
       isSearchDone.value = true
     } else {
@@ -253,10 +255,10 @@ const handleNodeClick = (node) => {
 
 onMounted(() => {
   // chartRelationship = setChartRelation(null, chartRelationshipDomId, handleNodeClick)
-  chartBar = setChartBar(chartBarDomId)
-  chartPie = setChartPie(chartPieDomId)
+  // chartBar = setChartBar(chartBarDomId)
+  // chartPie = setChartPie(chartPieDomId)
 
-// relationChart({}, handleNodeClick)
+  // relationChart({}, handleNodeClick)
 })
 
 onBeforeUnmount(() => {

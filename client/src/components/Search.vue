@@ -30,7 +30,7 @@
 </div>
 </template>
 <script setup>
-import { ref, reactive, defineProps, watch } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import context from '../core/context.js'
 import keywordService from '../services/keyword.js'
 

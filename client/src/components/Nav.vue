@@ -11,6 +11,9 @@
             <RouterLink to="/">首页</RouterLink>
           </li>
           <li class="menu-item">
+            <RouterLink to="/file">文档管理</RouterLink>
+          </li>
+          <li class="menu-item">
             <RouterLink to="/download">数据下载</RouterLink>
           </li>
         </ul>

@@ -37,8 +37,8 @@ export const relationChart = (data, handleNodeClick) => {
   let selector = '#chartRelationship'
   d3.select(selector).selectAll('*').remove();
 
-  const width = 1030
-  const height = 500
+  const width = 1254
+  const height = 904
   const color = '#67c23a'
 
   // 碰撞作用力，为节点指定一个radius区域来防止节点重叠，设置碰撞力的强度，范围[0,1], 默认为0.7。设置迭代次数，默认为1，迭代次数越多最终的布局效果越好，但是计算复杂度更高
