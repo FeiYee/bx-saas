@@ -104,5 +104,87 @@ class SearchService:
         # return data
         return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
+    def search_file(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
+        # self.search(keyword_text=keyword_text, current_user=current_user, db=db)
+
+        # data = jsonable_encoder({'keyword': keyword_text})
+        data = None
+        try:
+            result = graph_service.search_table(text=keyword_text)
+        except Exception as err:
+            result = None
+
+        data = [
+            {
+                'name': 'ddsdsdsdsdsds23223232.pdf',
+                'id': '122d2',
+                'type': 1,
+                'url': 'ddsdsdsdsdsds23223232.pdf',
+            },
+            {
+                'name': 'ddsdsdsdsdsds.pdf',
+                'id': '122d2',
+                'type': 0,
+                'url': 'ddsdsdsdsdsds.pdf',
+            },
+            {
+                'name': 'ddsdsdsdsdsds.pdf',
+                'id': '122d2',
+                'type': 1,
+                'url': 'ddsdsdsdsdsds.pdf',
+            },
+            {
+                'name': 'ddsdsdsdsdsds.pdf',
+                'id': '122d2',
+                'type': 1,
+                'url': 'ddsdsdsdsdsds.pdf',
+            },
+            {
+                'name': 'ddsdsdsdsdsds.pdf',
+                'id': '122d2',
+                'type': 0,
+                'url': 'ddsdsdsdsdsds.pdf',
+            }
+        ]
+        # type 0->全文, 1-> 摘要
+        # return data
+        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
+
+    def search_content(self, keyword_text: str, current_user: User, db: Session) -> Any:
+        # self.search(keyword_text=keyword_text, current_user=current_user, db=db)
+
+        # data = jsonable_encoder({'keyword': keyword_text})
+        data = None
+        try:
+            result = graph_service.search_table(text=keyword_text)
+        except Exception as err:
+            result = None
+
+        data = [
+            {
+                'type': 1,
+                'url': '/asset/1/xlsx/3.xlsx',
+            },
+            {
+                'type': 0,
+                'url': '/asset/1/png/img_1.png',
+            },
+            {
+                'type': 0,
+                'url': '/asset/1/png/img_2.png',
+            },
+            {
+                'type': 1,
+                'url': '/asset/1/xlsx/1.xlsx',
+            },
+            {
+                'type': 0,
+                'url': '/asset/1/png/img_3.png',
+            }
+        ]
+        # type 0-> image, 1->excel
+        # return data
+        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
+
 
 search_service = SearchService(keyword_model=Keyword, search_model=Search, search_record_model=SearchRecord)
