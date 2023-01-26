@@ -1,141 +1,91 @@
-from py2neo import Graph
-from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
+# -*- coding: UTF-8 -*-
 import pandas as pd
 import pickle
 import _thread
 import os
 import numpy as np
-import json
-
 import time
 import datetime
-
+from copy import deepcopy
 def mkdir(path):
+    '''
+    创建目录
+    '''
     folder = os.path.exists(path)
 
     if not folder:
         os.makedirs(path)
+def get_files(path):
+    '''
+    获取所有文件目录
+    '''
+    temp = []
+    for line in os.listdir(path):
+        temp.append(os.path.join(path,line))
+    return temp
 
-class GraphNeo():
-    def __init__(self,neo4j_host,neo4j_port,neo4j_user,neo4j_password):
-        self.graph = Graph("neo4j://" + neo4j_host + ":" + neo4j_port, auth=(neo4j_user, neo4j_password))
-        self.session = {}
-        self.cache_path = "cache"
-        self.cache_graph = "graph"
-        self.cache_table = "table"
-        # self.en2ch = {"SampleCount":"样本量","Title":"文献","Drugs":"药物/成分","Pathway_Target":"通路/靶标","Result":"结论","Group":"分组","Indicator":"指标","Molecular":"机制"}
 
-        self.en2ch = {"Title":"文献","Drugs":"药物/成分","Pathway_Target":"通路/靶标",
-                      "Result":"结论","Group":"分组","Indicator":"指标","Molecular":"机制",
-                     "Disease":"疾病","Cell":"细胞","Curative":"疗效","Microorganism":"微生物"}
-        self.total_graph = self.load_cache(self.cache_graph)
-        self.total_table = self.load_cache(self.cache_table)
-        try:
-            _thread.start_new_thread(self.get_graphs,("图谱异步加载",))
-            _thread.start_new_thread(self.get_table,("表格异步加载",))
-        except:
-            print("异步错误")
+class GraphService():
+    def __init__(self):
+        self.root_path = "Dataset/"
+        self.cache_path = self.root_path + "Cache/"
+        self.pdf_files = get_files(self.root_path + "PDFs")
+        self.extract_files = get_files(self.root_path + "Extract")
+        
+        self.graph_rela = [ '结论-Result', '疗效', '样本量-Sample Count',
+       '临床指标-Indicator', '分组-Group', '药物-Drugs', '疾病-Disease',
+       '副作用-Side Effect', '微生物', '细胞', '基因-Gene', '通路/靶标-Pathway/Target']
+        
+        self.main_table = pd.read_excel(os.path.join(self.root_path,"MainTable.xlsx")).fillna("")
+        self.init_sec()
+        self.main_graph = self.build_graph(self.main_table)
+        
 
-    def build_nodes(self, nodes_record):
-        data = {"id": str(nodes_record.get('n').identity),
-                "label": next(iter(nodes_record.get('n').labels))}
-        data.update(nodes_record.get('n'))
 
-        return {"data": data}
+        
+        self.temp_graph = deepcopy(self.main_graph)
+        self.temp_table = deepcopy(self.main_table)
 
-    def build_edges(self, relation_record):
-        data = {"source": relation_record.get('r').start_node.identity,
-                "target": relation_record.get('r').end_node.identity,
-                "relationship": type(relation_record.get('r')).__name__}
-
-        return {"data": data}
-
-    def build_graph(self,nodes_result,relation_result):
-        nodes = list(map(self.build_nodes, nodes_result))
-        edges = list(map(self.build_edges, relation_result))
-        return edges, nodes
-
-    def get_graphs(self, name):
-        while True:
-            search_rel_sql = "MATCH ()-[r]->() RETURN r"
-            search_nodes_sql = "MATCH (n) RETURN n"
-
-            relation_result = self.graph.run(search_rel_sql).data()
-            nodes_result = self.graph.run(search_nodes_sql).data()
-
-            edges, nodes = self.build_graph(nodes_result,relation_result)
-            self.save_cache({"nodes": nodes, "links": edges},self.cache_graph)
-            self.total_graph = self.load_cache(self.cache_graph)
-
-    def get_table(self,name):
-        while True:
-            search_nodes_sql = "MATCH (n:Title) RETURN n"
-            nodes_result = self.graph.run(search_nodes_sql).data()
-
-            nodes_result = list(map(self.build_nodes, nodes_result))
-            temp_dict = {"id":[],"Drugs":[],"Group":[],"Abstract":[],"Title":[],"Curative":[],"Indicator":[],"Disease":[],"Cell":[],"Pathway/Target":[],"Year":[],"Microorganism":[],"Author":[]}
-            for line in nodes_result:
-                for sub_line in temp_dict.keys():
-                    temp_dict[sub_line].append(line["data"][sub_line])
-            self.save_cache(pd.DataFrame(temp_dict),self.cache_table)
-            self.total_table = self.load_cache(self.cache_table)
-
-    def table2dict(self,table):
-        temp_dict = {}
-        table = table.replace(np.nan, "")
-        for line in table.keys():
-            temp_dict[line] = list(table[line].values)
-        return temp_dict
-
+    def init_sec(self):
+        '''
+        小问题矫正
+        '''
+        for key in list(self.main_table.keys()):
+            try:
+                temp = []
+                for line in self.main_table[key].values:
+                    temp.append(line.strip())
+                self.main_table[key] = temp
+            except:
+                None
+        urls = []
+        for line in self.main_table["Doi"].values:
+            urls.append("https://doi.org/" + line)
+        self.main_table["原文链接"] = urls
     def save_cache(self,data,name):
         mkdir(self.cache_path)
-        pic_file = open(self.cache_path + "/" + name + ".pickle", "wb")
+        pic_file = open(self.cache_path + "\\" + name + ".pickle", "wb")
         pickle.dump(data, pic_file)
         pic_file.close()
 
     def load_cache(self,name):
         try:
-            with open(self.cache_path + "/" + name + ".pickle", 'rb') as f:
+            with open(self.cache_path + "\\" + name + ".pickle", 'rb') as f:
                 data = pickle.load(f)
-            print(name + "服务器成功加载")
             return data
         except:
-            print(name + "服务器正在初始化")
             return None
 
     def search_graph(self, text):
-        ids = []
-        nodes = []
-        links = []
-        text = text.lower()
-        num_article = 0
-        for line in self.total_graph["nodes"]:
-            try:
-                if text in line["data"]['Abstract'].lower():
-                    ids.append(line["data"]['id'])
-                    nodes.append(line)
-                    pass
-            except:
-                None
-            try:
-                if text in line["data"]['name'].lower() or text in line["data"]['title'].lower():
-                    ids.append(line["data"]['id'])
-                    nodes.append(line)
-            except:
-                if text in line["data"]['name'].lower() or text in line["data"]['Title'].lower():
-                    ids.append(line["data"]['id'])
-                    nodes.append(line)
-        for line in self.total_graph["links"]:
-            if str(line["data"]['source']) in ids and str(line["data"]["target"]) in ids:
-                links.append(line)
-
-        for line in nodes:
-            if "Abstract" in line["data"].keys():
-                num_article += 1 
+        search_table = self.search_data(text)
+        result_graph = self.build_graph(search_table)
+        
+    
+    
         today = str(datetime.date.today().strftime('%y-%m'))
         year = str(today.split("-")[0])
         month = int(today.split("-")[1])
-        
+
         up_date = {}
         for i in range(6):
             if month - i < 0:
@@ -143,63 +93,170 @@ class GraphNeo():
                 month += i
             up_date[year + "-" + str(month)] = 0
         classin = {}
-        for line in nodes:
-            if self.en2ch[line["data"]["label"]] not in classin.keys():
-                classin[self.en2ch[line["data"]["label"]]] = 0.0
-            classin[self.en2ch[line["data"]["label"]]] += 1.0
+        for line in result_graph["links"]:
+            if line["data"]["relationship"] not in classin.keys():
+                classin[line["data"]["relationship"]] = 0.0
+            classin[line["data"]["relationship"]] += 1.0
             try:
                 up_date[line["up_date"]] += 1
             except:
                 None
         classin = {"name":list(classin.keys()),"count":list(classin.values())}
         up_date = {"date":list(up_date.keys()),"count":list(up_date.values())}
-        return {"nodes": nodes, "links": links,"number_nodes":float(len(nodes)),"number_links":float(len(links)),"number_article":float(num_article),"nodes_count":classin,"up_date":up_date}
 
+        return {"nodes": result_graph["nodes"], 
+                "links": result_graph["links"],
+                "number_nodes":float(len(result_graph["nodes"])),
+                "number_links":float(len(result_graph["links"])),
+                "number_article":float(len(search_table.values)),
+                "nodes_count":classin,
+                "up_date":up_date}
 
+    def teminal(self, text):
+        '''
+        命令设计：
+            text#500    //前500
+            text#!500    //后500
+            text#500-600  //500-600
+            text#all   //所有
+            text    //前100条
+
+        '''
+        text = text.replace("  "," ").replace("  "," ").replace("  "," ").replace("  "," ").replace("  "," ").replace("  "," ")
+        try:
+            if "#" in text:
+                if "-" in text.split("#")[-1]:
+                    terminal = text[1:].split(" ")[0].replace(" ","").split("-")
+                    terminal = [None if terminal[0] == "" else int(terminal[0]), None if terminal[1] == "" else int(terminal[1])]
+                    text = text.split("#")[0]
+                elif "all" == text.split("#")[-1].replace(" ","").lower():
+                    terminal = [None,None]
+                    text = text.split("#")[0]
+                elif "!" in text.split("#")[-1] or "！" in text.split("#")[-1]:
+                    terminal = text.split("#")[-1].replace(" ","").replace("!","").replace("！","")
+                    terminal = [-int(terminal),None]
+                    text = text.split("#")[0]
+                else :
+                    terminal = text.split("#")[-1].replace(" ","")
+                    terminal = [None,int(terminal)]
+                    text = text.split("#")[0]            
+            else:
+                terminal = [None,100]
+        except:
+            terminal = [None,100]
+        return terminal, text
+    
     def search_table(self,text):
+        
+        search_df = self.search_data(text)
+        
+        
+        file_name = self.cache_path + "\\SearchResult" + str(int(time.time()*100000000000)) + ".xlsx"
+        search_df.to_excel(file_name,index=None)
+        return {"table":[{na:a[i] for i, na in enumerate(list(self.main_table.keys()))} for a in search_df.values],
+                "number_article":float(len(search_df.values)),
+                "file_name":file_name}
+    
+    
+    def search_data(self,text):
+        '''
+        检索表格
+        '''
+        terminal, text = self.teminal(text)
         indexs_n = []
         text = text.lower()
-        self.total_table = self.total_table.replace(np.nan,"")
-        for i, line in enumerate(self.total_table.values):
-            line = " ".join(line)
+        index = 0
+        for i, line in enumerate(self.main_table.values):
+            temp = ""
+            for subline in line:
+                temp += str(subline)
+            line = temp
             if text in line.lower():
                 indexs_n.append(True)
             else:
                 indexs_n.append(False)
+        
+        search_df = self.main_table[indexs_n]
+        temp = {}
+        
+        for i, line in enumerate(list(search_df.keys())):
+            temp[line] = search_df.values[terminal[0]:terminal[1],i]
+        search_df = pd.DataFrame(temp)
+        self.temp_table = search_df
+        return search_df
+    
+    def build_graph(self,table):
+        '''
+        根据表格构建图谱
+        '''
+        nodes = []
+        links = []
+        index = 0
+        main_nodes = 0
+        for line in table.values:
+            nodes.append({"data":{"id":index,"name":line[0]}})
+            main_nodes = index
+            index += 1
+            for i, rela in enumerate(table.keys()):
+                if line[i] != "":
+                    try:
+                        nodes[-1]["data"][rela] = line[i].replace("@;","")
+                    except:
+                        nodes[-1]["data"][rela] = line[i]
+            
+            for i, rela in enumerate(self.graph_rela):
+                nodes.append({"data":{"id":index,"name":line[list(table.keys()).index(rela)]}})
+                links.append({"data":{"source":main_nodes,"target":index,"relationship":rela}})
+                index += 1
+                for i, rela in enumerate(table.keys()):
+                    if line[list(table.keys()).index(rela)] != "":
+                        try:
+                            nodes[-1]["data"][rela] = line[i].replace("@;","")
+                        except:
+                            nodes[-1]["data"][rela] = line[i]
+        self.temp_graph = {"nodes":nodes,"links":links}
+        return self.temp_graph
+    def get_title(self):
+        '''
+        获取所有文章名称
+        '''
+        return list(self.main_table["title"].values)
+    
+    def get_extract(self, title):
+        '''
+        获取PDFs提取到的图像和表格
+        '''
+        try:
+            file_name = self.main_table[self.main_table["title"].values == title]["index_file"][0]
+            PDF_Name = os.path.join(self.root_path,"PDFs",file_name + ".pdf")
+            extract = []
+            for line in get_files(os.path.join(self.root_path,"Extract",file_name,"png")):
+                extract.append({"type":0,"url":line})
+            for line in get_files(os.path.join(self.root_path,"Extract",file_name,"xlsx")):
+                extract.append({"type":1,"url":line})
                 
-        file_name = self.cache_path + "/SearchResult" + str(int(time.time()*100000000000)) + ".xlsx"
-        self.total_table[indexs_n].to_excel(file_name,index=None)
-        return {"table":[{na:a[i] for i, na in enumerate(list(self.total_table.keys()))} for a in self.total_table[indexs_n].values],"number_article":float(np.sum(indexs_n)),"file_name":file_name}
+            return {"files":extract,"archive":os.path.join(self.root_path,"Extract",file_name + ".zip"),"pdf":PDF_Name}
+        except:
+            return {"files":[],"archive":"","pdf":""}
+    
 
 if __name__ == '__main__':
     '''
     Sample
     '''
-    graph = GraphNeo(NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD)
-    # 所有图谱（图结构）
-    graph.total_graph
-    # 所有文章数据（表格）
-    graph.total_table
-    # 所有文章名
-    graph.total_table["table"]["Title"].values
-    # 检索图谱（图结构）
-    result = graph.search_graph("检索内容")
-    print(json.dumps(result["nodes"]))
-    print(json.dumps(result["links"]))
-    # 检索文章数据（表格）
-    result = graph.search_table("检索内容")
-    print(json.dumps(result["table"]))
+    graph = GraphService()
+    
+    graph.main_graph    # 所有图谱（图结构）
+    
+    graph.main_table    # 所有文章数据（表格）
+    
+    graph.get_title()   # 所有文章名 
+    
+    result = graph.search_graph("yphylla-Derived")   # 检索图谱（图结构）
+    
+    result = graph.search_table("yphylla-Derived")   # 检索文章数据（表格）
 
-    # 2022/12/04 更新
-    '''
-    1、文章搜索返回的数据按一条一条的list返回 已完成
-    2、Excel下载：  已完成
-        先调用 graph.search_table 函数获取所有文章数据，返回值当中包含 file_name 字段，该字段指向保存好的excel文件位置以及文件名“cache文件夹下”
-        前端调用该excel即可
-    3、获取文章题目列表  已完成
-        所有文章题目列表方法：list(graph.total_table["Title"].values)
-    4、更新统计  已完成
-        集成在 graph.search_graph 函数当中，返回字段为 up_date
-    5、节点类型统计  已完成
-        集成在 graph.search_graph 函数当中，返回字段为 nodes_count
-    '''
+    
+    title = "A meta-analysis of the clinical efficacy and safety of Bailing capsules in the treatment of nephrotic syndrome"
+    result = graph.get_extract(title)   # 获取图片、表格、打包文件、PDF 注意：检索内容需传入完整Title信息
+    print(result)
