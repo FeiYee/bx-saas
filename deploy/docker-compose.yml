@@ -89,18 +89,18 @@ services:
     user: root
     command: --default-authentication-plugin=mysql_native_password
 
-  neo4j:
-    image: neo4j:5.1.0-community
-    volumes:
-      - ./neo4j/data:/data
-    ports:
-      - "7474:7474"  # HTTP
-      - "7687:7687"  # Bolt
-    hostname: neo4j
-    networks:
-      - net
-    restart: always
-    user: root
+  # neo4j:
+  #   image: neo4j:5.1.0-community
+  #   volumes:
+  #     - ./neo4j/data:/data
+  #   ports:
+  #     - "7474:7474"  # HTTP
+  #     - "7687:7687"  # Bolt
+  #   hostname: neo4j
+  #   networks:
+  #     - net
+  #   restart: always
+  #   user: root
 
 networks:
   net:

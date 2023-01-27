@@ -1,22 +1,24 @@
 from typing import Type, TypeVar, Any
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
+import simplejson
+import requests
 from app.core.util import get_uuid
 from app.system.model.user import User
 from ..model.search import Search
 from ..model.keyword import Keyword
 from ..model.search_record import SearchRecord
 from ..schema.search_schema import SearchResultSchema
-from app.graph.service.graph_service import GraphNeo
-from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
-import simplejson
+# from app.graph.service.graph_service import GraphService
+# from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
+from config import GRAPH_SERVER
 
 
 KeywordModelType = TypeVar("KeywordModelType", bound=Keyword)
 SearchModelType = TypeVar("SearchModelType", bound=Search)
 SearchRecordModelType = TypeVar("SearchRecordModelType", bound=SearchRecord)
 
-graph_service = GraphNeo(NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD)
+# graph_service = GraphService(NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD)
 
 
 class SearchService:
@@ -79,12 +81,17 @@ class SearchService:
 
         # data = jsonable_encoder({'keyword': keyword_text})
         try:
-            data = graph_service.search_graph(text=keyword_text)
+            # data = graph_service.search_graph(text=keyword_text)
+            url = GRAPH_SERVER + '/search_graph'
+            res = requests.post(url=url, json={'text': keyword_text})
+            data = res.json()
+            print(data)
         except Exception as err:
+            print(err)
             data = None
 
-        # return data
-        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
+        return data
+        # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_article(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
         self.search(keyword_text=keyword_text, current_user=current_user, db=db)
@@ -92,7 +99,10 @@ class SearchService:
         # data = jsonable_encoder({'keyword': keyword_text})
         data = None
         try:
-            result = graph_service.search_table(text=keyword_text)
+            # result = graph_service.search_table(text=keyword_text)
+            url = GRAPH_SERVER + '/search_table'
+            res = requests.post(url=url, data={'text': keyword_text})
+            data = res.json()
         except Exception as err:
             result = None
 
@@ -101,8 +111,8 @@ class SearchService:
             if top_level != 0:
                 data['table'] = result['table'][0:top_level]
 
-        # return data
-        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
+        return data
+        # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_file(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
         # self.search(keyword_text=keyword_text, current_user=current_user, db=db)
@@ -110,7 +120,7 @@ class SearchService:
         # data = jsonable_encoder({'keyword': keyword_text})
         data = None
         try:
-            result = graph_service.search_table(text=keyword_text)
+            result = None
         except Exception as err:
             result = None
 
@@ -147,8 +157,8 @@ class SearchService:
             }
         ]
         # type 0->全文, 1-> 摘要
-        # return data
-        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
+        return data
+        # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_content(self, keyword_text: str, current_user: User, db: Session) -> Any:
         # self.search(keyword_text=keyword_text, current_user=current_user, db=db)
@@ -156,9 +166,11 @@ class SearchService:
         # data = jsonable_encoder({'keyword': keyword_text})
         data = None
         try:
-            result = graph_service.search_table(text=keyword_text)
+            url = GRAPH_SERVER + '/search_table'
+            res = requests.post(url=url, data={'text': keyword_text})
+            data = res.json()
         except Exception as err:
-            result = None
+            data = None
 
         data = {
             'files': [
@@ -187,8 +199,8 @@ class SearchService:
         }
 
         # type 0-> image, 1->excel
-        # return data
-        return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
+        return data
+        # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
 
 search_service = SearchService(keyword_model=Keyword, search_model=Search, search_record_model=SearchRecord)
