@@ -2,17 +2,35 @@
 
 .header {
   height: $header-height;
-  background-color: #f6f6f6;
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.5);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+
+  padding: 0 240px;
 
 
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
-  .container {
-    height: $header-height;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  a {
+    color: #FFFFFF;
+    padding: 0 0.5rem;
   }
+
+  // .container {
+  //   height: $header-height;
+  //   display: flex;
+  //   flex-direction: row;
+  //   justify-content: space-between;
+  //   align-items: center;
+  // }
 
   .account {
     display: flex;

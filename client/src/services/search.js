@@ -23,6 +23,23 @@ const searchService = {
     return await http.get(url, data)
   },
 
+  async searchFile(keyword, topLevel) {
+    let data = {
+      keyword,
+      top_level: topLevel
+    }
+    let url = this.getUrl('/search/file')
+    return await http.get(url, data)
+  },
+
+  async searchContent(keyword) {
+    let data = {
+      keyword,
+    }
+    let url = this.getUrl('/search/content')
+    return await http.get(url, data)
+  },
+
 }
 
 export default searchService

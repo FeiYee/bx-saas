@@ -3,7 +3,7 @@ import MainView from '../views/MainView.vue'
 import LoginView from '../views/LoginView.vue'
 import HomeView from '../views/HomeView.vue'
 import DownloadView from '../views/DownloadView.vue'
-import FiLeView from '../views/FiLeView.vue'
+import DocView from '../views/DocView.vue'
 import context from '../core/context.js'
 
 
@@ -17,7 +17,7 @@ const router = createRouter({
       children: [
         {path: '', name: 'home', component: HomeView, alias: '/'},
         {path: 'download', name: 'download', component: DownloadView},
-        {path: 'file', name: 'file', component: FiLeView},
+        {path: 'doc', name: 'doc', component: DocView},
       ],
     },
     {

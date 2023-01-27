@@ -20,7 +20,7 @@
         <section class="content-detail">
           <h3 class="content-title">内容简述</h3>
           <div>
-
+            <Preview />
           </div>
           <div>
 
@@ -98,7 +98,7 @@ import { ref, reactive, inject, onMounted, onBeforeUnmount } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
 import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
-// import Keyword from '../components/Keyword.vue'
+import Preview from '../components/Preview.vue'
 
 import { downloadFile } from '../core/download.js'
 

@@ -100,5 +100,5 @@ site/
 # data
 # data/
 *.db
-cache/
+# cache/
 temp/

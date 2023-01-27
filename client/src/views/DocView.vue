@@ -15,12 +15,12 @@
               </div>
               <div class="file-name" :class="{summary: item.type==1}">{{ item.name }}</div>
             </li>
-            <li class="file-item">
+            <!-- <li class="file-item">
               <div class="file-check">
                 <input type="checkbox" name="" id="">
               </div>
               <div class="file-name summary">dfsfsdf</div>
-            </li>
+            </li> -->
           </ul>
 
         </div>
@@ -106,7 +106,7 @@ const search = async () => {
   })
 
   try {
-    getFiles()
+    await getFiles()
   } catch (err) {
     console.log(err)
     ElMessage({
@@ -121,35 +121,10 @@ const search = async () => {
 
 
 const getFiles = async () => {
-  fileList.value = [
-    {
-      name: 'dsdsdsdsdsds.pdf',
-      id: '1222',
-      type: 0,
-    },
-    {
-      name: 'ddsdsdsdsdsds.pdf',
-      id: '122d2',
-      type: 1,
+  let data = await searchService.searchFile(keyword.value)
 
-    },
-    {
-      name: 'dsdsxdsdsdsds.pdf',
-      id: '12x22',
-      type: 0,
-    },
-  ]
-  return
-  let page = pageCurrent.value
-  let start = (page - 1) * pageSize.value
-  let end = page * pageSize.value
+  fileList.value = data;
 
-  let data = await searchService.searchArticle(keyword.value, topLevel.value)
-  articleCount.value = data.number_article
-  articleOriginalList.value = data.table
-  articleList.value = Array.from(articleOriginalList.value)
-  articleExcel.value = data.file_name
-  pageCount.value = data.table.length
 }
 
 const onPageChange = (page) => {
@@ -169,6 +144,7 @@ const onLastPage = () => {
 
 
 const init = () => {
+  search();
 }
 
 init()

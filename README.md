@@ -29,3 +29,13 @@
 | v1   | 版本1, 药厂      |
 | main | 主分支, 最新分支 |
 
+
+
+```shell
+python3 -m pip install pandas
+python3 -m pip install numpy
+python3 -m pip install sklearn
+python3 -m pip install pyecharts
+python3 -m pip install matplotlib
+python3 -m pip install neo4j
+```

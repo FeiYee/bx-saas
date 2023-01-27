@@ -18,12 +18,12 @@ export default defineConfig({
     usePolling: true,
     proxy: {
       '/api': {
-        target: 'http://116.198.202.249:8080',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, '/api')
       },
       '/file': {
-        target: 'http://116.198.202.249:8080',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/file/, '')
       },

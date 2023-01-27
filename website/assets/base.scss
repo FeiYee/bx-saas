@@ -129,6 +129,13 @@ table {
   table-layout: fixed;
 }
 
+.linear {
+  width: 220px;
+  height: 12px;
+  display: inline-block;
+  background: linear-gradient(to right, green, orange);
+}
+
 @media (hover: hover) {
   a:hover {
     // background-color: hsla(160, 100%, 37%, 0.2);

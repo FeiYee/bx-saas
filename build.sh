@@ -20,7 +20,12 @@ npm run build
 cp -r dist/* ../dist/portal/www
 cd ..
 
-cd doc
-mkdocs build
-cp -r site/* ../dist/doc/www
+cd website
+npm run build
+cp -r dist/* ../dist/website/www
 cd ..
+
+# cd doc
+# mkdocs build
+# cp -r site/* ../dist/doc/www
+# cd ..

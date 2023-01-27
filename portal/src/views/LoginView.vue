@@ -103,7 +103,7 @@ const login = async (data) => {
 <style lang="scss">
 .login {
   height: 100vh;
-  background-image: url('/bg.webp');
+  background-image: url('/bg.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -160,28 +160,32 @@ class SearchService:
         except Exception as err:
             result = None
 
-        data = [
-            {
-                'type': 1,
-                'url': '/asset/1/xlsx/3.xlsx',
-            },
-            {
-                'type': 0,
-                'url': '/asset/1/png/img_1.png',
-            },
-            {
-                'type': 0,
-                'url': '/asset/1/png/img_2.png',
-            },
-            {
-                'type': 1,
-                'url': '/asset/1/xlsx/1.xlsx',
-            },
-            {
-                'type': 0,
-                'url': '/asset/1/png/img_3.png',
-            }
-        ]
+        data = {
+            'files': [
+                {
+                    'type': 1,
+                    'url': '/asset/1/xlsx/3.xlsx',
+                },
+                {
+                    'type': 0,
+                    'url': '/asset/1/png/img_1.png',
+                },
+                {
+                    'type': 0,
+                    'url': '/asset/1/png/img_2.png',
+                },
+                {
+                    'type': 1,
+                    'url': '/asset/1/xlsx/1.xlsx',
+                },
+                {
+                    'type': 0,
+                    'url': '/asset/1/png/img_3.png',
+                }
+            ],
+            'archive': '/asset/1/png/img.zip'
+        }
+
         # type 0-> image, 1->excel
         # return data
         return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
