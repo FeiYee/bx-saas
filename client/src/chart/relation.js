@@ -45,16 +45,16 @@ export const relationChart = (data, handleNodeClick) => {
   const collide = d3
     .forceCollide(100)
     .radius(() => 30)
-    .strength(0.5)
-    .iterations(5)
+    .strength(0.7)
+    .iterations(3)
   const linkLine = d3
     .forceLink(links)
     .id(d => d.id)
-    .distance(220)
+    .distance(200)
   // 万有引力
   const charge = d3
     .forceManyBody()
-    .strength(-1000)
+    .strength(-800)
     .distanceMax(300)
 
   const simulation = d3

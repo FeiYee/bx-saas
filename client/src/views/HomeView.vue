@@ -163,7 +163,7 @@ const onSearch = async (keyword) => {
       let upData = data.up_date
 
       let relationData = getRelationData(data)
-
+console.log(relationData)
       if (chartRelationship) {
         chartRelationship.dispose()
       }

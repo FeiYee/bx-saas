@@ -84,19 +84,19 @@ const getFiles = async () => {
 
   fileList.value = [
     {
-      url: 'http://localhost:8000/file/asset/1/xlsx/3.xlsx',
+      url: 'http://43.154.134.150:5698/Dataset/Extract/基础10/xlsx/0-第5页-基础10.xlsx',
       type: 1,
     },
     {
-      url: 'http://localhost:8000/file/asset/1/png/img_1.png',
+      url: 'http://43.154.134.150:5698/Dataset/Extract/基础10/png/img_7.png',
       type: 0,
     },
     {
-      url: 'http://localhost:8000/file/asset/1/png/img_2.png',
+      url: 'http://43.154.134.150:5698/Dataset/Extract/基础10/png/img_7.png',
       type: 0,
     },
     {
-      url: 'http://localhost:8000/file/asset/1/xlsx/1.xlsx',
+      url: 'http://43.154.134.150:5698/Dataset/Extract/基础10/xlsx/0-第5页-基础10.xlsx',
       type: 1,
     }
   ]

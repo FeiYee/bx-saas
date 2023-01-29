@@ -32,11 +32,11 @@ const searchService = {
     return await http.get(url, data)
   },
 
-  async searchContent(keyword) {
+  async searchExtract(keyword) {
     let data = {
       keyword,
     }
-    let url = this.getUrl('/search/content')
+    let url = this.getUrl('/search/extract')
     return await http.get(url, data)
   },
 

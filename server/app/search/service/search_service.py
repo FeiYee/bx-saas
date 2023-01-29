@@ -160,13 +160,13 @@ class SearchService:
         return data
         # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
-    def search_content(self, keyword_text: str, current_user: User, db: Session) -> Any:
+    def search_extract(self, keyword_text: str, current_user: User, db: Session) -> Any:
         # self.search(keyword_text=keyword_text, current_user=current_user, db=db)
 
         # data = jsonable_encoder({'keyword': keyword_text})
         data = None
         try:
-            url = GRAPH_SERVER + '/search_table'
+            url = GRAPH_SERVER + '/search_extract'
             res = requests.post(url=url, data={'text': keyword_text})
             data = res.json()
         except Exception as err:
