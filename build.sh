@@ -9,6 +9,7 @@ rm -rf dist/server/__pycache__
 rm -rf dist/server/*/__pycache__
 rm -rf dist/server/*/*/__pycache__
 rm -rf dist/server/*/*/*/__pycache__
+rm -rf dist/server/cache/*.xlsx
 
 cd client
 npm run build
@@ -21,7 +22,7 @@ cp -r dist/* ../dist/portal/www
 cd ..
 
 cd website
-npm run build
+npm run generate
 cp -r dist/* ../dist/website/www
 cd ..
 
