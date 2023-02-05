@@ -12,7 +12,6 @@ class ArticleExtract(BaseModel):
     __tablename__ = "article_extract"
 
     article_id = Column(String(32), index=True, comment='文章ID')
-    # article_title = Column(String(255), default='', comment='标题')
     url = Column(String(255), unique=True, comment='URL')
     file_name = Column(String(255), comment='文件名称')
     file_path = Column(String(255), comment='文件路径')

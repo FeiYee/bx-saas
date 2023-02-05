@@ -5,11 +5,11 @@ from app.core.base import BaseModel
 class Article(BaseModel):
     __tablename__ = "article"
 
-    name = Column(String(1024), index=True, comment='名称')
-    title = Column(String(1024), index=True, comment='文章标题')
+    name = Column(String(1024), comment='名称')
+    title = Column(String(1024), comment='文章标题')
     summary = Column(TEXT, default='', comment='摘要')
     content = Column(TEXT, default='', comment='内容')
-    author = Column(String(255), default='', index=True, comment='作者')
+    author = Column(String(255), default='', comment='作者')
     date = Column(String(255), default='', comment='Date')
     molecular = Column(String(1024), default='', comment='机理')
     journal = Column(String(255), default='', comment='期刊')

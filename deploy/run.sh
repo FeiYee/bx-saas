@@ -1,5 +1,5 @@
-docker-compose up -d
+docker compose up -d
 
 sleep 60
 
-docker-compose restart server
+docker compose restart server
