@@ -16,4 +16,4 @@ class ArticleExtract(BaseModel):
     file_name = Column(String(255), comment='文件名称')
     file_path = Column(String(255), comment='文件路径')
     file_size = Column(String(255), comment='文件大小')
-    file_type = Column(Integer, default=0, comment="文件类型: 0->image, 1->excel, 2->pdf")
+    file_type = Column(Integer, default=0, comment="文件类型: 0->image, 1->excel, 2->pdf, 3->zip")
