@@ -4,9 +4,10 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 import requests
+from app.system.model.user import User
 
 from ..model.article import Article
-from ..schema.datum_schema import DatumSchema
+from ..schema.article_schema import ArticleSchema
 
 ArticleModelType = TypeVar("ArticleModelType", bound=Article)
 
@@ -20,8 +21,22 @@ class ArticleService:
         datums = db.query(self.model).all()
         return datums
 
+    def create(self, article_schema: ArticleSchema, current_user: User, db: Session) -> Article:
+        data = jsonable_encoder(article_schema)
+        article = self.model(**data)
+        db.add(article)
+        db.commit()
+        db.refresh(article)
+        return article
+
     def find_by_title(self, title: str, db: Session) -> List[str]:
         articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
+
+        # if len(title) == 0 or str.isspace(title):
+        #     articles = db.query(self.model).all()
+        # else:
+        #     articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
+
         return articles
 
     def find_article_title(self, *, db: Session) -> List[str]:

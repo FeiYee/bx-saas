@@ -1,4 +1,4 @@
-# 项目
+# BX-SAAS 项目
 
 ## 目录
 ```text
@@ -9,17 +9,19 @@
 ├── portal
 ├── resource
 ├── server
+├── website
 └── README.md
 ```
 
 ## 地址列表
-| 服务    | 地址                           |
-|-------|------------------------------|
-| 用户端   | http://116.198.202.249:8000/ |
-| 管理端   | http://116.198.202.249:8010/ |
-| 服务端   | http://116.198.202.249:8080/ |
-| mysql | 116.198.202.249:3306         |
-| neo4j | http://116.198.202.249:7474  |
+| 服务    | 地址                         |
+|---------|------------------------------|
+| 用户端   | http://43.154.134.150:8000/ |
+| 管理端   | http://43.154.134.150:8010/ |
+| 官网端   | http://43.154.134.150:8020/ |
+| 服务端   | http://43.154.134.150:8080/ |
+| mysql   | 43.154.134.150:3306         |
+| neo4j   | http://116.198.202.249:7474 |
 
 
 ## 分支
@@ -30,12 +32,3 @@
 | main | 主分支, 最新分支 |
 
 
-
-```shell
-python3 -m pip install pandas
-python3 -m pip install numpy
-python3 -m pip install sklearn
-python3 -m pip install pyecharts
-python3 -m pip install matplotlib
-python3 -m pip install neo4j
-```
