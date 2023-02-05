@@ -1,6 +1,7 @@
 
 
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, func
 from sqlalchemy.orm import Session
 
@@ -19,7 +20,7 @@ class BaseModel(Base):
     created_at = Column(DateTime, server_default=func.now(), comment='创建时间')
     updated_by = Column(String(32), comment='更新人ID')
     updated_at = Column(DateTime, onupdate=func.now(), comment='更新时间')
-    updated_count = Column(String(255), comment='更新次数')
+    updated_count = Column(Integer, comment='更新次数')
     deleted_by = Column(String(32), comment='删除人ID')
     deleted_at = Column(DateTime, comment='删除时间')
 

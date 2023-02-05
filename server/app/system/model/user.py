@@ -14,3 +14,4 @@ class User(BaseModel):
     name = Column(String(255), comment='名称')
     email = Column(String(255), index=True, comment='邮箱')
     is_admin = Column(Boolean, default=False, comment="是否管理员")
+    domain = Column(String(255), index=True, comment='域')

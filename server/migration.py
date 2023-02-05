@@ -2,11 +2,13 @@ import logging
 from sqlalchemy.orm import Session
 from app.core.database import engine, Base, DBSession
 from app.system.model.user import User
+import app.datum.model.article
+import app.datum.model.article_extract
+import app.datum.model.article_datum
 import app.datum.model.datum
 import app.search.model.keyword
 import app.search.model.search
 import app.search.model.search_record
-import app.stats.model.stats_download
 import app.system.model.user
 import app.system.model.org
 import app.system.model.org_user
