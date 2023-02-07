@@ -9,7 +9,7 @@ from ..model.search import Search
 from ..model.keyword import Keyword
 from ..model.search_record import SearchRecord
 from ..schema.search_schema import SearchResultSchema
-# from app.graph.service.graph_service import GraphService
+from app.datum.service.article_service import article_service
 # from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
 from config import GRAPH_SERVER
 
@@ -95,23 +95,24 @@ class SearchService:
 
     def search_article(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
         self.search(keyword_text=keyword_text, current_user=current_user, db=db)
+        articles = article_service.find_by_title(title=keyword_text)
+        if top_level != 0:
+            articles = articles[0:top_level]
+        return articles
 
-        # data = jsonable_encoder({'keyword': keyword_text})
-        data = None
-        try:
-            # result = graph_service.search_table(text=keyword_text)
-            url = GRAPH_SERVER + '/search_table'
-            res = requests.post(url=url, data={'text': keyword_text})
-            data = res.json()
-        except Exception as err:
-            result = None
-
-        if result is not None:
-            data = result
-            if top_level != 0:
-                data['table'] = result['table'][0:top_level]
-
-        return data
+        # data = None
+        # try:
+        #     # result = graph_service.search_table(text=keyword_text)
+        #     url = GRAPH_SERVER + '/search_table'
+        #     res = requests.post(url=url, data={'text': keyword_text})
+        #     data = res.json()
+        # except Exception as err:
+        #     result = None
+        #
+        # if result is not None:
+        #     data = result
+        #     if top_level != 0:
+        #         data['table'] = result['table'][0:top_level]
         # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_file(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:

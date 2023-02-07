@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.core.dependence import get_db
+from app.core.util import get_uuid
 from app.system.model.user import User
 from ..service.home_service import home_service
 from ..security.auth import get_current_user
@@ -32,5 +33,10 @@ async def get_user_detail(current_user: User = Depends(get_current_user), db: Se
 
 
 @router.get("/token/user", tags=["home"])
-def test_token(current_user: User = Depends(get_current_user)) -> Any:
+def user(current_user: User = Depends(get_current_user)) -> Any:
     return current_user
+
+
+@router.get("/uuid", tags=["home"])
+def uuid() -> Any:
+    return get_uuid()

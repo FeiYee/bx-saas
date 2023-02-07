@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get("/article", tags=["article"])
-async def get_article(db: Session = Depends(get_db)):
+async def get(db: Session = Depends(get_db)):
     return article_service.find(db=db)
 
 
@@ -21,7 +21,7 @@ async def create(article_schema: ArticleSchema, current_user: User = Depends(get
 
 
 @router.get("/article/query", tags=["article"])
-async def get_article(title: str = '', db: Session = Depends(get_db)):
+async def get_article_by_title(title: str = '', db: Session = Depends(get_db)):
     return article_service.find_by_title(title=title, db=db)
 
 

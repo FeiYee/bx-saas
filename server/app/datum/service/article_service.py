@@ -24,19 +24,18 @@ class ArticleService:
     def create(self, article_schema: ArticleSchema, current_user: User, db: Session) -> Article:
         data = jsonable_encoder(article_schema)
         article = self.model(**data)
+        article.created_by = current_user.id
         db.add(article)
         db.commit()
         db.refresh(article)
         return article
 
-    def find_by_title(self, title: str, db: Session) -> List[str]:
+    def find_by_title(self, title: str, db: Session) -> List[Article]:
         articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
-
         # if len(title) == 0 or str.isspace(title):
         #     articles = db.query(self.model).all()
         # else:
         #     articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
-
         return articles
 
     def find_article_title(self, *, db: Session) -> List[str]:

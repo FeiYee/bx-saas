@@ -22,7 +22,10 @@ class DatumService:
 
     async def create(self, file: UploadFile, title: str, db: Session) -> Datum:
         content = await file.read()
-        file_path = BASE_DIR / 'asset' / file.filename
+        file_dir = BASE_DIR / 'asset' / 'datum'
+        if not file_dir.exists():
+            file_dir.mkdir()
+        file_path = file_dir / file.filename
         file_path.write_bytes(content)
 
         datum = self.model()
