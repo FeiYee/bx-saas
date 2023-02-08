@@ -30,7 +30,7 @@ class ArticleService:
         db.refresh(article)
         return article
 
-    def find_by_title(self, title: str, db: Session) -> List[Article]:
+    def find_by_title(self, title: str, db: Session) -> List[tuple[Article]]:
         articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
         # if len(title) == 0 or str.isspace(title):
         #     articles = db.query(self.model).all()

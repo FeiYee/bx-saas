@@ -81,7 +81,8 @@ class SearchService:
 
         # data = jsonable_encoder({'keyword': keyword_text})
         try:
-            # data = graph_service.search_graph(text=keyword_text)
+            # data = graph_service.search_graph(title=keyword_text, db=db)
+            # data = graph_service.search_graph(title: str, db: Session)
             url = GRAPH_SERVER + '/search_graph'
             res = requests.post(url=url, json={'text': keyword_text})
             data = res.json()
@@ -95,7 +96,7 @@ class SearchService:
 
     def search_article(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
         self.search(keyword_text=keyword_text, current_user=current_user, db=db)
-        articles = article_service.find_by_title(title=keyword_text)
+        articles = article_service.find_by_title(title=keyword_text, db=db)
         if top_level != 0:
             articles = articles[0:top_level]
         return articles
