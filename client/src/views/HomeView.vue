@@ -20,7 +20,7 @@
         <section class="content-detail">
           <h3 class="content-title">内容简述</h3>
           <div>
-            <Preview />
+            <Preview v-model="articleExtracts"/>
           </div>
           <div>
 
@@ -101,10 +101,12 @@ import Nav from '../components/Nav.vue'
 import Preview from '../components/Preview.vue'
 
 import { downloadFile } from '../core/download.js'
+import filePrefix from '../core/config.js'
 
 import searchService from '../services/search.js'
 import keywordService from '../services/keyword.js'
 import datumService from '../services/datum.js'
+import articleExtractService from '../services/article-extract.js'
 
 import { getRelationData, setChartRelation, setChartPie, setChartBar } from '../chart/chart.js'
 import { relationChart } from '../chart/relation.js'
@@ -113,7 +115,7 @@ import context from '../core/context'
 // const echarts = inject('echarts')
 
 // let keyword = ref('')
-// let keywords = ref([])
+let articleExtracts = ref([])
 let isSearchDone = ref(false)
 
 const article = reactive({
@@ -232,11 +234,17 @@ const handleNodeClick = (node) => {
   article['Pathway/Target'] = node['Pathway/Target'] // 通路/靶标
   article['Side Effect'] = node['Side Effect']   // 副作用
   article['Sample count'] = node['Sample count'] // 样本量
+
+  getArticleExtracts(node.id)
 }
 
-// const getKeywords = async () => {
-//   keywords.value = await keywordService.getUserKeywords(0)
-// }
+const getArticleExtracts = async (articleId) => {
+  let list = articleExtractService.getArticleExtracts(articleId)
+  list.forEach(item => {
+    item.url = filePrefix + item.url
+  })
+  articleExtracts.value = list
+}
 
 // const init = async () => {
 //   // await getKeywords()

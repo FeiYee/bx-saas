@@ -8,6 +8,7 @@ class ArticleDatumSchema(BaseModel):
     user_id: str | None = None
     url: str | None = None
     type: int | None = None
+    content_type: int | None = None
     keyword: int | None = None
     file_name: str | None = None
     file_path: str | None = None

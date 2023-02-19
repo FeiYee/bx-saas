@@ -95,7 +95,7 @@ import { ElMessage, ElLoading } from 'element-plus'
 import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
 import searchService from '../services/search.js'
-import {downloadExcelFile} from '../core/download.js'
+import {downloadFile} from '../core/download.js'
 import context from '../core/context'
 
 const keyword = ref('')
@@ -211,7 +211,7 @@ const onLastPage = () => {
 }
 
 const onDownload = async () => {
-  downloadExcelFile(articleExcel.value, '搜索结果.xlsx')
+  downloadFile(articleExcel.value, '搜索结果.xlsx')
 }
 
 const init = () => {

@@ -32,7 +32,7 @@ const props = defineProps({
 
 const emit = defineEmits(['search', 'update:modelValue']);
 
-const keyword = computed({
+const fileList = computed({
   get: () => props.modelValue,
   set: (value) => {
     emit('update:modelValue', value)
@@ -42,7 +42,7 @@ const keyword = computed({
 
 const file = ref({});
 
-const fileList = ref([]);
+// const fileList = ref([]);
 
 
 const init = async () => {
@@ -105,8 +105,6 @@ const getFiles = async () => {
 
 const onClick = (index) => {
   file.value = fileList.value[index];
-
-  console.log(file.value)
   if (file.value.type === 1) {
     renderExcel(file)
   }

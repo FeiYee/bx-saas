@@ -1,9 +1,10 @@
 import axios from 'axios'
 import qs from 'qs'
 import context from './context.js'
+import {apiPrefix} from './config'
 
 const instance = axios.create({
-  baseURL: '/api',
+  baseURL: apiPrefix,
   timeout: 300000,
   headers: {
     'Authorization': `Bearer ${context.getToken()}`,
