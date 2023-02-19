@@ -1,4 +1,6 @@
 import logging
+
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 from app.core.database import engine, Base, DBSession
 from app.system.model.user import User
@@ -38,7 +40,7 @@ def migrate():
         db = DBSession()
         init_user(db)
         # Try to create session to check if DB is awake
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
     except Exception as e:
         logger.error(e)
         raise e
