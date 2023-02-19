@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
-import time
+from pubmed.pubmed import fetch
 
 
 def main():
+    fetch()
     pass
 
 

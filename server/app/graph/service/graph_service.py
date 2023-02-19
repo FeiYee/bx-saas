@@ -28,10 +28,10 @@ class GraphService:
         self.temp_graph = deepcopy(self.main_graph)
 
     def build_db2graph(self,db):
-        
+
         self.main_table = {}
         self.main_graph = {}
-        
+
         self.cursor = db.cursor()
         self.cursor.execute("select COLUMN_NAME from information_schema.COLUMNS where table_name = 'article';")
         for line in self.cursor.fetchall():
@@ -41,7 +41,7 @@ class GraphService:
         self.main_graph = self.build_graph(self.main_table)
         self.temp_table = deepcopy(self.main_table)
         self.temp_graph = deepcopy(self.main_graph)
-        
+
     def set_data(self):
         self.cursor.execute("SELECT * FROM article")
         while True:
@@ -69,7 +69,7 @@ class GraphService:
         for line in self.main_table["doi"].values:
             urls.append("https://doi.org/" + line)
         self.main_table["原文链接"] = urls
-        
+
         temp = []
         for line in self.main_table[self.index].values:
             temp.append(" ".join(line).replace("."," ").replace(","," ").replace("  "," ").replace("  "," ").lower())
@@ -116,7 +116,7 @@ class GraphService:
         text = text.lower()
         search_df = self.main_table[self.index][self.main_table["search_index"].str.contains(text)]
 
-        
+
         if return_table:
             return search_df
         else:
@@ -164,11 +164,11 @@ class GraphService:
                             nodes[-1]["data"][rela] = line[i]
         self.temp_graph = {"nodes": nodes, "links": links}
         return self.temp_graph
-    
+
     def search_graph(self, text, db):
-        
+
         self.build_db2graph(db)
-        
+
         search_table = self.search_table(text,return_table = True)
         result_graph = self.build_graph(search_table)
 
@@ -201,3 +201,6 @@ class GraphService:
                 "number_article": float(len(search_table.values)),
                 "nodes_count": classin,
                 "up_date": up_date}
+
+
+graph_service = GraphService()

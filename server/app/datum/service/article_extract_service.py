@@ -82,4 +82,4 @@ class ArticleExtractService:
         return article_extract
 
 
-article_extract_service = ArticleExtractService(ArticleExtract)
+article_extract_service = ArticleExtractService(model=ArticleExtract)

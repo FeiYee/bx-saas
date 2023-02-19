@@ -38,5 +38,8 @@ def user(current_user: User = Depends(get_current_user)) -> Any:
 
 
 @router.get("/uuid", tags=["home"])
-def uuid() -> Any:
-    return get_uuid()
+def uuid(number: int = 1, ) -> Any:
+    uuids = list()
+    for i in range(number):
+        uuids.append(get_uuid())
+    return uuids

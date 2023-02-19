@@ -1,24 +1,19 @@
 from typing import Type, TypeVar, Any
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-import simplejson
 import requests
 from app.core.util import get_uuid
 from app.system.model.user import User
 from ..model.search import Search
 from ..model.keyword import Keyword
 from ..model.search_record import SearchRecord
-from ..schema.search_schema import SearchResultSchema
 from app.datum.service.article_service import article_service
-# from config import NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD
+from app.graph.service.graph_service import graph_service
 from config import GRAPH_SERVER
 
 
 KeywordModelType = TypeVar("KeywordModelType", bound=Keyword)
 SearchModelType = TypeVar("SearchModelType", bound=Search)
 SearchRecordModelType = TypeVar("SearchRecordModelType", bound=SearchRecord)
-
-# graph_service = GraphService(NEO4J_HOST, NEO4J_PORT, NEO4J_USER, NEO4J_PASSWORD)
 
 
 class SearchService:
@@ -78,14 +73,8 @@ class SearchService:
 
     def search_graph(self, keyword_text: str, current_user: User, db: Session) -> Any:
         self.search(keyword_text=keyword_text, current_user=current_user, db=db)
-
-        # data = jsonable_encoder({'keyword': keyword_text})
         try:
-            # data = graph_service.search_graph(title=keyword_text, db=db)
-            # data = graph_service.search_graph(title: str, db: Session)
-            url = GRAPH_SERVER + '/search_graph'
-            res = requests.post(url=url, json={'text': keyword_text})
-            data = res.json()
+            data = graph_service.search_graph(title=keyword_text, db=db)
             print(data)
         except Exception as err:
             print(err)
