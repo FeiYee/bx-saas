@@ -3,34 +3,36 @@
     <div class="preview-content">
       <div class="preview-img" v-show="file.type === 0">
         <img :src="file.url" srcset="">
-        <!-- <el-image
-          style="width: 100%; height: 100%"
-          :src="file.url"
-          :zoom-rate="1.2"
-          :preview-src-list="file.url"
-          :initial-index="4"
-          fit="cover"
-        /> -->
       </div>
       <div v-show="file.type === 1" id="excel"></div>
     </div>
     <div class="preview-operate" >
-      <span v-for="(item, index) in fileList" @click="onClick(index)">{{ index + 1 }}</span>
+      <div class="preview-operate-page">
+        <span
+          v-for="(item, index) in fileList"
+          :key="index" @click="onClick(index)"
+          :class="{active: fileIndex === index}">
+          {{ index + 1 }}
+        </span>
+      </div>
+      <div class="preview-operate-download" @click="onClickDownload">
+        <span>导出</span>
+        <el-icon><Download color="#9E9E9E"/></el-icon>
+      </div>
     </div>
-
   </section>
 </template>
 <script setup>
-import { ref, defineEmits, computed, onMounted } from 'vue'
+import { ref, defineEmits, computed, watch } from 'vue'
 import { read, utils, writeFile } from 'xlsx';
 import canvasDatagrid from 'canvas-datagrid';
-// import context from '../core/context.js'
 
 const props = defineProps({
-  modelValue: String,
+  modelValue: Array,
 });
 
-const emit = defineEmits(['search', 'update:modelValue']);
+const file = ref({});
+const fileIndex = ref(0);
 
 const fileList = computed({
   get: () => props.modelValue,
@@ -39,16 +41,29 @@ const fileList = computed({
   }
 });
 
+const emit = defineEmits(['update:modelValue', 'download']);
 
-const file = ref({});
+watch(
+  () => props.modelValue,
+  value => {
+    if (value) {
+      onClick(0)
+    }
+  }
+)
 
-// const fileList = ref([]);
 
+const onClick = (index) => {
+  fileIndex.value = index;
+  file.value = fileList.value[index];
+  if (file.value.type === 1) {
+    renderExcel(file)
+  }
+};
 
-const init = async () => {
-  getFiles();
-
-}
+const onClickDownload = () => {
+  emit('download')
+};
 
 const renderExcel = async (file) => {
   let url = file.value.url;
@@ -75,50 +90,9 @@ const renderExcel = async (file) => {
     grid.schema[i - range.s.c].title = utils.encode_col(i);
   }
 
-}
+};
 
-
-const getFiles = async () => {
-  // fileList.value = [];
-  // type: 0-> image, 1->excel
-
-  fileList.value = [
-    {
-      url: 'http://43.154.134.150:7096/static/Extract/基础10/xlsx/0-第5页-基础10.xlsx',
-      type: 1,
-    },
-    {
-      url: 'http://43.154.134.150:7096/static/Extract/基础10/png/img_7.png',
-      type: 0,
-    },
-    {
-      url: 'http://43.154.134.150:7096/static/Extract/基础10/png/img_3.png',
-      type: 0,
-    },
-    {
-      url: 'http://43.154.134.150:7096/static/Extract/基础10/xlsx/0-第5页-基础10.xlsx',
-      type: 1,
-    }
-  ]
-
-}
-
-const onClick = (index) => {
-  file.value = fileList.value[index];
-  if (file.value.type === 1) {
-    renderExcel(file)
-  }
-}
-
-
-init();
-
-onMounted(() => {
-  onClick(0);
-
-})
 </script>
-
 <style lang="scss">
 .preview {
   width: 100%;
@@ -135,8 +109,9 @@ onMounted(() => {
     height: 100%;
     max-height: 100%;
     max-width: 100%;
+    text-align: center;
     img {
-      width: 100%;
+      // width: 100%;
       height: 100%;
     }
   }
@@ -144,15 +119,37 @@ onMounted(() => {
   .preview-operate {
     text-align: center;
     padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .preview-operate-page {
+    display: flex;
     span {
       display: inline-block;
-      padding: 4px 6px;
-      font-size: 1.5rem;
+      padding: 0 6px;
+      font-size: 1.2rem;
       cursor: pointer;
       &.active {
         color: var(--color-primary);
       }
     }
   }
+  .preview-operate-download {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    padding-left: 1rem;
+    cursor: pointer;
+    span {
+      color: var(--color-primary);
+    }
+
+
+  }
+
+
 }
 </style>

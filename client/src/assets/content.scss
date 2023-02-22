@@ -18,6 +18,20 @@
     color: var(--color-white, $color-white);
     background-color: var(--color-primary, $color-primary);
     border-radius: 4px 4px 0 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    .el-icon {
+      font-size: 2rem;
+      cursor: pointer;
+    }
   }
   .content-stat {
     height: 80px;

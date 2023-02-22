@@ -21,6 +21,7 @@
   }
   .file-list {
     width: 100%;
+    min-height: $item-height * 2;
   }
 
   .file-item {

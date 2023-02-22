@@ -41,7 +41,9 @@ instance.interceptors.response.use(function (response) {
 
 const request = {
   async get(url, params) {
-    url = url + '?' + qs.stringify(params)
+    if (params) {
+      url = url + '?' + qs.stringify(params)
+    }
     try {
       let res = await instance.get(url, params)
       return res.data

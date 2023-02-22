@@ -9,7 +9,7 @@ class ArticleDatumSchema(BaseModel):
     url: str | None = None
     type: int | None = None
     content_type: int | None = None
-    keyword: int | None = None
+    keyword: str | None = None
     file_name: str | None = None
     file_path: str | None = None
     file_size: str | None = None

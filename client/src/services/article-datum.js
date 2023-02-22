@@ -16,7 +16,15 @@ const articleDatumService = {
     return await http.postFormData(url, data)
   },
 
+  async uploadArticleDatum(data) {
+    let url = this.getUrl(`/article/datum/upload`)
+    return await http.postFormData(url, data)
+  },
 
+  async getArticleDatumsByUser(data) {
+    let url = this.getUrl(`/article/datum/user`)
+    return await http.get(url, data)
+  },
 
 }
 

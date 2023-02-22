@@ -23,22 +23,22 @@ const searchService = {
     return await http.get(url, data)
   },
 
-  async searchFile(keyword, topLevel) {
-    let data = {
-      keyword,
-      top_level: topLevel
-    }
-    let url = this.getUrl('/search/file')
-    return await http.get(url, data)
-  },
+  // async searchFile(keyword, topLevel) {
+  //   let data = {
+  //     keyword,
+  //     top_level: topLevel
+  //   }
+  //   let url = this.getUrl('/search/file')
+  //   return await http.get(url, data)
+  // },
 
-  async searchExtract(keyword) {
-    let data = {
-      keyword,
-    }
-    let url = this.getUrl('/search/extract')
-    return await http.get(url, data)
-  },
+  // async searchExtract(keyword) {
+  //   let data = {
+  //     keyword,
+  //   }
+  //   let url = this.getUrl('/search/extract')
+  //   return await http.get(url, data)
+  // },
 
 }
 

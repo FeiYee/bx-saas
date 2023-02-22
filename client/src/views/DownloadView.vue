@@ -33,29 +33,17 @@
                 </thead>
                 <tbody>
                   <tr v-for="article in articles" :key="article.id">
-                    <td>{{article.Title}}</td>
-                    <td>{{article.Drugs}}</td>
-                    <td>{{article.Molecular}}</td>
-                    <td>{{article['Pathway/Target']}}</td>
-                    <td>{{article.Indicator}}</td>
-                    <td>{{article.Result}}</td>
-                    <td>{{article['Side Effect']}}</td>
-                    <td>{{article.Group}}</td>
-                    <td>{{article['Sample count']}}</td>
-                    <td>{{article.Year}}</td>
+                    <td>{{article.title}}</td>
+                    <td>{{article.drugs}}</td>
+                    <td>{{article.molecular}}</td>
+                    <td>{{article.pathway_target}}</td>
+                    <td>{{article.indicator}}</td>
+                    <td>{{article.result}}</td>
+                    <td>{{article.side_effect}}</td>
+                    <td>{{article.group}}</td>
+                    <td>{{article.sample_count}}</td>
+                    <td>{{article.journal}}</td>
                   </tr>
-                  <!-- <tr>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                    <td>研究人工虫草提取物和奥美沙坦</td>
-                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -163,11 +151,11 @@ const search = async () => {
 
   try {
     let data = await searchService.searchArticle(keyword.value, topLevel.value)
-    articleCount.value = data.number_article
-    articleOriginalList.value = data.table
+    articleCount.value = data.length
+    articleOriginalList.value = data
     articleList.value = Array.from(articleOriginalList.value)
-    articleExcel.value = data.file_name
-    pageCount.value = data.table.length
+    // articleExcel.value = data.file_name
+    pageCount.value = data.length
 
     getArticles()
   } catch (err) {

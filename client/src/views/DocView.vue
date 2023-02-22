@@ -13,7 +13,7 @@
               <div class="file-check">
                 <input type="checkbox" name="" id="">
               </div>
-              <div class="file-name" :class="{summary: item.type==1}">{{ item.name }}</div>
+              <div class="file-name" :class="{summary: item.type==1}">{{ item.file_name }}</div>
             </li>
             <!-- <li class="file-item">
               <div class="file-check">
@@ -66,15 +66,20 @@
   </main>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, toRaw } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
 import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
-import searchService from '../services/search.js'
+import articleDatumService from '../services/article-datum.js'
 import context from '../core/context'
 
 const keyword = ref('')
 const fileList = ref([])
+
+const articleDatum = reactive({
+  article_id: "",
+  keyword: "",
+});
 
 const isSearchDone = ref(false)
 
@@ -85,6 +90,7 @@ const pageCurrent = ref(1)
 
 const onSearch = async (keywordText) => {
   keyword.value = keywordText
+  articleDatum.keyword = keywordText
   await search()
 }
 
@@ -119,13 +125,15 @@ const search = async () => {
   }
 }
 
-
 const getFiles = async () => {
-  let data = await searchService.searchFile(keyword.value)
+  try {
+    let data = await articleDatumService.getArticleDatumsByUser(toRaw(articleDatum))
+    fileList.value = data;
 
-  fileList.value = data;
+  } catch (e) {
 
-}
+  }
+};
 
 const onPageChange = (page) => {
   pageCurrent.value = page

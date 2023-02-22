@@ -1,13 +1,14 @@
 <template>
   <Search @search="onSearch" :isSearchDone="isSearchDone" />
   <Nav />
-  <!-- <Keyword :keywords="keywords" @click="onKeywordClick" @reload="onKeywordReload"/> -->
-  <!-- <div class="containers"></div> -->
   <main class="home content">
     <div class="container">
       <div class="content-primary">
-        <section class="content-graph">
-          <h3 class="content-title">知识图谱</h3>
+        <section class="content-graph" :class="{full: showType === 1}" v-show="showType === 0 || showType === 1">
+          <h3 class="content-title">
+            <span style="padding-left:2rem;">知识图谱</span>
+            <el-icon @click="onClickShow(1)" v-show="showType === 0"><ArrowRight color="#ffffff"/></el-icon>
+          </h3>
           <div class="content-stat">
             <div class="content-stat__total">
               <span>共检索到文章数量：{{ articleCount }}</span>
@@ -17,22 +18,32 @@
             <div id="chartRelationship" class="chart-relationship"></div>
           </div>
         </section>
-        <section class="content-detail">
-          <h3 class="content-title">内容简述</h3>
+        <section class="content-detail" :class="{full: showType === 2}" v-show="showType === 0 || showType === 2">
+          <h3 class="content-title">
+            <el-icon @click="onClickShow(2)" v-show="showType === 0"><ArrowLeft color="#ffffff" :size="62"/></el-icon>
+            <span style="padding-right:2rem;">内容简述</span>
+          </h3>
           <div>
             <Preview v-model="articleExtracts"/>
           </div>
-          <div>
-
+          <div class="file-original">
+            <el-upload
+              ref="uploadRef"
+              :auto-upload="false"
+              :limit="2"
+              :on-change="onFileChange"
+              :on-remove="onFileRemove"
+              action="/" >
+              <el-button type="success">上传论文原文PDF文件</el-button>
+            </el-upload>
           </div>
         </section>
       </div>
 
       <div class="content-operate">
-        <div class="operate-btn">知识图谱</div>
-        <div class="operate-btn">内容</div>
-        <div class="operate-btn">内容 + 知识图谱</div>
-
+        <div class="operate-btn" @click="onClickShow(1)">知识图谱</div>
+        <div class="operate-btn" @click="onClickShow(2)">内容</div>
+        <div class="operate-btn" @click="onClickShow(0)">内容 + 知识图谱</div>
       </div>
 
       <div>
@@ -43,18 +54,18 @@
               <div class="article__info">
                 <span>
                   <span class="info-title">作者：</span>
-                  <span class="info-content__author" :title="article.Author">{{ article.Author }}</span>
+                  <span class="info-content__author" :title="article.author">{{ article.author }}</span>
                 </span>
                 <span>
                   <span class="info-title">刊名：</span>
                   <span class="info-content__name" :title="article.name">{{ article.name }}</span></span>
                 <span>
                   <span class="info-title">日期：</span>
-                  <span class="info-content__year" :title="article.Year">{{ article.Year }}</span>
+                  <span class="info-content__year" :title="article.year">{{ article.year }}</span>
                 </span>
               </div>
               <div class="article__summary">
-                {{ article.Abstract }}
+                {{ article.abstract }}
               </div>
               <div class="article__link">
                 <button @click="onOriginalArticle">原文获取</button>
@@ -67,21 +78,21 @@
                     <th>通路/靶标</th>
                     <th>指标</th>
                     <th>结论</th>
-                    <th v-show="!!article['Side Effect']">副作用</th>
-                    <th v-show="!!article.Group">分组</th>
-                    <th v-show="!!article['Sample count']">样本量</th>
+                    <th v-show="!!article.side_effect">副作用</th>
+                    <th v-show="!!article.group">分组</th>
+                    <th v-show="!!article.sample_count">样本量</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{ article.Drugs }}</td>
-                    <td>{{ article.Molecular }}</td>
-                    <td>{{ article['Pathway/Target']}}</td>
-                    <td>{{ article.Indicator }}</td>
-                    <td>{{ article.Result }}</td>
-                    <td v-show="!!article['Side Effect']">{{ article['Side Effect']}}</td>
-                    <td v-show="!!article.Group">{{ article.Group }}</td>
-                    <td v-show="!!article['Sample count']">{{ article['Sample count'] }}</td>
+                    <td>{{ article.drugs }}</td>
+                    <td>{{ article.molecular }}</td>
+                    <td>{{ article.pathway_target}}</td>
+                    <td>{{ article.indicator }}</td>
+                    <td>{{ article.result }}</td>
+                    <td v-show="!!article.side_effect">{{ article.side_effect}}</td>
+                    <td v-show="!!article.group">{{ article.group }}</td>
+                    <td v-show="!!article.sample_count">{{ article.sample_count }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -94,45 +105,53 @@
   </main>
 </template>
 <script setup>
-import { ref, reactive, inject, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, toRaw, inject, onMounted, onBeforeUnmount } from 'vue'
 import { ElMessage, ElLoading } from 'element-plus'
 import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
 import Preview from '../components/Preview.vue'
 
 import { downloadFile } from '../core/download.js'
-import filePrefix from '../core/config.js'
+import { filePrefix } from '../core/config.js'
 
 import searchService from '../services/search.js'
 import keywordService from '../services/keyword.js'
 import datumService from '../services/datum.js'
 import articleExtractService from '../services/article-extract.js'
+import articleDatumService from '../services/article-datum.js'
 
-import { getRelationData, setChartRelation, setChartPie, setChartBar } from '../chart/chart.js'
+import { getRelationData } from '../chart/chart.js'
 import { relationChart } from '../chart/relation.js'
 import context from '../core/context'
 
-// const echarts = inject('echarts')
 
-// let keyword = ref('')
-let articleExtracts = ref([])
 let isSearchDone = ref(false)
+const showType = ref(0); // 0->内容 + 知识图谱; 1->知识图谱; 2->内容
+const uploadRef = ref()
+
+let articleExtracts = ref([])
+
+const articleDatum = reactive({
+  article_id: "",
+  keyword: "",
+  file: null,
+});
 
 const article = reactive({
-  Title: '',   // 文章名
-  Author: '',   // 作者
-  Abstract: '', // 摘要
-  Drugs: '', // 药物
-  Indicator: '', // 指标
-  Molecular: '', // 机理
-  Result: '',   // 结论
-  Year: '',  // 发表年份
-  title: '',  // 文章名
+  id: '',
+  title: '',   // 文章名
+  author: '',   // 作者
+  abstract: '', // 摘要
+  drugs: '', // 药物
+  indicator: '', // 指标
+  molecular: '', // 机理
+  result: '',   // 结论
+  year: '',  // 发表年份
   name: '',
-  Group: '', // 分组
-  'Pathway/Target': '', // 通路/靶标
-  'Side Effect': '',  // 副作用
-  'Sample count': '', // 样本量
+  group: '', // 分组
+  pathway_target: '', // 通路/靶标
+  side_effect: '',  // 副作用
+  sample_count: '', // 样本量
 })
 
 let articleCount = ref(0)
@@ -140,14 +159,13 @@ let linkCount = ref(0)
 let nodeCount = ref(0)
 
 const chartRelationshipDomId = 'chartRelationship'
-const chartBarDomId = 'chartBar'
-const chartPieDomId = 'chartPie'
-let chartBar = null
-let chartPie = null
+
 let chartRelationship = null
 
 const onSearch = async (keyword) => {
-  isSearchDone.value = false
+  isSearchDone.value = false;
+  articleDatum.keyword = keyword;
+
   const loading = ElLoading.service({
     lock: true,
     text: '搜索中...',
@@ -165,14 +183,12 @@ const onSearch = async (keyword) => {
       let upData = data.up_date
 
       let relationData = getRelationData(data)
-console.log(relationData)
+
       if (chartRelationship) {
         chartRelationship.dispose()
       }
       // chartRelationship = setChartRelation(relationData, chartRelationshipDomId, handleNodeClick)
       relationChart(relationData, handleNodeClick)
-      // chartPie = setChartPie(chartPieDomId, nodesCount)
-      // chartBar = setChartBar(chartBarDomId, upData)
 
       isSearchDone.value = true
     } else {
@@ -191,22 +207,26 @@ console.log(relationData)
   }
 }
 
-// const onKeywordClick = async (keywordText) => {
-//   console.log(keywordText)
-//   keyword.value = keywordText
-//   await onSearch(keywordText)
-// }
 
-// const onKeywordReload = async () => {
-//   await getKeywords()
-// }
+const onClickShow = async (type) => {
+  showType.value = type;
+}
+
+const onFileChange = file => {
+  articleDatum.file = file.raw;
+  console.log(articleDatum)
+  uploadArticleDatum();
+}
+
+const onFileRemove = file => {
+  articleDatum.file = null
+}
 
 const onOriginalArticle = async () => {
   if (article.title) {
     console.log(article.title)
   }
   let data = await datumService.download(article.title)
-  console.log(data)
   if (!data) {
     ElMessage({
       message: '未找到原文',
@@ -216,35 +236,55 @@ const onOriginalArticle = async () => {
   }
   downloadFile(data.url, data.file_name)
 
-}
+};
 
 const handleNodeClick = (node) => {
   console.log(node)
-  article.title = node.title
-  article.Title = node.title  // 文章名
+  article.title = node.title  // 文章名
   article.name = node.name
-  article.Abstract = node.Abstract
-  article.Year = node.Year
-  article.Author = node.Author
-  article.Drugs = node.Drugs // 药物
-  article.Indicator = node.Indicator // 指标
-  article.Molecular = node.Molecular // 机理
-  article.Result = node.Result   // 结论
-  article.Group = node.Group // 分组
-  article['Pathway/Target'] = node['Pathway/Target'] // 通路/靶标
-  article['Side Effect'] = node['Side Effect']   // 副作用
-  article['Sample count'] = node['Sample count'] // 样本量
+  article.abstract = node.abstract
+  article.year = node.year
+  article.author = node.author
+  article.drugs = node.drugs // 药物
+  article.indicator = node.indicator // 指标
+  article.molecular = node.molecular // 机理
+  article.result = node.result   // 结论
+  article.group = node.group // 分组
+  article.pathway_target = node.pathway_target // 通路/靶标
+  article.side_effect = node.side_effect   // 副作用
+  article.sample_count = node.sample_count // 样本量
+
+  articleDatum.article_id = node.id || '';
 
   getArticleExtracts(node.id)
-}
+};
+
 
 const getArticleExtracts = async (articleId) => {
-  let list = articleExtractService.getArticleExtracts(articleId)
+  let list = await articleExtractService.getArticleExtracts(articleId)
   list.forEach(item => {
     item.url = filePrefix + item.url
   })
   articleExtracts.value = list
-}
+};
+
+
+const uploadArticleDatum = async () => {
+  console.log(toRaw(articleDatum))
+  try {
+    let res = await articleDatumService.uploadArticleDatum(toRaw(articleDatum));
+    articleDatum.file = null;
+    uploadRef.value.clearFiles();
+    if (res) {
+      ElMessage({
+        message: '原文上传成功',
+        type: 'success',
+      })
+    }
+  } catch (e) {
+    console.log(e)
+  }
+};
 
 // const init = async () => {
 //   // await getKeywords()
@@ -267,15 +307,12 @@ onMounted(() => {
   // chartPie = setChartPie(chartPieDomId)
 
   // relationChart({}, handleNodeClick)
+
+  getArticleExtracts('90d31f3b1662450d8943f28f204eec03')
+
 })
 
 onBeforeUnmount(() => {
-  if (chartBar) {
-    chartBar.dispose()
-  }
-  if (chartPie) {
-    chartPie.dispose()
-  }
   if (chartRelationship) {
     chartRelationship.dispose()
   }

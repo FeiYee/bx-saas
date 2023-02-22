@@ -22,7 +22,9 @@
     width: calc(50% - 8px);
     height: 100%;
     background-color: var(--color-white, $color-white);
-
+    &.full {
+      width: 100%;
+    }
     .content-stat {
       // height: 40px;
 
@@ -38,6 +40,25 @@
     width: calc(50% - 8px);
     background-color: var(--color-white, $color-white);
 
+    &.full {
+      width: 100%;
+    }
+    .file-original {
+      height: 77px;
+      margin: 24px 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      background-color: var(--color-background-primary, $color-background-primary);
+
+      .el-button {
+        background-color: var(--color-primary);
+      }
+      .el-upload-list {
+        display: none;
+      }
+    }
   }
 
   .content-operate {

@@ -1,5 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, func
-from sqlalchemy.orm import relationship
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func
 
 from app.core.base import BaseModel
 
@@ -14,7 +13,7 @@ class ArticleDatum(BaseModel):
     article_id = Column(String(32), index=True, comment='文章ID')
     user_id = Column(String(32), default=None, comment='用户ID')
     url = Column(String(255), unique=True, comment='URL')
-    type = Column(Integer, default=0, comment="文件类型: 0->image, 1->excel, 2->pdf, 3->zip")
+    type = Column(Integer, default=0, comment="文件类型: 0->image, 1->excel, 2->pdf, 3->zip, 4->other")
     content_type = Column(Integer, default=0, comment="内容类型: 0->全文, 1->摘要")
     keyword = Column(String(255), comment='关键字')
     file_name = Column(String(255), comment='文件名称')

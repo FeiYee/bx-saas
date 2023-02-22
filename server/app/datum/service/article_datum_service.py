@@ -1,11 +1,11 @@
 from typing import Type, TypeVar
 from fastapi import File, Form, UploadFile
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import func
+from sqlalchemy import func, or_, and_
 from sqlalchemy.orm import Session
 from config import BASE_DIR
 from app.core.util import write_file
-
+from app.system.model.user import User
 from ..model.article_datum import ArticleDatum
 from ..schema.article_datum_schema import ArticleDatumSchema
 
@@ -27,7 +27,7 @@ class ArticleDatumService:
 
         article_datum = self.model()
         article_datum.article_id = article_id
-        article_datum.keyword = article_id
+        article_datum.keyword = ''
         article_datum.url = str('/' / file_path.relative_to(BASE_DIR)).replace('\\', '/')
         article_datum.file_name = file.filename
         article_datum.file_path = str(file_path)
@@ -69,6 +69,43 @@ class ArticleDatumService:
         db.delete(article_datum)
         db.commit()
         return article_datum
+
+    async def upload(self, *, file: UploadFile, article_id: str, keyword: str, current_user: User, db: Session) -> ArticleDatum:
+        file_path = await write_file(file=file, write_path='article_datum', write_sub_path=current_user.id)
+
+        article_datum = self.model()
+        article_datum.article_id = article_id
+        article_datum.user_id = current_user.id
+        article_datum.keyword = keyword
+        article_datum.url = str('/' / file_path.relative_to(BASE_DIR)).replace('\\', '/')
+        article_datum.file_name = file.filename
+        article_datum.file_path = str(file_path)
+        article_datum.file_type = file.content_type
+        article_datum.file_size = file_path.stat().st_size
+
+        if 'image' in file.content_type:
+            article_datum.type = 0
+        elif 'sheet' in file.content_type:
+            article_datum.type = 1
+        elif 'pdf' in file.content_type:
+            article_datum.type = 2
+        elif 'zip' in file.content_type:
+            article_datum.type = 3
+
+        db.add(article_datum)
+        db.commit()
+        db.refresh(article_datum)
+        return article_datum
+
+    def query_by_user(self, article_id: str, keyword: str, current_user: User, db: Session) -> list[tuple[ArticleDatum]]:
+        filters = [self.model.user_id == current_user.id]
+        if keyword != '':
+            filters = [and_(self.model.keyword == keyword, self.model.user_id == current_user.id)]
+        if article_id != '':
+            filters = [and_(self.model.article_id == article_id, self.model.user_id == current_user.id)]
+
+        article_datums = db.query(self.model).filter(*filters).all()
+        return article_datums
 
     def download(self, *, article_datum_id: str, db: Session) -> ArticleDatum:
         article_datum = db.query(self.model).get(article_datum_id)

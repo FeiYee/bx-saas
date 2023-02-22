@@ -1,6 +1,8 @@
 from fastapi import APIRouter, File, Form, UploadFile, Depends
 from sqlalchemy.orm import Session
 from app.core.dependence import get_db
+from app.system.model.user import User
+from app.home.security.auth import get_current_user
 from ..schema.article_datum_schema import ArticleDatumSchema
 from ..service.article_datum_service import article_datum_service
 
@@ -28,15 +30,15 @@ async def delete(article_datum_id: str, db: Session = Depends(get_db)):
     return article_datum_service.delete(article_datum_id=article_datum_id, db=db)
 
 
+@router.post("/article/datum/upload", tags=["article_datum"])
+async def upload(file: UploadFile = File(), article_id: str = Form(default=''), keyword: str = Form(default=''), current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return await article_datum_service.upload(file=file, article_id=article_id, keyword=keyword, current_user=current_user, db=db)
+
+
+@router.get("/article/datum/user", response_model=list[ArticleDatumSchema], tags=["article_datum"])
+async def query_by_user(article_id: str = '', keyword: str = '', current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return article_datum_service.query_by_user(article_id=article_id, keyword=keyword, current_user=current_user, db=db)
+
 # @router.get("/article/datum/download", tags=["datum"])
 # async def download(title: str, db: Session = Depends(get_db)):
 #     return article_datum_service.download(title=title, db=db)
-#
-#
-# @router.post("/article_datum/upload", tags=["datum"])
-# async def upload(file: bytes = File(), path: str = Form()):
-#     return {
-#         "file_size": len(file),
-#         "path": path,
-#     }
-#
