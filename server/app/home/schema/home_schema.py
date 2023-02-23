@@ -13,6 +13,13 @@ class Token(BaseModel):
     token_type: str
 
 
+class RegisterSchema(BaseModel):
+    username: str
+    password: str
+    email: str
+    domain: str
+
+
 class UserDetailSchema(BaseModel):
     user: Any | None = None
     org: Any | None = None

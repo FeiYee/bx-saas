@@ -5,10 +5,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from config import ACCESS_TOKEN_EXPIRE_MINUTES
 from app.system.model.user import User
+from app.system.schema.user_schema import UserSchema
 from app.system.service.user_service import user_service
 from app.system.service.org_user_service import org_user_service
 from ..security.auth import create_access_token
-from ..schema.home_schema import Token, UserDetailSchema
+from ..schema.home_schema import Token, UserDetailSchema, RegisterSchema
 
 
 class HomeService:
@@ -18,6 +19,12 @@ class HomeService:
 
     def home(self) -> Any:
         return {"index": "Home"}
+
+    def register(self, register_schema: RegisterSchema, db: Session) -> Any:
+        user_schema = UserSchema(**register_schema.dict())
+
+        user = user_service.create(user_schema=user_schema, db=db)
+        return user
 
     def login(self, auth_form: OAuth2PasswordRequestForm, db: Session) -> Any:
         user = user_service.find_by_username(

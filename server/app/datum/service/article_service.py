@@ -30,6 +30,13 @@ class ArticleService:
         db.refresh(article)
         return article
 
+    def find_page_by_title(self, title: str, page_number: int, page_size: int, db: Session) -> list[tuple[Article]]:
+        datums = db.query(self.model)\
+            .filter(self.model.title.like('%{title}%'.format(title=title)))\
+            .limit(page_size)\
+            .offset((page_number-1)*page_size)
+        return datums
+
     def find_by_title(self, title: str, db: Session) -> List[tuple[Article]]:
         articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
         # if len(title) == 0 or str.isspace(title):

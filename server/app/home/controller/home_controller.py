@@ -1,11 +1,12 @@
 from typing import Any
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.core.dependence import get_db
 from app.core.util import get_uuid
 from app.system.model.user import User
+from ..schema.home_schema import RegisterSchema
 from ..service.home_service import home_service
 from ..security.auth import get_current_user
 
@@ -15,6 +16,17 @@ router = APIRouter()
 @router.get("/")
 async def home():
     return home_service.home()
+
+
+@router.post("/register", tags=["home"])
+async def login(username: str = Form(), password: str = Form(), email: str = Form(), domain: str = Form(), db: Session = Depends(get_db)) -> Any:
+    register_schema = RegisterSchema(
+        username=username,
+        password=password,
+        email=email,
+        domain=domain,
+    )
+    return home_service.register(register_schema=register_schema, db=db)
 
 
 @router.post("/login", tags=["home"])
