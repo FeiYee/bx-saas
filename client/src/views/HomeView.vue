@@ -24,7 +24,7 @@
             <span style="padding-right:2rem;">内容简述</span>
           </h3>
           <div>
-            <Preview v-model="articleExtracts"/>
+            <Preview v-model="articleExtracts" @export="onExport"/>
           </div>
           <div class="file-original">
             <el-upload
@@ -130,6 +130,7 @@ const showType = ref(0); // 0->内容 + 知识图谱; 1->知识图谱; 2->内容
 const uploadRef = ref()
 
 let articleExtracts = ref([])
+let articleExtractExport = ref(null)
 
 const articleDatum = reactive({
   article_id: "",
@@ -235,8 +236,19 @@ const onOriginalArticle = async () => {
     return
   }
   downloadFile(data.url, data.file_name)
-
 };
+
+const onExport = () => {
+  console.log(articleExtractExport.value);
+  if (!articleExtractExport.value) {
+    ElMessage({
+      message: '导出文件不存在',
+      type: 'warning',
+    });
+    return
+  }
+  downloadFile(articleExtractExport.value.url, articleExtractExport.value.file_name)
+}
 
 const handleNodeClick = (node) => {
   console.log(node)
@@ -261,11 +273,18 @@ const handleNodeClick = (node) => {
 
 
 const getArticleExtracts = async (articleId) => {
+  articleExtractExport.value = null;
   let list = await articleExtractService.getArticleExtracts(articleId)
+  let datas = []
   list.forEach(item => {
-    item.url = filePrefix + item.url
+    item.url = filePrefix + item.url;
+    if (item.type === 3) {
+      articleExtractExport.value = item;
+      return;
+    }
+    datas.push(item);
   })
-  articleExtracts.value = list
+  articleExtracts.value = datas
 };
 
 

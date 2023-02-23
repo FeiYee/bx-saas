@@ -3,7 +3,10 @@ import { filePrefix } from "./config"
 
 export const downloadFile = function (url, fileName) {
   const ele = document.createElement('a')
-  ele.href = filePrefix + url
+  if (!url.startsWith(filePrefix)) {
+    url = filePrefix + url;
+  }
+  ele.href = url
   ele.setAttribute('download', fileName || '')
   ele.style.display = 'none'
   document.body.appendChild(ele)

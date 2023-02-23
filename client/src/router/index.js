@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '../views/MainView.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
+import MainView from '../views/MainView.vue'
 import HomeView from '../views/HomeView.vue'
 import DownloadView from '../views/DownloadView.vue'
 import DocView from '../views/DocView.vue'
@@ -24,13 +25,20 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     }
   ]
 })
 
 router.beforeEach(async (to, from) => {
-
   let token = context.getToken()
+  if (!token && to.name === 'register') {
+    return true
+  }
   if (!token && to.name !== 'login') {
     return { name: 'login' }
   }

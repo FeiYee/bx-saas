@@ -6,6 +6,11 @@ const authService = {
     return this.prefix + url
   },
 
+  async register(data) {
+    let url = this.getUrl('/register')
+    return await http.postFormUrlencoded(url, data)
+  },
+
   async login(data) {
     let url = this.getUrl('/login')
     return await http.postFormUrlencoded(url, data)

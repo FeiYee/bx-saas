@@ -15,7 +15,7 @@
           {{ index + 1 }}
         </span>
       </div>
-      <div class="preview-operate-download" @click="onClickDownload">
+      <div class="preview-operate-download" @click="onClickExport">
         <span>导出</span>
         <el-icon><Download color="#9E9E9E"/></el-icon>
       </div>
@@ -41,7 +41,7 @@ const fileList = computed({
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'download']);
+const emit = defineEmits(['update:modelValue', 'export']);
 
 watch(
   () => props.modelValue,
@@ -61,8 +61,8 @@ const onClick = (index) => {
   }
 };
 
-const onClickDownload = () => {
-  emit('download')
+const onClickExport = () => {
+  emit('export')
 };
 
 const renderExcel = async (file) => {
