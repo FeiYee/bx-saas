@@ -5,7 +5,7 @@
       <a href="/">Home</a>
       <a href="/">Blog</a>
       <a href="/">GitHub</a>
-      <a href="/about">About us</a>
+      <a href="/about/">About us</a>
     </nav>
     <div>
       <a href="/">log in</a>

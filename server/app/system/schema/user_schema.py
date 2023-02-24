@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class UserSchema(BaseModel):
     id: str | None = None
     username: str
-    password: str | None = None
+    # password: str | None = None
     name: str | None = None
     email: str | None = None
     domain: str | None = None

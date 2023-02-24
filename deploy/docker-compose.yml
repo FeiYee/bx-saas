@@ -68,7 +68,7 @@ services:
     restart: always
     depends_on:
       - mysql
-      - neo4j
+      # - neo4j
 
   mysql:
     image: mysql:8.0.31

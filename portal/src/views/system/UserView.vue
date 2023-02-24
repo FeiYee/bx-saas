@@ -29,14 +29,15 @@
       <el-col :span="24">
         <el-table :data="userList" border stripe style="width: 100%">
           <el-table-column prop="username" label="用户名" width="180" />
-          <el-table-column prop="password" label="密码" width="180" />
+          <!-- <el-table-column prop="password" label="密码" width="180" /> -->
           <el-table-column prop="name" label="名称" width="180" />
+          <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
+          <el-table-column prop="domain" label="域" width="180" />
           <el-table-column prop="is_admin" label="管理员" width="70">
             <template #default="scope">
               <el-switch v-model="scope.row.is_admin" size="small" disabled/>
             </template>
           </el-table-column>
-          <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
           <el-table-column fixed="right" label="操作" width="98">
             <template #default="scope">
               <!-- <el-button link type="primary" size="small" @click="handleClick">查看</el-button> -->
@@ -58,14 +59,14 @@
         <el-form-item label="用户名">
           <el-input v-model="user.username" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="user.password" autocomplete="off" />
-        </el-form-item>
         <el-form-item label="姓名">
           <el-input v-model="user.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="user.email" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="域">
+          <el-input v-model="user.domain" autocomplete="off" />
         </el-form-item>
         <el-form-item label="管理员">
           <el-switch v-model="user.is_admin" size="small" />
@@ -91,9 +92,10 @@ const dialogVisible = ref(false)
 const user = reactive({
   id: null,
   username: "",
-  password: "",
+  // password: "",
   name: "",
   email: "",
+  domain: "",
   is_admin: false
 })
 
@@ -106,9 +108,10 @@ const userCondition = reactive({
 const setUser = (data) => {
   user.id = data ? data.id : null
   user.username = data ? data.username : ''
-  user.password = data ? data.password : ''
+  // user.password = data ? data.password : ''
   user.name = data ? data.name : ''
   user.email = data ? data.email : ''
+  user.domain = data ? data.domain : ''
   user.is_admin = data ? data.is_admin : false
 }
 

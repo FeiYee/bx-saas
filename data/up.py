@@ -2,7 +2,7 @@ import json
 import requests
 
 def main():
-    url = 'http://localhost:8080/api/article'
+    url = 'http://43.154.134.150:8080/api/article'
     with open('article.json', encoding='utf-8') as fp:
         articles = json.load(fp)
         for article in articles:
