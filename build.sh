@@ -9,7 +9,10 @@ rm -rf dist/server/__pycache__
 rm -rf dist/server/*/__pycache__
 rm -rf dist/server/*/*/__pycache__
 rm -rf dist/server/*/*/*/__pycache__
-rm -rf dist/server/cache/*.xlsx
+rm -rf dist/server/cache/
+rm -rf dist/server/asset/
+mkdir dist/server/cache/
+mkdir dist/server/asset/
 
 cd client
 npm run build
