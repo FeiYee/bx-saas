@@ -8,8 +8,8 @@
       <a href="/about/">About us</a>
     </nav>
     <div>
-      <a href="/">log in</a>
-      <a href="/">sing up</a>
+      <a href="http://graph.baix.ai/login" target="_blank">log in</a>
+      <a href="http://graph.baix.ai/register" target="_blank">sing up</a>
     </div>
   </header>
 </template>
