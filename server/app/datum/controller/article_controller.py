@@ -16,8 +16,8 @@ async def get(db: Session = Depends(get_db)):
 
 
 @router.post("/article", response_model=ArticleSchema, tags=["article"])
-async def create(article_schema: ArticleSchema, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return article_service.create(article_schema=article_schema, current_user=current_user, db=db)
+async def create(article_schema: ArticleSchema, db: Session = Depends(get_db)):
+    return article_service.create(article_schema=article_schema, db=db)
 
 
 @router.get("/article/query", tags=["article"])

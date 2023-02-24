@@ -6,13 +6,12 @@ BASE_DIR = Path(__file__).parent
 
 SERVER_NAME = 'ba-saas-server'
 
-
 SECRET_KEY: str = secrets.token_urlsafe(32)
 # 60 minutes * 24 hours * 8 days = 8 days
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
-# GRAPH_HOST = '43.154.134.150'
-# GRAPH_PORT = '7096'
+PASSWORD_DEFAULT = '123456'
+
 GRAPH_SERVER = 'http://43.154.134.150:7096'
 
 DATABASE_TYPE = 'mysql'

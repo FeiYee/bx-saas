@@ -7,8 +7,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_uuid():
-    id = str(uuid.uuid4()).replace('-', '')
-    return id
+    return str(uuid.uuid4()).replace('-', '')
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

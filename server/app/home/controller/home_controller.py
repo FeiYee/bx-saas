@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.dependence import get_db
 from app.core.util import get_uuid
 from app.system.model.user import User
-from ..schema.home_schema import RegisterSchema
+from ..schema.home_schema import RegisterSchema, UserSchema
 from ..service.home_service import home_service
 from ..security.auth import get_current_user
 
@@ -19,7 +19,7 @@ async def home():
 
 
 @router.post("/register", tags=["home"])
-async def login(username: str = Form(), password: str = Form(), email: str = Form(), domain: str = Form(), db: Session = Depends(get_db)) -> Any:
+async def register(username: str = Form(), password: str = Form(), email: str = Form(), domain: str = Form(), db: Session = Depends(get_db)) -> UserSchema:
     register_schema = RegisterSchema(
         username=username,
         password=password,

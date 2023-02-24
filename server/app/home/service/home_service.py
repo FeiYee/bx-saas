@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from config import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.core.util import verify_password, get_password_hash
 from app.system.model.user import User
 from app.system.schema.user_schema import UserSchema
 from app.system.service.user_service import user_service
@@ -20,26 +21,30 @@ class HomeService:
     def home(self) -> Any:
         return {"index": "Home"}
 
-    def register(self, register_schema: RegisterSchema, db: Session) -> Any:
+    def register(self, register_schema: RegisterSchema, db: Session) -> UserSchema:
         user_schema = UserSchema(**register_schema.dict())
-
+        # user_schema.password = get_password_hash(user_schema.password)
         user = user_service.create(user_schema=user_schema, db=db)
         return user
 
     def login(self, auth_form: OAuth2PasswordRequestForm, db: Session) -> Any:
+        password = auth_form.password
         user = user_service.find_by_username(
             username=auth_form.username,
-            password=auth_form.password,
             db=db
         )
         if user is None:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用户名或密码错误")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用户不存在")
         elif not user.is_valid:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="无效用户")
 
-        token_type = "bearer"
+        verify = verify_password(plain_password=password, hashed_password=user.password)
+        if not verify:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="密码错误")
+
+        token_type = "Bearer"
         access_token = create_access_token(
-            user.id,
+            subject=user.id,
             expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         )
 

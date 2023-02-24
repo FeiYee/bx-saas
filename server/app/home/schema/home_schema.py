@@ -11,6 +11,7 @@ class TokenPayload(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+    grant_type: str = 'password'
 
 
 class RegisterSchema(BaseModel):
@@ -18,6 +19,16 @@ class RegisterSchema(BaseModel):
     password: str
     email: str
     domain: str
+
+
+class UserSchema(BaseModel):
+    id: str
+    username: str
+    email: str
+    domain: str
+
+    class Config:
+        orm_mode = True
 
 
 class UserDetailSchema(BaseModel):

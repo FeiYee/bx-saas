@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from config import PASSWORD_DEFAULT
 from app.core.util import get_password_hash
 from ..model.user import User
 from ..schema.user_schema import UserSchema
@@ -20,10 +21,9 @@ class UserService:
         user = db.query(self.model).get(id)
         return user
 
-    def find_by_username(self, username: str, password: str, db: Session) -> User:
+    def find_by_username(self, username: str, db: Session) -> User:
         user = db.query(self.model).filter(
             self.model.username == username,
-            self.model.password == password
         ).first()
         return user
 
@@ -38,18 +38,20 @@ class UserService:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用已存在.")
         data = jsonable_encoder(user_schema)
         user = self.model(**data)
-        # user.password = get_password_hash(user.password)
+        if user.password is not None and len(user.password) > 0:
+            user.password = get_password_hash(user.password)
+        else:
+            user.password = get_password_hash(PASSWORD_DEFAULT)
         db.add(user)
         db.commit()
         db.refresh(user)
         return user
 
     def update(self, user_id: str, user_schema: UserSchema, db: Session) -> User:
-        data = jsonable_encoder(user_schema, exclude_unset=True, exclude=['id'])
+        data = jsonable_encoder(user_schema, exclude_unset=True, exclude={'id', 'password'})
+        if hasattr(data, 'password'):
+            data.password = get_password_hash(data.password)
         user = db.query(self.model).get(user_id)
-        # user.username = data['username']
-        # if hasattr(data, 'password'):
-        #     data.password = get_password_hash(data.password)
 
         for field in data:
             setattr(user, field, data[field])

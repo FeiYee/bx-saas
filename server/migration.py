@@ -3,6 +3,7 @@ import logging
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from app.core.database import engine, Base, DBSession
+from app.core.util import get_password_hash
 from app.system.model.user import User
 import app.datum.model.article
 import app.datum.model.article_extract
@@ -26,7 +27,7 @@ def init_user(db: Session):
         username == username
     ).first()
     if not user:
-        user = User(username=username, password='123', is_admin=True, name='Admin')
+        user = User(username=username, password=get_password_hash('123'), is_admin=True, name='Admin')
         db.add(user)
         db.commit()
 

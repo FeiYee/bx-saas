@@ -21,10 +21,10 @@ class ArticleService:
         datums = db.query(self.model).all()
         return datums
 
-    def create(self, article_schema: ArticleSchema, current_user: User, db: Session) -> Article:
+    def create(self, article_schema: ArticleSchema, db: Session) -> Article:
         data = jsonable_encoder(article_schema)
         article = self.model(**data)
-        article.created_by = current_user.id
+        # article.created_by = current_user.id
         db.add(article)
         db.commit()
         db.refresh(article)
