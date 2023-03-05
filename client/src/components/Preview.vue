@@ -54,6 +54,9 @@ watch(
 
 
 const onClick = (index) => {
+  if (!fileList.value.length) {
+    return
+  }
   fileIndex.value = index;
   file.value = fileList.value[index];
   if (file.value.type === 1) {

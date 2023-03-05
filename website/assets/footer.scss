@@ -2,7 +2,7 @@
 
 
 .footer {
-  height: $footer-height;
+  // height: $footer-height;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,6 +25,21 @@
     }
   }
 
+  .partner {
+    h3 {
+      padding-bottom: 2rem;
+    }
+    .partner-list {
+      display: flex;
+      flex-direction: row;
+    }
+    .partner-list-item {
+      padding-right: 2rem;
+    }
+    p {
+      padding: 8px 0;
+    }
+  }
   .wechat {
     padding: 2rem;
   }

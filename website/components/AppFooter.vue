@@ -13,21 +13,26 @@
       <div class="info-item">
         <a href="/about">About us</a>
       </div>
-      <div>
+      <div class="partner">
         <h3>合作伙伴</h3>
-        <div>
-          <p>Shanghai Junshi Biomedical Technology Co., Ltd.</p>
-          <p>Hangzhou Zhongmei Huadong Pharmaceutical Co., Ltd.</p>
-          <p>Jiangsu Hengrui Pharmaceutical Co., Ltd.</p>
-          <p>Innovent Biopharmaceutical (Suzhou) Co., Ltd.</p>
-          <p>Shanghai Fosun Pharmaceutical (Group) Co., Ltd.</p>
-          <p>Qilu Pharmaceutical Co., Ltd.</p>
-          <p>BeiGene Cornerstone Pharmaceuticals</p>
+        <div class="partner-list">
+          <div class="partner-list-item">
+            <p>Shanghai Junshi Biomedical Technology Co., Ltd.</p>
+            <p>Hangzhou Zhongmei Huadong Pharmaceutical Co., Ltd.</p>
+            <p>Jiangsu Hengrui Pharmaceutical Co., Ltd.</p>
+            <p>Innovent Biopharmaceutical (Suzhou) Co., Ltd.</p>
+            <p>Shanghai Fosun Pharmaceutical (Group) Co., Ltd.</p>
+            <p>Qilu Pharmaceutical Co., Ltd.</p>
+            <p>BeiGene Cornerstone Pharmaceuticals</p>
+          </div>
 
-          <p>Bio-Thera Bio-Pharmaceutical Co., Ltd.</p>
-          <p>Chia Tai Tianqing Pharmaceutical Group Co., Ltd.</p>
-          <p>Zhongshan Akeso Biopharmaceutical Co., Ltd.</p>
-          <p>Beijing Tiantan Biological Products Co., Ltd.</p>
+          <div class="partner-list-item">
+            <p>Bio-Thera Bio-Pharmaceutical Co., Ltd.</p>
+            <p>Chia Tai Tianqing Pharmaceutical Group Co., Ltd.</p>
+            <p>Zhongshan Akeso Biopharmaceutical Co., Ltd.</p>
+            <p>Beijing Tiantan Biological Products Co., Ltd.</p>
+          </div>
+
         </div>
       </div>
 

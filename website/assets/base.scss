@@ -3,7 +3,7 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  --color-primary: #81C784;
+  --color-primary: #00b050;
   --color-secondary: #C8E6C9;
 
   --color-background-primary: #F5F5F5;
@@ -133,7 +133,15 @@ table {
   width: 220px;
   height: 12px;
   display: inline-block;
-  background: linear-gradient(to right, green, orange);
+  background: linear-gradient(to right, #03b150, #91d050);
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-left {
+  text-align: left;
 }
 
 @media (hover: hover) {
