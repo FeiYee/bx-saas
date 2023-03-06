@@ -5,32 +5,32 @@
       <el-main>
         <div class="box">
           <div class="box-header">
-            <h3 class="title">欢迎注册</h3>
+            <h3 class="title">Welcome BAIX</h3>
             <div class="title-tip">
-              <span>已有账号? </span>
-              <el-link type="success" @click="onClick" >立即登录</el-link>
+              <span>Have account?  </span>
+              <el-link type="success" @click="onClick" >Log in</el-link>
             </div>
           </div>
           <el-form
             ref="registerForm"
             :model="auth"
             :rules="rules"
-            label-width="50px"
+            label-width="90px"
             :size="formSize"
             status-icon>
-            <el-form-item label="账号" prop="username">
+            <el-form-item label="Account" prop="username">
               <el-input v-model="auth.username" />
             </el-form-item>
-            <el-form-item label="密码" prop="password">
+            <el-form-item label="Password" prop="password">
               <el-input v-model="auth.password" type="password"/>
             </el-form-item>
             <!-- <el-form-item label="确认密码" prop="password">
               <el-input v-model="auth.password1" type="password"/>
             </el-form-item> -->
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="Email" prop="email">
               <el-input v-model="auth.email" type="email"/>
             </el-form-item>
-            <el-form-item label="域" prop="domain">
+            <el-form-item label="Domain" prop="domain">
               <el-input v-model="auth.domain"/>
             </el-form-item>
             <!-- <el-form-item label="记住密码" prop="type">
@@ -39,7 +39,7 @@
             </el-checkbox-group>
           </el-form-item> -->
             <el-form-item>
-              <el-button type="success" @click="onRegister(registerForm)">注册</el-button>
+              <el-button type="success" @click="onRegister(registerForm)">Register</el-button>
             </el-form-item>
           </el-form>
         </div>

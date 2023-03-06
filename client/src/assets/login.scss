@@ -1,7 +1,7 @@
 .login,
 .register {
   height: 100vh;
-  background-image: url('/bg.png');
+  background-image: url('/bg-light.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -37,5 +37,8 @@
   .title-tip {
     display: flex;
     align-items: center;
+    span {
+      padding-right: 8px;
+    }
   }
 }

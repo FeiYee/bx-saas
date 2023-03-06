@@ -14,7 +14,7 @@
         <a href="/about">About us</a>
       </div>
       <div class="partner">
-        <h3>合作伙伴</h3>
+        <h3>Partner</h3>
         <div class="partner-list">
           <div class="partner-list-item">
             <p>Shanghai Junshi Biomedical Technology Co., Ltd.</p>

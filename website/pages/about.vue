@@ -49,38 +49,43 @@
 }
 .about {
   .introduce {
-    height: 820px;
-    padding: 0 190px;
-    padding-top: 200px;
+    // height: 8rem;
+    padding: 0 1.8rem 0.8rem;
+    padding-top: 1.6rem;
     background-image: url('/bg-light.png');
     background-color: rgba(255, 255, 255, 0.6);
     background-blend-mode: overlay;
-    font-size: 1.8rem;
+    background-position: center;
+    font-size: 0.28rem;
     color: #333;
 
     h2, p {
-      margin-bottom: 3rem;
+      margin-bottom: 0.46rem;
 
     }
   }
   .contact {
-    height: 760px;
+    height: 7rem;
     text-align: center;
-    padding: 5rem 16rem 10rem;
+    padding: 0.6rem 2rem 1.6rem;
 
     h2 {
-      font-size: 3rem;
+      font-size: 0.42rem;
     }
 
     .contact-content {
-      padding-top: 5rem;
+      padding-top: 0.8rem;
       text-align: left;
       div {
-        padding: 1rem 0;
-        font-size: 2.6rem;
+        padding: 0.16rem 0;
+        font-size: 0.32rem;
       }
       i {
         margin-right: 6px;
+      }
+      svg {
+        width: 36px;
+        height: 36px;
       }
     }
   }

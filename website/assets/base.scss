@@ -43,7 +43,7 @@
   font-weight: normal;
 }
 html {
-  font-size: 16px;
+  font-size: 100px;
   -webkit-text-size-adjust: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -130,8 +130,8 @@ table {
 }
 
 .linear {
-  width: 220px;
-  height: 12px;
+  width: 2.2rem;
+  height: 0.12rem;
   display: inline-block;
   background: linear-gradient(to right, #03b150, #91d050);
 }

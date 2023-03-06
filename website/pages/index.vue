@@ -23,7 +23,17 @@
                 </svg>
               </i>
             </div>
-            <div class="process-icon part-1"></div>
+            <div class="process-icon part-1">
+              <div class="icon-part">
+                <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M40 33V42C40 43.1046 39.1046 44 38 44H31.5" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M40 16V6C40 4.89543 39.1046 4 38 4H10C8.89543 4 8 4.89543 8 6V42C8 43.1046 8.89543 44 10 44H16" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 16H30" stroke="#969696" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M23 44L40 23" stroke="#969696" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M16 24H24" stroke="#969696" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
             <div class="process-desc">Fill in keywords</div>
           </div>
           <div class="process-item">
@@ -38,7 +48,16 @@
                 </svg>
               </i>
             </div>
-            <div class="process-icon part-2"></div>
+            <div class="process-icon part-2">
+              <div class="icon-part">
+                <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M38 4H10C8.89543 4 8 4.89543 8 6V42C8 43.1046 8.89543 44 10 44H38C39.1046 44 40 43.1046 40 42V6C40 4.89543 39.1046 4 38 4Z" fill="none" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M17 30L31 30" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M17 36H24" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M30 13L22 21L18 17" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
             <div class="process-desc">After reviewing the email, <br /> Activate function</div>
           </div>
           <div class="process-item">
@@ -47,7 +66,24 @@
               <div>Use</div>
               <span></span>
             </div>
-            <div class="process-icon part-3"></div>
+            <div class="process-icon part-3">
+              <div class="icon-part">
+                <!-- <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M44 5H3.99998V17H44V5Z" fill="none" stroke="#333" stroke-width="4" stroke-linejoin="round"/>
+                  <path d="M3.99998 41.0301L16.1756 28.7293L22.7549 35.0301L30.7982 27L35.2786 31.368" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M44 16.1719V42.1719" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M3.99998 16.1719V30.1719" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M13.0155 43H44" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M17 11H38" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M9.99998 10.9966H11" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                </svg> -->
+                <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="6" width="40" height="30" rx="3" fill="none" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M24 36V43" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M32 14L16 28" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 43H38" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="15" cy="17" r="3" fill="none" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="33" cy="25" r="3" fill="none" stroke="#969696" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
             <div class="process-desc">Using BAIX, <br />Accelerate scientific research</div>
           </div>
         </div>
@@ -59,9 +95,9 @@
         <div class="linear"></div>
         <div class="source-content">
           <div class="source-item left">
-            <div class="source-heavy align-right">~1400 <span style="font-size: 2.5rem;"> W</span></div>
-            <div style="padding-top: 16rem;">
-              <div class="source-heavy align-left">~100 <span style="font-size: 2.5rem;"> W</span></div>
+            <div class="source-heavy align-right">~1400 <span style="font-size: 0.32rem;"> W</span></div>
+            <div style="padding-top: 2.4rem;">
+              <div class="source-heavy align-left">~100 <span style="font-size: 0.32rem;"> W</span></div>
               <div class="source-title">Program</div>
               <ol class=" align-left">
                 <li>BAIX</li>
@@ -78,8 +114,8 @@
                 <li>Automatic labeling</li>
               </ol>
             </div>
-            <div style="padding-top: 4rem;">
-              <div class="source-heavy align-right">12 <span style="font-size: 2.5rem;"> PB</span></div>
+            <div style="padding-top: 0.88rem;">
+              <div class="source-heavy align-right">12 <span style="font-size: 0.32rem;"> PB</span></div>
               <div class="source-title">Genetic Drug Data</div>
               <ol>
                 <li>KEGG database</li>
@@ -117,227 +153,4 @@
   </div>
 </template>
 
-<style lang="scss">
 
-.home {
-  .banner {
-    height: 1080px;
-    background-image: url('/bg-light.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    color: #ffffff;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    // justify-content: center;
-    padding-top: 15rem;
-
-    h1, h2 {
-      font-size: 3.5rem;
-      font-weight: normal;
-    }
-    p {
-      padding-top: 2rem;
-      margin-bottom: 3rem;
-      font-size: 2rem;
-    }
-    a {
-      background-color: var(--color-primary);
-      color: #FFFFFF;
-      padding: 1rem 3.5rem;
-      font-size: 2rem;
-      cursor: pointer;
-    }
-  }
-
-  .process {
-    // height: 1100px;
-    text-align: center;
-    padding: 0 10rem 10rem;
-    h2 {
-      font-size: 3rem;
-      padding: 70px 0 40px;
-    }
-
-    .process-content {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: stretch;
-      padding-top: 5rem;
-    }
-    .process-item {
-      // flex-grow: 1;
-      flex: 1 0 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      // justify-content: center;
-      position: relative;
-    }
-    .process-part {
-      color: var(--color-primary);
-      font-size: 2rem;
-      padding-bottom: 2rem;
-    }
-    .process-icon {
-      width: 244px;
-      height: 240px;
-      border-radius: 50%;
-      // border: 2px solid var(--color-primary);
-      background-position: center;
-      background-size: auto;
-      background-repeat: no-repeat;
-      &.part-1 {
-        background-image: url('/part1.png');
-      }
-      &.part-2 {
-        background-image: url('/part2.png');
-      }
-      &.part-3 {
-        background-image: url('/part3.png');
-      }
-    }
-    .process-desc {
-      font-size: 2rem;
-      padding-top: 1rem;
-    }
-    .process-name {
-      width: 100%;
-      font-size: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 2px solid  var(--color-border);
-      margin-bottom: 3rem;
-      position: relative;
-      span {
-        display: block;
-        width: 226px;
-        border: 3px solid var(--color-primary);
-        position: absolute;
-        bottom: -4px;
-        left: 50%;
-        margin-left: -113px;
-      }
-      i {
-        width: 48px;
-        height: 48px;
-        background-color: transparent;
-        position: absolute;
-        bottom: -25px;
-        right: -25px;
-        z-index: 99;
-      }
-    }
-  }
-  .source {
-    // height: 1300px;
-    text-align: center;
-    background-color: #C8E6C9;
-    padding: 0 10rem 10rem;
-
-    background-color: #f2fbf6;
-    h2 {
-      font-size: 3rem;
-      padding: 70px 0 40px;
-    }
-    .source-content {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      padding-top: 5rem;
-      background-position: center;
-      background-size: auto;
-      background-repeat: no-repeat;
-      background-image: url('/source.png');
-    }
-    .source-item {
-      // padding: 0 15rem;
-      flex: 1 0 0;
-      text-align: left;
-      &.left {
-        padding-right: 15rem;
-        text-align: right;
-      }
-      &.right {
-        padding-left: 15rem;
-        text-align: left;
-      }
-
-      ol {
-        list-style: unset;
-        padding-left: 2rem;
-      }
-      li {
-        font-size: 2rem;
-      }
-    }
-    .source-heavy {
-      font-size: 4rem;
-      font-weight: 400;
-      padding-bottom: 2rem;
-    }
-    .source-title {
-      background-color:  var(--color-primary);
-      width: 450px;
-      height: 86px;
-      line-height: 86px;
-      text-align: center;
-      color: #ffffff;
-      font-size: 2rem;
-    }
-  }
-  .presentation {
-    // height: 1300px;
-    text-align: center;
-    padding: 0 10rem 10rem;
-    h2 {
-      font-size: 3rem;
-      padding: 70px 0 40px;
-    }
-    .presentation-content {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: stretch;
-      padding-top: 5rem;
-    }
-    .presentation-item {
-      flex: 1 0 0;
-      text-align: left;
-      padding: 0 2rem;
-      width: 50%;
-    }
-    .presentation-title {
-      color: var(--color-primary);
-      font-size: 2rem;
-      padding: 1rem 0;
-      margin-bottom: 3rem;
-
-      div {
-        background-image: linear-gradient(to bottom, #03b150, #91d050);
-        background-clip: text;
-        color: transparent;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        padding-bottom: 4px;
-      }
-      span {
-        width: 100%;
-        height: 4px;
-        display: block;
-        background-image: linear-gradient(to right, #03b150, #91d050);
-      }
-    }
-    .presentation-img {
-      margin-top: 2rem;
-      width: 100%;
-      img {
-        width: 100%;
-      }
-    }
-  }
-}
-</style>
