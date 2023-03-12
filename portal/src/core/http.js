@@ -94,6 +94,24 @@ const request = {
       throw err.response.data
     }
   },
+  async putFormData(url, params) {
+    const config = {
+      transformRequest: function (data, headers) {
+        let formData = new FormData()
+        Object.keys(data).forEach(key => {
+          let value = data[key]
+          formData.append(key, value)
+        })
+        return formData
+      },
+    }
+    try {
+      let res = await instance.put(url, params, config)
+      return res.data
+    } catch (err) {
+      throw err.response.data
+    }
+  },
   async patch(url, params) {
     try {
       let res = await instance.patch(url, params)

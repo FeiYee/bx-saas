@@ -1,12 +1,12 @@
 <template>
   <el-container>
     <el-header class="layout-header">
-      <el-row class="view-title">
+      <el-row class="header-box">
         <el-col :span="12">
           <h1>BX-SaaS</h1>
         </el-col>
         <el-col :span="12" class="align-right">
-          <el-dropdown @command="handleCommand">
+          <el-dropdown @command="handleCommand" style="color: #ffffff;">
             <span class="el-dropdown-link">
               {{user.username}}
               <el-icon class="el-icon--right">
@@ -41,6 +41,7 @@
                 </el-icon>资料管理
               </template>
               <el-menu-item index="/datum/datum">文件管理</el-menu-item>
+              <el-menu-item index="/datum/paper">用户资料</el-menu-item>
             </el-sub-menu>
             <el-sub-menu index="/search">
               <template #title>

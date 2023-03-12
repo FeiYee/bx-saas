@@ -8,6 +8,8 @@ from app.system.model.user import User
 import app.datum.model.article
 import app.datum.model.article_extract
 import app.datum.model.article_datum
+import app.datum.model.paper
+import app.datum.model.paper_datum
 import app.datum.model.datum
 import app.search.model.keyword
 import app.search.model.search

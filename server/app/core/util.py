@@ -32,3 +32,17 @@ async def write_file(file: UploadFile, write_path: str = '', write_sub_path: str
     file_path = file_dir / file.filename
     file_path.write_bytes(content)
     return file_path
+
+
+def get_file_type(file: UploadFile) -> int:
+    content_type = 4
+    if 'image' in file.content_type:
+        content_type = 0
+    elif 'sheet' in file.content_type:
+        content_type = 1
+    elif 'pdf' in file.content_type:
+        content_type = 2
+    elif 'zip' in file.content_type:
+        content_type = 3
+
+    return content_type

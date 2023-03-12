@@ -2,7 +2,9 @@
 .align-right {
   text-align: right;
 }
-
+.search-box {
+  margin-bottom: 20px;
+}
 .view-title {
   margin-bottom: 10px;
   height: 100%;
@@ -13,4 +15,33 @@
 .layout-header {
   color: var(--color-white);
   background-color: var(--color-primary);
+}
+.header-box {
+  height: 100%;
+  justify-items: center;
+  align-items: center;
+  line-height: 1;
+}
+.header-box .el-dropdown {
+  color: #ffffff;
+  font-size: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+}
+.header-box .el-dropdown-link {
+  color: #ffffff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+}
+.header-box .el-icon {
+  border: none;
+  background-color: transparent;
+  color: #ffffff;
+}
+
+.el-dialog {
+  max-height: 70vh;
+  overflow: auto;
 }
