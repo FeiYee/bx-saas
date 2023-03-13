@@ -16,6 +16,9 @@
           <li class="menu-item">
             <RouterLink to="/download">数据下载</RouterLink>
           </li>
+          <li class="menu-item">
+            <RouterLink to="/paper">资料管理</RouterLink>
+          </li>
         </ul>
       </menu>
     </div>

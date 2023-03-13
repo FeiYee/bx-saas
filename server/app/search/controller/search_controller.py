@@ -23,3 +23,8 @@ async def search_graph(keyword: str, current_user: User = Depends(get_current_us
 @router.get("/search/article", tags=["search"])
 async def search_article(keyword: str, top_level: int = 0, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return search_service.search_article(keyword_text=keyword, top_level=top_level, current_user=current_user, db=db)
+
+
+@router.get("/search/paper", tags=["search"])
+async def search_article(keyword: str, top_level: int = 0, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return search_service.search_paper(keyword_text=keyword, current_user=current_user, db=db)

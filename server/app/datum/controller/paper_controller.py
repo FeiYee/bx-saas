@@ -27,9 +27,14 @@ async def put(paper_id: str, name: str = Form(default=''), description: str = Fo
     return await paper_service.update(paper_id=paper_id, name=name, description=description, file=file, db=db)
 
 
-@router.get("/paper/query", tags=["paper"])
-async def get_paper_by_title(title: str = '', db: Session = Depends(get_db)):
-    return paper_service.find_by_title(title=title, db=db)
+@router.delete("/paper/{paper_id}", response_model=PaperSchema, tags=["paper"])
+async def delete(paper_id: str, db: Session = Depends(get_db)):
+    return paper_service.delete(paper_id=paper_id, db=db)
+
+
+@router.get("/paper/user", tags=["paper"])
+async def get_paper_by_user(name: str = '', current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return paper_service.find_by_user(name=name, current_user=current_user, db=db)
 
 
 @router.get("/paper/title", tags=["paper"])

@@ -51,8 +51,8 @@ const router = useRouter()
 const formSize = ref('default')
 const loginForm = ref()
 const auth = reactive({
-  // username: 'admin',
-  // password: '123',
+  username: 'admin',
+  password: '123',
   username: '',
   password: '',
 })

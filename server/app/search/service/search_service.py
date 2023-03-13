@@ -6,6 +6,7 @@ from ..model.search import Search
 from ..model.keyword import Keyword
 from ..model.search_record import SearchRecord
 from app.datum.service.article_service import article_service
+from app.datum.service.paper_service import paper_service
 from app.graph.service.graph_service import graph_service
 
 KeywordModelType = TypeVar("KeywordModelType", bound=Keyword)
@@ -25,6 +26,8 @@ class SearchService:
         self.search_record_model = search_record_model
 
     def search(self, keyword_text: str, current_user: User, db: Session):
+        if not keyword_text:
+            return
         keyword = db.query(self.keyword_model).filter(
             self.keyword_model.keyword == keyword_text,
             # self.keyword_model.type == 0,
@@ -86,6 +89,11 @@ class SearchService:
         if top_level != 0:
             articles = articles[0:top_level]
         return articles
+
+    def search_paper(self, keyword_text: str, current_user: User, db: Session) -> Any:
+        self.search(keyword_text=keyword_text, current_user=current_user, db=db)
+        papers = paper_service.find_by_user(name=keyword_text, current_user=current_user, db=db)
+        return papers
 
 
 search_service = SearchService(keyword_model=Keyword, search_model=Search, search_record_model=SearchRecord)

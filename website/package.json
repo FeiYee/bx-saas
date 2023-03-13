@@ -9,6 +9,10 @@
   },
   "devDependencies": {
     "nuxt": "3.0.0",
-    "sass": "^1.57.1"
+    "sass": "^1.57.1",
+    "unplugin-element-plus": "^0.7.0"
+  },
+  "dependencies": {
+    "element-plus": "^2.2.36"
   }
 }

@@ -4,7 +4,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 
-SERVER_NAME = 'ba-saas-server'
+SERVER_NAME = 'bx-saas-server'
 
 SECRET_KEY: str = secrets.token_urlsafe(32)
 # 60 minutes * 24 hours * 8 days = 8 days
@@ -15,7 +15,7 @@ PASSWORD_DEFAULT = '123456'
 GRAPH_SERVER = 'http://43.154.134.150:7096'
 
 DATABASE_TYPE = 'mysql'
-DATABASE_TYPE = 'sqlite'
+# DATABASE_TYPE = 'sqlite'
 
 DATABASE_HOST = '43.154.134.150'
 DATABASE_PORT = '3306'

@@ -5,6 +5,7 @@ import MainView from '../views/MainView.vue'
 import HomeView from '../views/HomeView.vue'
 import DownloadView from '../views/DownloadView.vue'
 import DocView from '../views/DocView.vue'
+import PaperView from '../views/PaperView.vue'
 import context from '../core/context.js'
 
 
@@ -19,6 +20,7 @@ const router = createRouter({
         {path: '', name: 'home', component: HomeView, alias: '/'},
         {path: 'download', name: 'download', component: DownloadView},
         {path: 'doc', name: 'doc', component: DocView},
+        {path: 'paper', name: 'paper', component: PaperView},
       ],
     },
     {

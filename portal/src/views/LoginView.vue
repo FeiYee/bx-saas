@@ -42,8 +42,8 @@ const ruleFormRef = ref()
 const auth = reactive({
   username: 'admin',
   password: '123',
-  // username: '',
-  // password: '',
+  username: '',
+  password: '',
 })
 
 const rules = reactive({

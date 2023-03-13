@@ -54,7 +54,7 @@ watch(
 
 const onSearch = () => {
   if (!keyword.value) {
-    return
+    // return
   }
   context.setKeyword(keyword.value)
   emit('search', keyword.value)

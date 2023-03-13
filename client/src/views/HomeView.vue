@@ -23,7 +23,7 @@
             <el-icon @click="onClickShow(2)" v-show="showType === 0"><ArrowLeft color="#ffffff" :size="62"/></el-icon>
             <span style="padding-right:2rem;">内容简述</span>
           </h3>
-          <div>
+          <div style="padding: 20px;">
             <Preview v-model="articleExtracts" @export="onExport"/>
           </div>
           <div class="file-original">
@@ -327,7 +327,7 @@ onMounted(() => {
 
   // relationChart({}, handleNodeClick)
 
-  getArticleExtracts('90d31f3b1662450d8943f28f204eec03')
+  // getArticleExtracts('90d31f3b1662450d8943f28f204eec03')
 
 })
 

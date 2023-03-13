@@ -23,6 +23,14 @@ const searchService = {
     return await http.get(url, data)
   },
 
+  async searchPaper(keyword) {
+    let data = {
+      keyword,
+    }
+    let url = this.getUrl('/search/paper')
+    return await http.get(url, data)
+  },
+
   // async searchFile(keyword, topLevel) {
   //   let data = {
   //     keyword,
@@ -32,13 +40,6 @@ const searchService = {
   //   return await http.get(url, data)
   // },
 
-  // async searchExtract(keyword) {
-  //   let data = {
-  //     keyword,
-  //   }
-  //   let url = this.getUrl('/search/extract')
-  //   return await http.get(url, data)
-  // },
 
 }
 

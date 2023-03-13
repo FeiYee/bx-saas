@@ -50,7 +50,12 @@ class KeywordService:
         return keyword
 
     def find_by_user(self, user_id: str, db: Session) -> List[str]:
-        keywords = db.query(self.model).filter(self.model.user == user_id).all()
+        keywords = (
+            db.query(self.model)
+            .filter(self.model.user == user_id)
+            .order_by(self.model.weight.desc())
+            .all()
+        )
         keyword_list = []
         for k in keywords:
             keyword_list.append(k.keyword)
