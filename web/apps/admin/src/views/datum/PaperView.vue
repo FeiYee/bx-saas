@@ -1,9 +1,24 @@
 <template>
   <div class="">
+    <!-- <el-row class="search-box" >
+      <el-col :span="24">
+        <el-collapse :model-value="1">
+          <el-collapse-item title="查询" :name="1">
+            <el-form :inline="true" :model="paperSearch">
+              <el-form-item label="用户" required>
+                <el-select v-model="paperSearch.user_id" placeholder="选择" >
+                  <el-option v-for="item in userList" :key="item.id" :label="item.username" :value="item.id" />
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+    </el-row> -->
 
     <el-row class="view-title">
       <el-col :span="12">
-        <h4>{{ modelValue.name }}</h4>
+        <h4>用户资料</h4>
       </el-col>
       <el-col :span="12" class="align-right">
         <el-button type="primary" plain size="small" @click="onCreate">新增</el-button>
@@ -12,7 +27,7 @@
 
     <el-row>
       <el-col :span="24">
-        <el-table :data="paperDatumList" border stripe style="width: 100%">
+        <el-table :data="paperList" border stripe style="width: 100%">
           <el-table-column prop="name" label="名称" show-overflow-tooltip/>
           <el-table-column prop="description" label="描述" show-overflow-tooltip/>
           <!-- <el-table-column prop="url" label="url" show-overflow-tooltip/> -->
@@ -25,11 +40,13 @@
           <el-table-column prop="file_name" label="文件名" width="180" show-overflow-tooltip/>
           <!-- <el-table-column prop="file_path" label="文件路径" width="180" show-overflow-tooltip/> -->
           <el-table-column prop="file_size" label="文件大小" width="90" show-overflow-tooltip/>
-          <el-table-column fixed="right" label="操作" width="98">
+          <el-table-column prop="user_id" label="用户" show-overflow-tooltip/>
+          <el-table-column fixed="right" label="操作" width="140">
             <template #default="scope">
               <!-- <el-button link type="success" size="small" @click="onDetail(scope.row)">详情</el-button> -->
               <el-button link type="warning" size="small" @click="onUpdate(scope.row)">编辑</el-button>
               <el-button link type="danger" size="small" @click="onDelete(scope.row)">删除</el-button>
+              <el-button link type="primary" size="small" @click="onDetailDatum(scope.row)">附件</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -37,19 +54,24 @@
     </el-row>
 
     <el-dialog v-model="dialogVisible" title="用户资料">
-      <el-form :model="paperDatum" label-width="60px">
+      <el-form :model="paper" label-width="60px">
+        <el-form-item label="用户" required>
+          <el-select v-model="paper.user_id" placeholder="选择" >
+            <el-option v-for="item in userList" :key="item.id" :label="item.username" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称">
-          <el-input v-model="paperDatum.name" autocomplete="off" />
+          <el-input v-model="paper.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model="paperDatum.description" autocomplete="off" />
+          <el-input v-model="paper.description" autocomplete="off" />
         </el-form-item>
         <el-form-item label="文件">
           <el-upload
             class="paper-upload"
             v-model:file-list="files"
             :auto-upload="false"
-            :limit="1"
+            :limit="2"
             drag
             :on-change="onFileChange"
             :on-remove="onFileRemove"
@@ -74,72 +96,73 @@
       </template>
     </el-dialog>
 
+    <el-dialog v-model="dialogDatumVisible" @close="onCloseDatum()"
+      title="资料附件" width="75vw" :close-on-click-modal="false">
+      <PaperDatum v-model="paper" />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="onCancelDatum">关 闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 <script  setup>
-import { defineEmits, reactive, ref, toRaw, watch } from 'vue'
+import { reactive, ref, toRaw, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-// import { getFileType } from '../core/file.js'
-import { fileUtil, paperDatumService } from 'lib'
-
-const props = defineProps({
-  modelValue: Object,
-});
+// import { getFileType } from '../../core/file.js'
+import { fileUtil, paperService, systemService } from 'lib'
+import PaperDatum from '../../components/PaperDatum.vue'
 
 const dialogVisible = ref(false)
+const dialogDatumVisible = ref(false)
 
-const paperDatum = reactive({
+const paperSearch = reactive({
+  id: null,
+  name: "",
+  description: "",
+  user_id: "",
+})
+
+const paper = reactive({
   id: null,
   name: "",
   description: "",
   file: null,
+  user_id: "",
 })
 
-const paperDatumList = ref([])
+const paperList = ref([])
+const userList = ref([])
 const files = ref([])
 
+// watch(
+//   () => dialogDatumVisible,
+//   value => {
+//     setPaper()
+//   }
+// )
 
-const emit = defineEmits(['update:modelValue']);
-
-watch(
-  () => props.modelValue,
-  value => {
-    console.log(value)
-    if (value && value.id) {
-      getPaperDatums()
-    }
-  },
-  {
-    deep: true
-  }
-)
-
-watch(
-  () => files,
-  value => {
-    console.log(value)
-  }
-)
-
-const setPaperDatum = (data) => {
-  paperDatum.id = data ? data.id : null
-  paperDatum.name = data ? data.name : ''
-  paperDatum.description = data ? data.description : ''
-  paperDatum.file = data ? data.file : null
-
+const setPaper = (data) => {
+  paper.id = data ? data.id || null : null
+  paper.name = data ? data.name || '' : ''
+  paper.description = data ? data.description || '' : ''
+  paper.user_id = data ? data.user_id || '' : ''
+  paper.file = data ? data.file || null : null
   files.value = data && data.id ? [{name: data.file_name, url: data.url}] : [];
 }
 
 
 const onDetail = async (row) => {
   console.log(row)
-  setPaperDatum(row)
+  setPaper(row)
   dialogVisible.value = true
 }
 
 const onUpdate = async (row) => {
   console.log(row)
-  setPaperDatum(row)
+  setPaper(row)
   dialogVisible.value = true
 }
 
@@ -155,8 +178,8 @@ const onDelete = async (row) => {
       }
     )
     try {
-      await paperDatumService.deletePaperDatum(row.id)
-      await getPaperDatums()
+      await paperService.deletePaper(row.id)
+      await getPapers()
       ElMessage({type: 'success', message: '删除成功'})
     } catch (e) {
       ElMessage({type: 'error', message: '删除失败'})
@@ -166,74 +189,99 @@ const onDelete = async (row) => {
   }
 }
 
+
+const onDetailDatum = async (row) => {
+  console.log(row)
+  setPaper(row)
+  dialogDatumVisible.value = true
+}
+
 const onCreate = () => {
-  setPaperDatum()
+  setPaper()
   dialogVisible.value = true
 }
 
 const onConfirm = () => {
   dialogVisible.value = false
-  if (paperDatum.id) {
-    updatePaperDatum()
+  if (paper.id) {
+    updatePaper()
   } else {
-    createPaperDatum()
+    createPaper()
   }
 }
 
 const onCancel = () => {
   dialogVisible.value = false
-  setPaperDatum()
+  setPaper()
 }
 
+
 const onFileChange = file => {
-  paperDatum.file = file.raw
-  console.log(files)
+  paper.file = file.raw
+  files.value = [file]
 }
 
 const onFileRemove = file => {
-  paperDatum.file = null
+  paper.file = null
+  files.value = []
 }
 
-const getPaperDatums = async () => {
-  let paperId = props.modelValue.id
-  if (!paperId) {
-    return
-  }
-  let paperDatums = await paperDatumService.getPaperDatums(paperId)
-  paperDatumList.value = paperDatums
+
+const onCancelDatum = () => {
+  console.log(paper)
+  dialogDatumVisible.value = false
+  // setPaper()
 }
 
-const createPaperDatum = async () => {
-  let paperId = props.modelValue.id
-  let data = toRaw(paperDatum)
+const onCloseDatum = () => {
+  setPaper()
+}
+
+
+const getPapers = async () => {
+  let papers = await paperService.getPapers()
+  paperList.value = papers
+}
+
+const createPaper = async () => {
+  let data = toRaw(paper)
   console.log(data)
   try {
-    await paperDatumService.createPaperDatum(paperId, data)
-    setPaperDatum()
-    getPaperDatums()
+    await paperService.createPaper(data)
+    setPaper()
+    getPapers()
     ElMessage({type: 'success', message: '新增成功'})
   } catch(e) {
     ElMessage({type: 'error', message: '新增失败'})
   }
 }
 
-const updatePaperDatum = async () => {
-  let data = toRaw(paperDatum)
+const updatePaper = async () => {
+  let data = toRaw(paper)
   if (!data.file) {
     delete data.file
   }
   try {
-    await paperDatumService.updatePaperDatum(data)
-    setPaperDatum()
-    getPaperDatums()
+    await paperService.updatePaper(data)
+    setPaper()
+    getPapers()
     ElMessage({type: 'success', message: '更新成功'})
   } catch(e) {
     ElMessage({type: 'error', message: '更新失败'})
   }
 }
 
+const getUsers = async () => {
+  let users = await systemService.getUsers()
+  userList.value = users
+}
 
-getPaperDatums()
+const init = async () => {
+  getPapers()
+  getUsers()
+}
+
+init()
 
 </script>
 <style>

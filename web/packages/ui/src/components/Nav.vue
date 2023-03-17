@@ -1,43 +1,55 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true
-  }
-})
-</script>
-
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
-  </div>
+  <nav class="nav">
+    <div class="container">
+      <!-- <div class="search">
+        <input v-model="keyword" type="search" name="search" id="search">
+        <button @click="onClick">搜索</button>
+      </div> -->
+      <menu class="menu">
+        <ul class="menu-list">
+          <li class="menu-item">
+            <RouterLink to="/">首页</RouterLink>
+          </li>
+          <li class="menu-item">
+            <RouterLink to="/doc">文档管理</RouterLink>
+          </li>
+          <li class="menu-item">
+            <RouterLink to="/download">数据下载</RouterLink>
+          </li>
+          <li class="menu-item">
+            <RouterLink to="/paper">资料管理</RouterLink>
+          </li>
+        </ul>
+      </menu>
+    </div>
+  </nav>
 </template>
+<script setup>
+// import { ref, defineProps, defineEmits, computed } from 'vue'
+import { RouterLink } from 'vue-router'
+// import context from '../core/context.js'
 
-<style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  top: -10px;
-}
+// const props = defineProps({
+//   modelValue: String,
+// })
 
-h3 {
-  font-size: 1.2rem;
-}
+// const emit = defineEmits(['search', 'update:modelValue'])
 
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
+// const keyword = computed({
+//   get: () => props.modelValue,
+//   set: (value) => {
+//     emit('update:modelValue', value)
+//   }
+// })
 
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
-}
-</style>
+
+// const onClick = () => {
+//   if (!keyword.value) {
+//     return
+//   }
+//   context.setKeyword(keyword.value)
+//   emit('search', keyword.value)
+// }
+
+
+</script>
