@@ -10,7 +10,7 @@
           <li class="menu-item">
             <RouterLink to="/">首页</RouterLink>
           </li>
-          <li class="menu-item">
+          <!-- <li class="menu-item">
             <RouterLink to="/doc">文档管理</RouterLink>
           </li>
           <li class="menu-item">
@@ -18,7 +18,7 @@
           </li>
           <li class="menu-item">
             <RouterLink to="/paper">资料管理</RouterLink>
-          </li>
+          </li> -->
         </ul>
       </menu>
     </div>

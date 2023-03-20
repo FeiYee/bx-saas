@@ -19,7 +19,7 @@ export default defineNuxtConfig({
 
   },
   devServer: {
-    port: 8020
+    port: 8000
   },
   vite: {
     // plugins: [ElementPlus({})],

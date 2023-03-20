@@ -17,10 +17,10 @@ const router = createRouter({
       name: 'main',
       component: MainView,
       children: [
-        {path: '', name: 'home', component: HomeView, alias: '/'},
-        {path: 'download', name: 'download', component: DownloadView},
-        {path: 'doc', name: 'doc', component: DocView},
-        {path: 'paper', name: 'paper', component: PaperView},
+        {path: '', name: 'home', component: PaperView, alias: '/'},
+        // {path: 'download', name: 'download', component: DownloadView},
+        // {path: 'doc', name: 'doc', component: DocView},
+        // {path: 'paper', name: 'paper', component: PaperView},
       ],
     },
     {
