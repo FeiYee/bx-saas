@@ -14,20 +14,26 @@ rm -rf dist/server/asset/
 mkdir dist/server/cache/
 mkdir dist/server/asset/
 
-cd client
-npm run build
-cp -r dist/* ../dist/client/www
-cd ..
-
-cd portal
-npm run build
-cp -r dist/* ../dist/portal/www
-cd ..
-
 cd website
 npm run generate
 cp -r dist/* ../dist/website/www
 cd ..
+
+cd admin
+npm run build
+cp -r dist/* ../dist/admin/www
+cd ..
+
+cd graph
+npm run build
+cp -r dist/* ../dist/graph/www
+cd ..
+
+cd medical
+npm run build
+cp -r dist/* ../dist/medical/www
+cd ..
+
 
 # cd doc
 # mkdocs build

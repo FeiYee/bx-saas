@@ -14,45 +14,59 @@ services:
     depends_on:
       - server
 
-  client:
-    image: nginx:1.23.2
-    volumes:
-      - ./client/www:/usr/share/nginx/html:ro
-      - ./client/config/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "8000:80"
-    hostname: client
-    networks:
-      - net
-    restart: always
-    depends_on:
-      - server
-
-  portal:
-    image: nginx:1.23.2
-    volumes:
-      - ./portal/www:/usr/share/nginx/html:ro
-      - ./portal/config/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "8010:80"
-    hostname: portal
-    networks:
-      - net
-    restart: always
-    depends_on:
-      - server
-
   website:
     image: nginx:1.23.2
     volumes:
       - ./website/www:/usr/share/nginx/html:ro
       - ./website/config/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "8020:80"
+      - "8000:80"
     hostname: website
     networks:
       - net
     restart: always
+
+  admin:
+    image: nginx:1.23.2
+    volumes:
+      - ./admin/www:/usr/share/nginx/html:ro
+      - ./admin/config/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8010:80"
+    hostname: admin
+    networks:
+      - net
+    restart: always
+    depends_on:
+      - server
+
+  graph:
+    image: nginx:1.23.2
+    volumes:
+      - ./graph/www:/usr/share/nginx/html:ro
+      - ./graph/config/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8020:80"
+    hostname: graph
+    networks:
+      - net
+    restart: always
+    depends_on:
+      - server
+
+  medical:
+    image: nginx:1.23.2
+    volumes:
+      - ./medical/www:/usr/share/nginx/html:ro
+      - ./medical/config/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8030:80"
+    hostname: medical
+    networks:
+      - net
+    restart: always
+    depends_on:
+      - server
 
   server:
     # image: python:3.10.8
