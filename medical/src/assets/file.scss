@@ -1,0 +1,105 @@
+@use 'variable' as *;
+
+.file {
+  $item-height: 4rem;
+
+  .container {
+    background-color: var(--color-background-primary);
+    border-radius: 4px;
+
+    padding-bottom: 3rem;
+
+  }
+
+  .content-main {
+    display: flex;
+    padding: 0;
+    border-radius: 4px;
+  }
+  .content-primary {
+    background-color: var(--color-background-primary, $color-background-primary);
+  }
+  .file-list {
+    width: 100%;
+    min-height: $item-height * 2;
+  }
+
+  .file-item {
+    height: $item-height;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding-top: 12px;
+
+    .file-check {
+      padding-right: 1rem;
+    }
+
+    .file-name {
+      background-color: var(--color-white, $color-white);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 4px;
+
+      &.summary {
+        background-color: var(--color-background-tertiary, $color-background-tertiary);
+      }
+    }
+  }
+
+  .file-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+
+    .file-operate {
+      display: flex;
+      flex-direction: row;
+
+    }
+    .operate-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-right: 2rem;
+      label, span {
+        color: var(--color-primary, $color-primary);
+        margin-left: 4px;
+        font-weight: 600;
+      }
+    }
+    .file-label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .label-title {
+      color: var(--color-primary, $color-primary);
+      margin-right: 2rem;
+      font-weight: 600;
+    }
+    .label-item {
+      display: flex;
+      align-items: center;
+    }
+    .label-color {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+      margin-left: 1rem;
+      display: inline-block;
+      border-radius: 4px;
+      background-color: var(--color-white, $color-white);
+      &.gray {
+        background-color: var(--color-background-tertiary, $color-background-tertiary);
+      }
+    }
+
+  }
+
+}
