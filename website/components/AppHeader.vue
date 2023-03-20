@@ -4,8 +4,8 @@
       <h1 class="logo">BAIX</h1>
       <nav>
         <a href="/">Home</a>
-        <a href="/">Blog</a>
-        <a href="/">GitHub</a>
+        <a href="http://graph.baix.ai/" target="_blank">Graph</a>
+        <a href="http://medical.baix.ai/" target="_blank">Medical</a>
         <a href="/about/">About us</a>
       </nav>
       <div>
