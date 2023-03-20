@@ -6,9 +6,12 @@ const keywordService = {
     return this.prefix + url
   },
 
-  async getUserKeywords() {
+  async getUserKeywords(searchType) {
+    let data = {
+      search_type: searchType
+    }
     let url = this.getUrl(`/keyword/user`)
-    return await http.get(url)
+    return await http.get(url, data)
   },
 
   async deleteKeyword(id) {

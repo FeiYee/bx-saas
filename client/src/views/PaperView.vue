@@ -1,5 +1,5 @@
 <template>
-  <Search @search="onSearch" :isSearchDone="isSearchDone" />
+  <Search @search="onSearch" :is-search-done="isSearchDone" :search-type="1"/>
   <Nav />
   <main class="file content paper">
     <div class="container">
@@ -14,9 +14,23 @@
               <ElTooltip effect="dark" :content="paper.description" placement="top" >
                 <span>{{ paper.name }}</span>
               </ElTooltip>
+              <el-dropdown @command="onCommand(paper, $event)">
+                <span class="el-dropdown-link">
+                  <el-icon class="el-icon--right" style="transform: rotate(90deg);">
+                    <MoreFilled />
+                  </el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="download">下载</el-dropdown-item>
+                    <!-- <el-dropdown-item command="upload">上传</el-dropdown-item> -->
+                    <!-- <el-dropdown-item divided>删除</el-dropdown-item> -->
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
             </div>
           </template>
-          <Preview v-model="paper.paper_datums" :is-export-disabled="true" @export="onExport"/>
+          <Preview v-model="paper.paper_datums" v-model:current-value="paperDatum" :is-export-disabled="true" @export="onExport"/>
         </ElCard>
 
       </section>
@@ -63,12 +77,14 @@
 </template>
 <script setup>
 import { ref, reactive, toRaw, inject, onMounted, onBeforeUnmount } from 'vue'
-import { ElMessage, ElButton, ElLoading, ElDialog, ElCard, ElForm, ElFormItem, ElTooltip } from 'element-plus'
+import { ElMessage, ElButton, ElLoading, ElDialog, ElCard, ElForm, ElFormItem, ElTooltip,
+  ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon } from 'element-plus'
 import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
 import Preview from '../components/Preview.vue'
 import paperService from '../services/paper.js'
 import searchService from '../services/search.js'
+import { downloadFile } from '../core/download.js'
 import { filePrefix } from '../core/config.js'
 
 let isSearchDone = ref(false)
@@ -76,6 +92,8 @@ const dialogVisible = ref(false)
 
 const files = ref([])
 const papers = ref([])
+const paperDatum = ref(null)
+
 const paperExport = ref(null)
 
 
@@ -148,6 +166,23 @@ const onExport = () => {
   downloadFile(paperExport.value.url, paperExport.value.file_name)
 }
 
+const onCommand = (paper, command) => {
+  if (!paperDatum.value) {
+    ElMessage({
+      message: '下载文件不存在',
+      type: 'warning',
+    });
+    return
+  }
+  switch (command) {
+    case 'download':
+      downloadFile(paperDatum.value.url, paperDatum.value.file_name);
+      break;
+    default:
+      break
+  }
+
+}
 
 const onCreate = () => {
   setPaper()
@@ -227,6 +262,12 @@ const createPaper = async () => {
   .el-popper.is-customized .el-popper__arrow::before {
     background: linear-gradient(45deg, #b2e68d, #bce689);
     right: 0;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 

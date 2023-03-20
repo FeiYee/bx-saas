@@ -18,14 +18,14 @@ class RegisterSchema(BaseModel):
     username: str
     password: str
     email: str
-    domain: str
+    # domain: str
 
 
 class UserSchema(BaseModel):
     id: str
     username: str
     email: str
-    domain: str
+    # domain: str
 
     class Config:
         orm_mode = True

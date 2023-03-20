@@ -36,8 +36,8 @@ async def get(user_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/keyword/user",  tags=["keyword"])
-async def get(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return keyword_service.find_user_keywords(current_user=current_user, db=db)
+async def get(search_type: int = 0, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return keyword_service.find_user_keywords(search_type=search_type, current_user=current_user, db=db)
 
 
 # 废弃

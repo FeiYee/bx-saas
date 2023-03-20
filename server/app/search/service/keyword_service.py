@@ -1,6 +1,6 @@
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, or_
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, func, or_, and_
 from sqlalchemy.orm import Session
 from app.system.model.user import User
 from app.system.service.org_user_service import org_user_service
@@ -61,11 +61,11 @@ class KeywordService:
             keyword_list.append(k.keyword)
         return keyword_list
 
-    def find_user_keywords(self, current_user: User, db: Session) -> Any:
+    def find_user_keywords(self, search_type: int, current_user: User, db: Session) -> Any:
         org = org_user_service.find_user_org(user_id=current_user.id, db=db)
-        filters = [self.model.user_id == current_user.id]
+        filters = [self.model.user_id == current_user.id, self.model.type == search_type]
         if org is not None:
-            filters = [or_(self.model.org_id == org.id, self.model.user_id == current_user.id)]
+            filters = [and_(self.model.type == search_type, or_(self.model.org_id == org.id, self.model.user_id == current_user.id))]
         keywords = db.query(self.model).filter(*filters).order_by(self.model.weight.desc()).distinct(self.model.keyword).all()
 
         keyword_list = []

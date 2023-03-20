@@ -35,7 +35,11 @@ import context from '../core/context.js'
 import keywordService from '../services/keyword.js'
 
 const props = defineProps({
-  isSearchDone: Boolean
+  isSearchDone: Boolean,
+  searchType: {
+    type: Number,
+    default: 0
+  }
 })
 
 const keyword = ref('')
@@ -67,7 +71,7 @@ const onKeywordClick = keywordText => {
 }
 
 const getKeywords = async () => {
-  keywords.value = await keywordService.getUserKeywords(0)
+  keywords.value = await keywordService.getUserKeywords(props.searchType)
 }
 
 const onKeywordClose = async (keyword) => {

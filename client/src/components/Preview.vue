@@ -31,6 +31,7 @@ import canvasDatagrid from 'canvas-datagrid';
 
 const props = defineProps({
   modelValue: Array,
+  currentValue: Object,
   isExportDisabled: {
     type: Boolean,
     default: false
@@ -49,7 +50,7 @@ const fileList = computed({
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'export']);
+const emit = defineEmits(['update:modelValue', 'update:currentValue', 'export']);
 
 watch(
   () => props.modelValue,
@@ -70,6 +71,7 @@ const onClick = (index) => {
   if (file.value.type === 1) {
     renderExcel(file)
   }
+  emit('update:currentValue', file.value)
 };
 
 const onClickExport = () => {

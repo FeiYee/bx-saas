@@ -30,9 +30,9 @@
             <el-form-item label="Email" prop="email">
               <el-input v-model="auth.email" type="email"/>
             </el-form-item>
-            <el-form-item label="Domain" prop="domain">
+            <!-- <el-form-item label="Domain" prop="domain">
               <el-input v-model="auth.domain"/>
-            </el-form-item>
+            </el-form-item> -->
             <!-- <el-form-item label="记住密码" prop="type">
             <el-checkbox-group v-model="auth.type">
               <el-checkbox label="记住密码" name="type" />
@@ -75,9 +75,9 @@ const rules = reactive({
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
   ],
-  domain: [
-    { required: true, message: '请输入域', trigger: 'blur' },
-  ],
+  // domain: [
+  //   { required: true, message: '请输入域', trigger: 'blur' },
+  // ],
 })
 
 const onClick = () => {

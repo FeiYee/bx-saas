@@ -19,12 +19,12 @@ async def home():
 
 
 @router.post("/register", tags=["home"])
-async def register(username: str = Form(), password: str = Form(), email: str = Form(), domain: str = Form(), db: Session = Depends(get_db)) -> UserSchema:
+async def register(username: str = Form(), password: str = Form(), email: str = Form(), domain: str = Form(default=''), db: Session = Depends(get_db)) -> UserSchema:
     register_schema = RegisterSchema(
         username=username,
         password=password,
         email=email,
-        domain=domain,
+        # domain=domain,
     )
     return home_service.register(register_schema=register_schema, db=db)
 

@@ -8,6 +8,7 @@ pydantic==1.10.5
 python-multipart==0.0.5
 requests==2.28.2
 simplejson==3.18.3
+slowapi==0.1.7
 
 SQLAlchemy==1.4.44
 PyMySQL==1.0.2
