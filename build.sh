@@ -16,7 +16,7 @@ mkdir dist/server/asset/
 
 cd website
 npm run generate
-cp -r dist/* ../dist/website/www
+cp -r .output/public/* ../dist/website/www
 cd ..
 
 cd admin
