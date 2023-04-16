@@ -33,9 +33,7 @@ class GraphService:
         self.main_graph = {}
 
         self.cursor = db.cursor()
-        self.cursor.execute("select COLUMN_NAME from information_schema.COLUMNS where table_name = 'article';")
-        for line in self.cursor.fetchall():
-            self.main_table[line[0]] = []
+        
         self.set_data()
         self.init_sec()
         self.main_graph = self.build_graph(self.main_table)
@@ -43,15 +41,19 @@ class GraphService:
         self.temp_graph = deepcopy(self.main_graph)
 
     def set_data(self):
-        self.cursor.execute("SELECT * FROM article")
-        while True:
-            try:
-                data = self.cursor.fetchone()
-                for i, line in enumerate(data):
-                    self.main_table[list(self.main_table.keys())[i]].append(line)
-            except:
-                break
-        self.main_table = pd.DataFrame(self.main_table)
+        query = "SELECT * FROM article;"
+
+        # 执行 SQL 查询语句
+        self.cursor.execute(query)
+
+        # 获取查询结果
+        result = self.cursor.fetchall()
+
+        # 获取查询结果中的列名
+        column_names = [i[0] for i in self.cursor.description]
+
+        # 将查询结果转换为 DataFrame
+        self.main_table = pd.DataFrame(result, columns=column_names)
 
     def init_sec(self):
         '''
@@ -114,6 +116,7 @@ class GraphService:
     def search_table(self, text, return_table = False):
         terminal, text = self.teminal(text)
         text = text.lower()
+        self.main_table["search_index"] = self.main_table["search_index"].astype(str)
         search_df = self.main_table[self.index][self.main_table["search_index"].str.contains(text)]
 
 
@@ -133,6 +136,7 @@ class GraphService:
             return {"table": [{na: a[i] for i, na in enumerate(list(self.main_table.keys()))} for a in search_df.values],
                     "number_article": float(len(search_df.values)),
                     "file_name": file_name}
+        
     def build_graph(self, table):
         '''
         根据表格构建图谱
@@ -201,6 +205,5 @@ class GraphService:
                 "number_article": float(len(search_table.values)),
                 "nodes_count": classin,
                 "up_date": up_date}
-
 
 graph_service = GraphService()
