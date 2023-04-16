@@ -6,6 +6,7 @@ import pymysql
 import datetime
 import pandas as pd
 from copy import deepcopy
+import collections
 
 def mkdir(path):
     '''
@@ -169,12 +170,70 @@ class GraphService:
         self.temp_graph = {"nodes": nodes, "links": links}
         return self.temp_graph
 
-    def search_graph(self, text, db):
 
-        self.build_db2graph(db)
+    def search_graph(self,text,db = None):
+        # 建立连接
+        conn = pymysql.connect(
+            host='43.154.134.150',  # MySQL服务器地址
+            port=3306,         # MySQL服务器端口号，默认为3306
+            user='root',       # 用户名
+            password='Emzujju12!',  # 密码
+            database='bx_saas',  # 数据库名称
+            charset='utf8mb4',  # 字符编码
+            cursorclass=pymysql.cursors.DictCursor  # 游标类型
+        )
+        node_properties = ['id', 'name', 'title', 'summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
+        query = "SELECT * FROM graphs;"
 
-        search_table = self.search_table(text,return_table = True)
-        result_graph = self.build_graph(search_table)
+        # 创建游标对象
+        cursor = conn.cursor()
+
+        # 执行 SQL 查询语句
+        cursor.execute(query)
+
+        # 获取查询结果
+        result = cursor.fetchall()
+
+        # 获取查询结果中的列名
+        column_names = [i[0] for i in cursor.description]
+
+        # 将查询结果转换为 DataFrame
+        graph_table = pd.DataFrame(result, columns=column_names)
+        cursor.close()
+
+        graph_table["search_index"] = [" ".join(line) for line in graph_table.values]
+        graph_table["search_index"] = graph_table["search_index"].astype(str)
+
+
+        df = graph_table[["title","ent1","rela","ent2"]][graph_table["search_index"].str.contains(text)]
+
+        node_properties = ['title', 'summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
+        # Create a list of all unique nodes
+        nodes = set(df['ent1']).union(set(df['ent2']))
+
+        # Map each node to a unique ID
+        node_to_id = {node: i for i, node in enumerate(nodes)}
+
+        # Create a dictionary to store the graph
+        graph = {'nodes': [], 'links': []}
+
+        # Add each node to the graph
+        for node, node_id in node_to_id.items():
+            graph['nodes'].append({"data":{'id': node_id, 'name': node }})
+            for cc in node_properties:
+                graph['nodes'][-1]["data"][cc] = "NULL"
+
+        # Add each relationship to the graph
+        for _, row in df.iterrows():
+            start_id = node_to_id[row['ent1']]
+            end_id = node_to_id[row['ent2']]
+            rela = row['rela']
+            graph['links'].append({"data":{'source': start_id, 'relationship': rela, 'target': end_id,'title':row["title"]}})
+
+        # Sort the nodes and relationships by ID
+        graph['nodes'] = sorted(graph['nodes'], key=lambda x: x["data"]['id'])
+        graph['links'] = sorted(graph['links'], key=lambda x: (x["data"]['source'], x["data"]['target'], x["data"]['relationship']))
+
 
         today = str(datetime.date.today().strftime('%y-%m'))
         year = str(today.split("-")[0])
@@ -187,7 +246,7 @@ class GraphService:
                 month += i
             up_date[year + "-" + str(month)] = 0
         classin = {}
-        for line in result_graph["links"]:
+        for line in graph["links"]:
             if line["data"]["relationship"] not in classin.keys():
                 classin[line["data"]["relationship"]] = 0.0
             classin[line["data"]["relationship"]] += 1.0
@@ -195,15 +254,14 @@ class GraphService:
                 up_date[line["up_date"]] += 1
             except:
                 None
-        classin = {"name": list(classin.keys()), "count": list(classin.values())}
-        up_date = {"date": list(up_date.keys()), "count": list(up_date.values())}
+        self.temp_graph = graph
 
-        return {"nodes": result_graph["nodes"],
-                "links": result_graph["links"],
-                "number_nodes": float(len(result_graph["nodes"])),
-                "number_links": float(len(result_graph["links"])),
-                "number_article": float(len(search_table.values)),
-                "nodes_count": classin,
-                "up_date": up_date}
+        return {"nodes": graph["nodes"],
+        "links": graph["links"],
+        "number_nodes": float(len(graph["nodes"])),
+        "number_links": float(len(graph["links"])),
+        "number_article": float(len(df.values)),
+        "nodes_count": classin,
+        "up_date": up_date}
 
 graph_service = GraphService()
