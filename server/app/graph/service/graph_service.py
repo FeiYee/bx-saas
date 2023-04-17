@@ -172,6 +172,7 @@ class GraphService:
 
 
     def search_graph(self,text,db = None):
+        text = text.lower()
         # 建立连接
         conn = pymysql.connect(
             host='43.154.134.150',  # MySQL服务器地址
@@ -207,7 +208,7 @@ class GraphService:
 
         df = graph_table[["title","ent1","rela","ent2"]][graph_table["search_index"].str.contains(text)]
 
-        node_properties = ['title', 'summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
+        rela_properties = ['summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
         # Create a list of all unique nodes
         nodes = set(df['ent1']).union(set(df['ent2']))
 
@@ -220,15 +221,18 @@ class GraphService:
         # Add each node to the graph
         for node, node_id in node_to_id.items():
             graph['nodes'].append({"data":{'id': node_id, 'name': node }})
-            for cc in node_properties:
-                graph['nodes'][-1]["data"][cc] = "NULL"
+            
 
+        total_article = []
         # Add each relationship to the graph
         for _, row in df.iterrows():
             start_id = node_to_id[row['ent1']]
             end_id = node_to_id[row['ent2']]
             rela = row['rela']
             graph['links'].append({"data":{'source': start_id, 'relationship': rela, 'target': end_id,'title':row["title"]}})
+            total_article.append(row["title"])
+            for cc in rela_properties:
+                graph['links'][-1]["data"][cc] = "NULL"
 
         # Sort the nodes and relationships by ID
         graph['nodes'] = sorted(graph['nodes'], key=lambda x: x["data"]['id'])
@@ -255,13 +259,14 @@ class GraphService:
             except:
                 None
         self.temp_graph = graph
-
+        
+        article_num = len(list(set(total_article)))
+        
         return {"nodes": graph["nodes"],
         "links": graph["links"],
         "number_nodes": float(len(graph["nodes"])),
         "number_links": float(len(graph["links"])),
-        "number_article": float(len(df.values)),
+        "number_article": float(article_num),
         "nodes_count": classin,
         "up_date": up_date}
-
 graph_service = GraphService()
