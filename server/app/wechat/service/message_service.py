@@ -9,5 +9,9 @@ class MessageService:
     def __init__(self):
         pass
 
+    def receive(self, content: any, db: Session) -> any:
+        print(content)
+        return content
+
 
 message_service = MessageService()
