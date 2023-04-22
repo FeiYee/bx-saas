@@ -7,7 +7,7 @@ import datetime
 import pandas as pd
 from copy import deepcopy
 import collections
-
+from collections import Counter
 def mkdir(path):
     '''
     创建目录
@@ -211,7 +211,7 @@ class GraphService:
         rela_properties = ['summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
         # Create a list of all unique nodes
         nodes = set(df['ent1']).union(set(df['ent2']))
-
+        nodes_size_dict = Counter(list(df['ent1'].values) + list(df['ent2'].values))
         # Map each node to a unique ID
         node_to_id = {node: i for i, node in enumerate(nodes)}
 
@@ -220,7 +220,15 @@ class GraphService:
 
         # Add each node to the graph
         for node, node_id in node_to_id.items():
-            graph['nodes'].append({"data":{'id': node_id, 'name': node }})
+            size = nodes_size_dict[node]
+            if size < 20:
+                size = 20
+            else:
+                size += 2
+            
+            if size > 90:
+                size = 100
+            graph['nodes'].append({"data":{'id': node_id, 'name': node, 'size':size ,'color': nodes_size_dict[node]//30}})
             
 
         total_article = []
@@ -229,14 +237,14 @@ class GraphService:
             start_id = node_to_id[row['ent1']]
             end_id = node_to_id[row['ent2']]
             rela = row['rela']
-            graph['links'].append({"data":{'source': start_id, 'relationship': rela, 'target': end_id,'title':row["title"]}})
+            graph['links'].append({"data":{'source': start_id, 'name': rela, 'target': end_id,'title':row["title"]}})
             total_article.append(row["title"])
             for cc in rela_properties:
                 graph['links'][-1]["data"][cc] = "NULL"
 
         # Sort the nodes and relationships by ID
         graph['nodes'] = sorted(graph['nodes'], key=lambda x: x["data"]['id'])
-        graph['links'] = sorted(graph['links'], key=lambda x: (x["data"]['source'], x["data"]['target'], x["data"]['relationship']))
+        graph['links'] = sorted(graph['links'], key=lambda x: (x["data"]['source'], x["data"]['target'], x["data"]['name']))
 
 
         today = str(datetime.date.today().strftime('%y-%m'))
@@ -251,9 +259,9 @@ class GraphService:
             up_date[year + "-" + str(month)] = 0
         classin = {}
         for line in graph["links"]:
-            if line["data"]["relationship"] not in classin.keys():
-                classin[line["data"]["relationship"]] = 0.0
-            classin[line["data"]["relationship"]] += 1.0
+            if line["data"]["name"] not in classin.keys():
+                classin[line["data"]["name"]] = 0.0
+            classin[line["data"]["name"]] += 1.0
             try:
                 up_date[line["up_date"]] += 1
             except:
