@@ -173,6 +173,7 @@ class GraphService:
 
     def search_graph(self,text,db = None):
         text = text.lower()
+        ranges, text = teminal(text)
         # 建立连接
         conn = pymysql.connect(
             host='43.154.134.150',  # MySQL服务器地址
@@ -184,7 +185,7 @@ class GraphService:
             cursorclass=pymysql.cursors.DictCursor  # 游标类型
         )
         node_properties = ['id', 'name', 'title', 'summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
-        query = "SELECT * FROM graphs;"
+
 
         # 创建游标对象
         cursor = conn.cursor()
@@ -200,6 +201,14 @@ class GraphService:
 
         # 将查询结果转换为 DataFrame
         graph_table = pd.DataFrame(result, columns=column_names)
+        if ranges[0] == None and ranges[1] == None:
+            graph_table = graph_table
+        elif ranges[0] == None:
+            graph_table = graph_table.head(ranges[1])
+        elif ranges[1] == None:
+            graph_table = graph_table.tail(graph_table.values.shape[0] - ranges[0])
+        else:
+            graph_table = graph_table.iloc[ranges[0]:ranges[1]]
         cursor.close()
 
         graph_table["search_index"] = [" ".join(line) for line in graph_table.values]
