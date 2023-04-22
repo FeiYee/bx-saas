@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 import os
 import time
 import pickle
@@ -173,7 +174,7 @@ class GraphService:
 
     def search_graph(self,text,db = None):
         text = text.lower()
-        ranges, text = teminal(text)
+        ranges, text = self.teminal(text)
         # 建立连接
         conn = pymysql.connect(
             host='43.154.134.150',  # MySQL服务器地址
@@ -189,7 +190,7 @@ class GraphService:
 
         # 创建游标对象
         cursor = conn.cursor()
-
+        query = "SELECT * FROM graphs;"
         # 执行 SQL 查询语句
         cursor.execute(query)
 
