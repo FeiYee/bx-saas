@@ -23,6 +23,8 @@ DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'Emzujju12!'
 DATABASE_DB = 'bx_saas'
 
+# wechat
+DATABASE_HOST = '152.136.129.64'
 
 # MINIO_HOST = 'minio'
 # MINIO_PORT = '7687'
