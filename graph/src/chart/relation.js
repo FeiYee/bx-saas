@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import colorMap from './color.js'
 
 export const relationChart = (data, handleNodeClick) => {
   let nodes = data.nodes || [
@@ -188,6 +189,7 @@ export const relationChart = (data, handleNodeClick) => {
       } else if (d.Type === 'Machine') {
         color = '#a0cfff'
       }
+      color = colorMap[d.color]
       return color
     })
     .attr('stroke-width', 6)
@@ -199,11 +201,13 @@ export const relationChart = (data, handleNodeClick) => {
       } else if (d.Type === 'Machine') {
         color = '#409eff'   // 蓝色
       }
+      color = colorMap[d.color]
       return color
     })
-    .attr("opacity", "0.6")
+    // .attr("opacity", "0.6")
     .style("cursor", "pointer")
     .attr('r', d => {
+      console.log(d)
       let radius = 56
       let now = new Date()
       let date = new Date()
@@ -215,6 +219,7 @@ export const relationChart = (data, handleNodeClick) => {
           radius = 40
         }
       }
+      radius = d.size
       return radius
     })
     // .selectAll('circle')
