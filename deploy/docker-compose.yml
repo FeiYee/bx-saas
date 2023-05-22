@@ -6,6 +6,7 @@ services:
     volumes:
       - ./entry/www:/usr/share/nginx/html:ro
       - ./entry/config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./entry/config/cert:/etc/nginx/cert
     ports:
       - "80:80"
     networks:
