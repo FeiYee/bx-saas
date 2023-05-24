@@ -24,7 +24,7 @@ export function getRelationData(data) {
 
   links.forEach(link => {
     let item = link.data
-    item.name = item.relationship
+    item.name = item.relationship || item.name
     item.source = item.source
     item.target = item.target
 

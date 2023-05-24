@@ -31,7 +31,7 @@ export const relationChart = (data, handleNodeClick) => {
     {
       source: "0",
       target: "1",
-      relationship: "研究"
+      name: "研究"
     },
   ]
 
@@ -45,18 +45,18 @@ export const relationChart = (data, handleNodeClick) => {
   // 碰撞作用力，为节点指定一个radius区域来防止节点重叠，设置碰撞力的强度，范围[0,1], 默认为0.7。设置迭代次数，默认为1，迭代次数越多最终的布局效果越好，但是计算复杂度更高
   const collide = d3
     .forceCollide(100)
-    .radius(() => 30)
+    .radius(() => 45)
     .strength(0.7)
     .iterations(3)
   const linkLine = d3
     .forceLink(links)
-    .id(d => d.id)
-    .distance(200)
+    .id(d => d.id || d.index)
+    .distance(280)
   // 万有引力
   const charge = d3
     .forceManyBody()
-    .strength(-800)
-    .distanceMax(300)
+    .strength(-400)
+    .distanceMax(600)
 
   const simulation = d3
     .forceSimulation(nodes)
@@ -71,7 +71,7 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('viewBox', [0, 0, width, height])
     .attr('class', 'd3')
     .call(
-      d3.zoom().scaleExtent([0.1, 2]).on('zoom', function (event) {
+      d3.zoom().scaleExtent([0.1, 3]).on('zoom', function (event) {
         // svg.attr('transform', event.transform)
         // if (event.transform.k > 1) {
         //   svg.attr('transform', event.transform)
@@ -102,36 +102,88 @@ export const relationChart = (data, handleNodeClick) => {
     .attr('fill', '#e3e3e3')
 
 
+  const clickLink = (e, d) => {
+    handleNodeClick(d)
+  }
+
   const link = svg
     .append('g')
     .attr('class', 'link')
     .attr('stroke', '#d3d3d3')
     .attr('stroke-width', 2)
     .selectAll('path')
-    // .data(links, function (d) {
+    .data(links, function (d) {
+      if (typeof d.source === 'object') {
+        return d.source.name + '_' + d.name + '_' + d.target.name
+      } else {
+        return d.source + '_' + d.name + '_' + d.target
+      }
+    })
+    // .data(links)
+    .enter()
+    .append('path')
+    .attr('id', d => {
+      return 'link-' + d.index
+    })
+    // .attr('id', function (d) {
     //   if (typeof d.source === 'object') {
     //     return d.source.name + '_' + d.relationship + '_' + d.target.name
     //   } else {
     //     return d.source + '_' + d.relationship + '_' + d.target
     //   }
     // })
+
+
+  // 连线的文字
+  const lineText = svg
+    .append('g')
+    .attr('class', 'link-text')
+    .selectAll('text')
     .data(links)
     .enter()
-    .append('path')
-  // .attr('id', function (d) {
-  //   if (typeof d.source === 'object') {
-  //     return d.source.name + '_' + d.relationship + '_' + d.target.name
-  //   } else {
-  //     return d.source + '_' + d.relationship + '_' + d.target
-  //   }
-  // })
+    .append('text')
+    .style('font-size', '14px')
+    .style("cursor", "pointer")
+    .attr('class', 'linetext')
+    .attr('id', d => {
+      return 'linktext-' + d.index
+    })
+    .attr('dy', -2)
+    .attr('dx', d => {
+      const sr = 36;
+      const sx = d.source.x;
+      const sy = d.source.y;
+      const tx = d.target.x;
+      const ty = d.target.y;
+
+      const distance = Math.sqrt(Math.pow(tx - sx, 2) + Math.pow(ty - sy, 2));
+
+      const textLength = d.name.length;
+      const deviation = 80; // 调整误差
+      const dx = ((distance) / 2 + deviation);
+      return dx;
+    })
+    .on('click', clickLink)//单击节点触发事件
+    .append('textPath')
+    .attr('xlink:href', d => {
+      return '#link-' + d.index
+    })
+    .text(d => {
+      let text = d.name
+      text = d.name
+      // text = text.substring(0, 20)
+      // text += '...'
+      return text
+    });
+
+
 
   const dbclickNode = () => {
 
   }
   const clickNode = (e, d) => {
     console.log(d, e)
-    handleNodeClick(d)
+    // handleNodeClick(d)
   }
   const drag = (simulation) => {
     const dragstarted = (event) => {
@@ -150,30 +202,20 @@ export const relationChart = (data, handleNodeClick) => {
     .append('g')
     .attr('class', 'node')
     .on('dblclick', dbclickNode)//双击节点事件
-    .on('click', clickNode)//单击节点触发事件
+    // .on('click', clickNode)//单击节点触发事件
     .call(d3.drag()
       .on('start', function (event, d) {
         event.sourceEvent.stopPropagation();
-        // restart()方法重新启动模拟器的内部计时器并返回模拟器。
-        // 与simulation.alphaTarget或simulation.alpha一起使用时，此方法可用于在交互
-        // 过程中进行“重新加热”模拟，例如在拖动节点时，在simulation.stop暂停之后恢复模拟。
-        // 当前alpha值为0，需设置alphaTarget让节点动起来
         if (!event.active) simulation.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
       })
       .on('drag', function (event, d) {
-
-        // d.fx属性- 节点的固定x位置
-        // 在每次tick结束时，d.x被重置为d.fx ，并将节点 d.vx设置为零
-        // 要取消节点，请将节点 .fx和节点 .fy设置为空，或删除这些属性。
         d.fx = event.x;
         d.fy = event.y;
       })
       .on('end', function (event, d) {
-
-        // 让alpha目标值值恢复为默认值0,停止力模型
-        // if (!d.event.active) simulation.alphaTarget(0);
+        if (!event.active) simulation.alphaTarget(0);
         d.fx = null;
         d.fy = null;
       }));
@@ -192,7 +234,8 @@ export const relationChart = (data, handleNodeClick) => {
       color = colorMap[d.color]
       return color
     })
-    .attr('stroke-width', 6)
+    // .attr('stroke-width', 6)
+    .attr('stroke-width', 0)
     .attr('fill', color)
     .attr('fill', d => {
       let color = '#67c23a' // 绿色
@@ -205,9 +248,8 @@ export const relationChart = (data, handleNodeClick) => {
       return color
     })
     // .attr("opacity", "0.6")
-    .style("cursor", "pointer")
+    // .style("cursor", "pointer")
     .attr('r', d => {
-      console.log(d)
       let radius = 56
       let now = new Date()
       let date = new Date()
@@ -246,15 +288,23 @@ export const relationChart = (data, handleNodeClick) => {
     .append('text')
     .attr('fill', '#333333')
     // .attr("opacity", "0.5")
-    .style("font-size", 14)
-    .style("cursor", "pointer")
+    .style("font-size", 12)
+    // .style("cursor", "pointer")
     .attr('dx', () => -40)
     .attr('dy', -26)
     // .text((d) => d.name)
     .attr('x', function (d) {
       const len = 12
       const step = 5
-      let title = d.title || d.Title || d.name || ''
+      let size = d.size
+      if (size < 40) {
+        size += 10
+      }
+      if (size > 60) {
+        size -= 20
+
+      }
+      let title = d.name || d.title || d.Title || ''
       // let titles = title.split(' ')
       let title1 = ''
       let title2 = ''
@@ -276,38 +326,46 @@ export const relationChart = (data, handleNodeClick) => {
         .append('tspan')
         // .attr('ix', 0)
         // .attr('fill', '#000000')
-        .text(title1)
+        .attr('dx', -size + 2)
+        .attr('dy', size/8)
+        .text(title)
 
-      if (title2) {
-        d3.select(this)
-        .append('tspan')
-        // .attr('ix', 0)
-        .attr('dx', -58)
-        .attr('dy', -12)
-        // .attr('fill', '#000000')
-        .text(title2)
-      }
-      if (title3) {
-        d3.select(this)
-        .append('tspan')
-        .attr('dx', -68)
-        .attr('dy', 2)
-        .text(title3)
-      }
-      if (title4) {
-        d3.select(this)
-        .append('tspan')
-        .attr('dx', -58)
-        .attr('dy', 16)
-        .text(title4)
-      }
-      if (title5) {
-        d3.select(this)
-        .append('tspan')
-        .attr('dx', -40)
-        .attr('dy', 30)
-        .text(title5)
-      }
+      // d3.select(this)
+      //   .append('tspan')
+      //   // .attr('ix', 0)
+      //   // .attr('fill', '#000000')
+      //   .text(title1)
+
+      // if (title2) {
+      //   d3.select(this)
+      //   .append('tspan')
+      //   // .attr('ix', 0)
+      //   .attr('dx', -58)
+      //   .attr('dy', -12)
+      //   // .attr('fill', '#000000')
+      //   .text(title2)
+      // }
+      // if (title3) {
+      //   d3.select(this)
+      //   .append('tspan')
+      //   .attr('dx', -68)
+      //   .attr('dy', 2)
+      //   .text(title3)
+      // }
+      // if (title4) {
+      //   d3.select(this)
+      //   .append('tspan')
+      //   .attr('dx', -58)
+      //   .attr('dy', 16)
+      //   .text(title4)
+      // }
+      // if (title5) {
+      //   d3.select(this)
+      //   .append('tspan')
+      //   .attr('dx', -40)
+      //   .attr('dy', 30)
+      //   .text(title5)
+      // }
     })
 
   // const nodeText = svg

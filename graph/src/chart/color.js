@@ -1,36 +1,3 @@
-const color = {
-  0: "#F5D5E3",
-  1: "#E4D7F5",
-  2: "#E4F5D7",
-  3: "#F5ECD7",
-  4: "#D7F5EF",
-  5: "#F5E2D7",
-  6: "#F5D5E3",
-  7: "#F5D5E3",
-  8: "#F5D5E3",
-  9: "#F5D5E3",
-  10: "#F5D5E3",
-  11: "#F5D5E3",
-  12: "#F5D5E3",
-  13: "#F5D5E3",
-  14: "#F5D5E3",
-  15: "#F5D5E3",
-  16: "#F5D5E3",
-  17: "#F5D5E3",
-  18: "#F5D5E3",
-  19: "#F5D5E3",
-  20: "#F5D5E3",
-  21: "#F5D5E3",
-  22: "#F5D5E3",
-  23: "#F5D5E3",
-  24: "#F5D5E3",
-  25: "#F5D5E3",
-  26: "#F5D5E3",
-  27: "#F5D5E3",
-  28: "#F5D5E3",
-  29: "#F5D5E3",
-  30: "#F5D5E3",
-}
 
 const colors = [
   '#F5D5E3',
@@ -43,4 +10,4 @@ const colors = [
   '#D6E6F0',
   '#D6F0E6', '#F0E6D6', '#E6F0D6', '#E6D6F0', '#E3D5F5', '#D5F5E3', '#D5E3F5', '#F5D8D5', '#D8D5F5', '#F5F1D5', '#D5F5F1', '#F1D5F5', '#F5E6D5', '#E6D5F5', '#D5F5E6', '#F5D5D7', '#D5D7F5', '#F5D5F3', '#D5F3F5', '#F3F5D5', '#D5F5D3', '#F5F3D5']
 
-export default color
+export default colors

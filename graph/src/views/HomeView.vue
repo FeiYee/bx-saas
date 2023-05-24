@@ -254,6 +254,7 @@ const handleNodeClick = (node) => {
   console.log(node)
   article.title = node.title  // 文章名
   article.name = node.name
+  article.name = node.journal
   article.abstract = node.abstract
   article.year = node.year
   article.author = node.author
