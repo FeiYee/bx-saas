@@ -103,3 +103,5 @@ site/
 *.db
 # cache/
 temp/
+
+miniprogram_npm/
