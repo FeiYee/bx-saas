@@ -27,6 +27,12 @@ class UserService:
         ).first()
         return user
 
+    def find_by_phone(self, phone: str, db: Session) -> User:
+        user = db.query(self.model).filter(
+            self.model.phone == phone,
+        ).first()
+        return user
+
     def find(self, db: Session) -> list[tuple[User]]:
         # data = jsonable_encoder(user_schema, exclude_unset=True)
         users = db.query(self.model).filter(self.model.deleted_at.is_(None)).all()

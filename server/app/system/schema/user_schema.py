@@ -8,7 +8,7 @@ class UserSchema(BaseModel):
     # password: str | None = None
     name: str | None = None
     email: str | None = None
-    # domain: str | None = None
+    phone: str | None = None
     is_admin: bool | None = False
     created_at: datetime | None = None
     updated_at: datetime | None = None

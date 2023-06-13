@@ -1,0 +1,20 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- <view class="box" wx:if="{{papers.length > 0}}">
+    <van-cell class="cell" wx:for="{{papers}}" wx:key="index" title="{{item.title}}" value=""  label="{{item.desc}}" border="{{ false }}">
+      <view slot="icon" class="cell-checkbox">
+        <van-checkbox value="{{ item.checked }}" bind:change="onChange"></van-checkbox>
+      </view>
+      <view slot="right-icon" class="cell-checkbox">
+        <van-icon name="eye-o" />
+      </view>
+    </van-cell>
+  </view>
+  <view class="box" wx:else="">
+    <van-empty description="暂无数据" />
+  </view> -->
+
+  <view class="box" >
+    <van-empty description="暂无数据" />
+  </view>
+</view>

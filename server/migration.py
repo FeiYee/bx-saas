@@ -18,6 +18,8 @@ import app.system.model.user
 import app.system.model.org
 import app.system.model.org_user
 
+import app.wechat.model.wechat
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

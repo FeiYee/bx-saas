@@ -1,4 +1,7 @@
 <!--index.wxml-->
 <view class="container">
-  Weixin
+  <view class="box" >
+    <van-empty description="暂无数据" />
+  </view>
+
 </view>

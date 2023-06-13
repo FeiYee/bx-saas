@@ -16,7 +16,7 @@ from app.system.controller import org_controller
 from app.system.controller import org_user_controller
 from app.system.controller import user_controller
 
-from app.wechat.controller import message_controller
+from app.wechat.controller import login_controller
 
 router = APIRouter()
 
@@ -36,6 +36,6 @@ router.include_router(org_controller.router)
 router.include_router(org_user_controller.router)
 router.include_router(user_controller.router)
 
-router.include_router(message_controller.router)
+router.include_router(login_controller.router)
 
 

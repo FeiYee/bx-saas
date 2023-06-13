@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<van-tabbar active="{{ active }}" bind:change="onChange">
+  <van-tabbar-item wx:for="{{tabs}}" wx:key="index" icon="{{item.icon}}">{{item.text}}</van-tabbar-item>
+</van-tabbar>
+<van-action-sheet
+  show="{{ isActionShow }}"
+  actions="{{ actions }}"
+  title="微信登录"
+  cancel-text="取消"
+  safe-area-inset-bottom="{{true}}"
+  bind:close="onClose"
+  bind:cancel="onClose"
+  bind:getuserinfo="onGetUserInfo"
+  bind:getphonenumber="onGetPhoneNumber"
+>
+</van-action-sheet>

@@ -1,0 +1,12 @@
+/**index.wxss**/
+.user {
+  width: 100%;
+}
+.cell-image {
+  margin-right: 30rpx;
+}
+
+.user .van-cell {
+  /* padding-left: 0;
+  padding-right: 0; */
+}

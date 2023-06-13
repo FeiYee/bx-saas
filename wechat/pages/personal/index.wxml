@@ -1,0 +1,23 @@
+<!--index.wxml-->
+<view class="container">
+<view class="user">
+  <van-cell class="cell" title="{{title}}" value=""  label="{{desc}}" border="{{ false }}">
+      <view slot="icon" class="cell-image">
+        <van-image 
+        round="{{true}}"
+        width="4rem"
+        height="4rem" src="/static/image/avatar.png" />
+      </view>
+      <view>
+      
+      </view>
+    </van-cell>
+</view>
+
+  <!-- <van-grid class="grid" square gutter="{{ 10 }}">
+    <van-grid-item icon="photo-o" text="文字" />
+    <van-grid-item icon="photo-o" text="文字" />
+    <van-grid-item icon="photo-o" text="文字" />
+    <van-grid-item icon="photo-o" text="文字" />
+  </van-grid> -->
+</view>

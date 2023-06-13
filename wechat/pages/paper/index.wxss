@@ -1,0 +1,23 @@
+/**index.wxss**/
+.cell-group {
+  width: 100%;
+}
+.cell {
+  width: 100%;
+  margin-bottom: 20rpx;
+}
+.cell:last-child {
+  margin-bottom: 0rpx;
+}
+.cell .van-cell  {
+  background-color: var(--card-background-color,#fafafa);
+}
+.cell-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  margin-top: 20rpx;
+}

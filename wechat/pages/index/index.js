@@ -1,2 +1,7 @@
 // index.js
-Page({})
+Page({
+  onShow() {
+    this.getTabBar().setActive();
+    this.getTabBar().showActionSheet();
+  }
+})
