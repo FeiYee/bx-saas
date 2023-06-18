@@ -17,10 +17,10 @@ class WechatService:
         url = 'https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code' + '&appid=' + appId + '&secret=' + appSecret + '&js_code=' + code
         res = requests.get(url)
         res_data = res.json()
-        session_key = res_data.session_key
-        unionid = res_data.unionid
-        openid = res_data.openid
-        errmsg = res_data.errmsg
+        session_key = res_data['session_key']
+        unionid = res_data['unionid']
+        openid = res_data['openid']
+        errmsg = res_data['errmsg']
         print(res_data)
         return res_data
 
@@ -32,8 +32,8 @@ class WechatService:
         url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential' + '&appid=' + appId + '&secret=' + appSecret
         res = requests.get(url)
         res_data = res.json()
-        access_token = res_data.access_token
-        expires_in = res_data.expires_in
+        access_token = res_data['access_token']
+        expires_in = res_data['expires_in']
         print(access_token)
         return access_token
 
@@ -46,12 +46,12 @@ class WechatService:
         """
         url = 'https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=' + access_token
         data = {
-            'code', code
+            'code': code
         }
-        res = requests.post(url, data)
+        res = requests.post(url=url, json=data)
         res_data = res.json()
-        phone_info = res_data.phone_info
-        phone = phone_info.phoneNumber
+        phone_info = res_data['phone_info']
+        phone = phone_info['phoneNumber']
 
         return phone
 
