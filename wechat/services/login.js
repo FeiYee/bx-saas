@@ -6,6 +6,7 @@ function login(code) {
   if (code) {
     wx.request({
       url: config.host + '/api/wechat/login',
+      method: 'POST',
       data: {
         code: code,
         info: ''
@@ -48,6 +49,4 @@ function _login(code) {
   })
 }
 
-module.exports = {
-  login
-};
+module.exports = login;

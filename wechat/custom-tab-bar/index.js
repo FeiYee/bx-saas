@@ -1,4 +1,6 @@
 // index.js
+const login = require('../services/login.js');
+
 Page({
   data: {
     active: 0,
@@ -51,9 +53,11 @@ Page({
   },
   onGetUserInfo(e) {
     console.log(e.detail);
+    login('e.detail')
+
   },
   onGetPhoneNumber(e) {
     console.log(e.detail);
-
+    login(e.detail.code)
   }
 })
