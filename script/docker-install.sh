@@ -46,6 +46,9 @@ sudo systemctl enable docker
 
 # sudo chmod +x /usr/local/bin/docker-compose
 
+sudo cp daemon.json /etc/docker/daemon.json
+
+
 sleep 60
 
 # 添加当前用户到docker组
@@ -55,6 +58,11 @@ sudo newgrp docker
 
 sudo systemctl restart docker
 
+# ubuntu
+sudo systemctl daemon-reload
+sudo service docker restart
+
+# centos
 # sudo systemctl reload-daemon
 
 # sudo systemctl restart docker
