@@ -26,6 +26,9 @@ DATABASE_DB = 'bx_saas'
 # wechat
 DATABASE_HOST = '152.136.129.64'
 
+# miniprogram
+DATABASE_HOST = 'database-1.cg2wude0gpbv.rds.cn-north-1.amazonaws.com.cn'
+
 # MINIO_HOST = 'minio'
 # MINIO_PORT = '7687'
 # MINIO_USER = 'minio'
