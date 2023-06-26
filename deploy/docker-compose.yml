@@ -10,6 +10,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8099:8099"
     networks:
       - net
     restart: always
