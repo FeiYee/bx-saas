@@ -1,7 +1,6 @@
 const config = require('../common/config');
 const context = require('../common/context');
 
-
 function login(code) {
   if (code) {
     wx.request({
@@ -13,11 +12,12 @@ function login(code) {
       },
       success(res) {
         console.log(res)
-        context.setToken(res)
+        const accessToken = res.data.access_token;
+        context.setToken(accessToken)
       },
       fail(err) {
         wx.showToast({
-          title: '等了失败',
+          title: '登录失败',
         })
       }
     })

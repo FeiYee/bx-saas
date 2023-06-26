@@ -1,18 +1,19 @@
 <!--index.wxml-->
 <view class="container">
-<view class="user">
-  <van-cell class="cell" title="{{title}}" value=""  label="{{desc}}" border="{{ false }}">
+  <view class="user">
+    <van-cell class="cell" title="{{title}}" value="" label="{{desc}}" border="{{ false }}">
       <view slot="icon" class="cell-image">
-        <van-image 
-        round="{{true}}"
-        width="4rem"
-        height="4rem" src="/static/image/avatar.png" />
+        <van-image round="{{true}}" width="4rem" height="4rem" src="/static/image/avatar.png" />
       </view>
       <view>
-      
+
       </view>
     </van-cell>
-</view>
+    <van-cell-group title="账户">
+      <van-cell title="个人资料" value="" is-link/>
+      <van-cell title="修改密码" value="" label="" border="{{ false }}" is-link/>
+    </van-cell-group>
+  </view>
 
   <!-- <van-grid class="grid" square gutter="{{ 10 }}">
     <van-grid-item icon="photo-o" text="文字" />

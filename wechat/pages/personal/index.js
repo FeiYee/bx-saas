@@ -1,11 +1,21 @@
 // index.js
+const context = require('../../common/context.js');
+const home = require('../../services/home.js');
+
 Page({
   data: {
     title: '未登录',
     desc: ''
   },
-  onShow() {
+  async onShow() {
     this.getTabBar().setActive();
-    this.getTabBar().showActionSheet()
+    let token = context.getToken();
+    if (token) {
+      await home.getUserDetail()
+      let user = context.getUser();
+      this.setData({title: user.username})
+    } else {
+      this.getTabBar().showActionSheet();
+    }
   }
 })
