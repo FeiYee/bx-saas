@@ -11,7 +11,11 @@ Page({
     this.getTabBar().setActive();
     let token = context.getToken();
     if (token) {
-      await home.getUserDetail()
+      try {
+        await home.getUserDetail()
+      } catch (error) {
+        this.getTabBar().showActionSheet();
+      }
       let user = context.getUser();
       this.setData({title: user.username})
     } else {

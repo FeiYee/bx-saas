@@ -9,10 +9,13 @@
 
       </view>
     </van-cell>
-    <van-cell-group title="账户">
-      <van-cell title="个人资料" value="" is-link/>
-      <van-cell title="修改密码" value="" label="" border="{{ false }}" is-link/>
-    </van-cell-group>
+    <view>
+      <van-cell-group title="账户">
+        <van-cell title="个人资料" value="" is-link/>
+        <van-cell title="修改密码" value="" label="" border="{{ false }}" is-link/>
+      </van-cell-group>
+    </view>
+
   </view>
 
   <!-- <van-grid class="grid" square gutter="{{ 10 }}">

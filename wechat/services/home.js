@@ -24,7 +24,7 @@ function getUserDetail() {
       fail(err) {
         reject(err);
         wx.showToast({
-          title: '获取用户信息失败',
+          title: '获取用户信息失败' + JSON.stringify(err),
         })
       }
     })

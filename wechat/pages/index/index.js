@@ -3,11 +3,15 @@ const context = require('../../common/context.js');
 const home = require('../../services/home.js');
 
 Page({
-  onShow() {
+  async onShow() {
     this.getTabBar().setActive();
     let token = context.getToken();
     if (token) {
-      home.getUserDetail()
+      try {
+        await home.getUserDetail()
+      } catch (error) {
+        this.getTabBar().showActionSheet();
+      }
     } else {
       this.getTabBar().showActionSheet();
     }
