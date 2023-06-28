@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-# -*- coding: UTF-8 -*-
 import os
 import time
 import pickle
@@ -28,6 +27,20 @@ class GraphService:
         self.graph_rela = ['molecular','result', 'effect', 'sample_count','indicator', 'group', 'drugs', 'disease', 'side_effect', 'microbe','cell', 'gene', 'pathway_target']
         self.temp_table = deepcopy(self.main_table)
         self.temp_graph = deepcopy(self.main_graph)
+        self.cache_path = "temp"
+        
+        conn = pymysql.connect(
+            host='43.154.134.150',  # MySQL服务器地址
+            port=3306,         # MySQL服务器端口号，默认为3306
+            user='root',       # 用户名
+            password='Emzujju12!',  # 密码
+            database='bx_saas',  # 数据库名称
+            charset='utf8mb4',  # 字符编码
+            cursorclass=pymysql.cursors.DictCursor  # 游标类型
+        )
+        self.build_db2graph(conn)
+        conn.close()
+        
 
     def build_db2graph(self,db):
 
@@ -55,7 +68,7 @@ class GraphService:
         column_names = [i[0] for i in self.cursor.description]
 
         # 将查询结果转换为 DataFrame
-        self.main_table = pd.DataFrame(result, columns=column_names)
+        self.main_table = pd.DataFrame(result, columns=column_names).fillna("")
 
     def init_sec(self):
         '''
@@ -71,12 +84,23 @@ class GraphService:
                 None
         urls = []
         for line in self.main_table["doi"].values:
-            urls.append("https://doi.org/" + line)
+            try:
+                urls.append("https://doi.org/" + line)
+            except:
+                urls.append("无可用")
+                
         self.main_table["原文链接"] = urls
 
         temp = []
         for line in self.main_table[self.index].values:
-            temp.append(" ".join(line).replace("."," ").replace(","," ").replace("  "," ").replace("  "," ").lower())
+            try:
+#                 print(line)
+                line = [item if item is not None else '' for item in line]
+                temp.append(" ".join(line).replace("."," ").replace(","," ").replace("  "," ").replace("  "," ").lower())
+            except:
+                print(temp[-1])
+                print("\n\n")
+                print(line)
         self.main_table["search_index"] = temp
 
     def teminal(self, text):
@@ -133,9 +157,14 @@ class GraphService:
                 mkdir(self.cache_path + "/SearchResult")
             except:
                 None
-            file_name = self.cache_path + "/SearchResult" + str(int(time.time() * 100000000000)) + ".xlsx"
+            file_name = self.cache_path + "/SearchResult/" + str(int(time.time() * 100000000000)) + ".xlsx"
             search_df.to_excel(file_name, index=None)
-            return {"table": [{na: a[i] for i, na in enumerate(list(self.main_table.keys()))} for a in search_df.values],
+#             temp_dict = []
+#             for a in search_df.values:
+#                 for i, na in enumerate(list(search_df.keys())):
+#                     temp_dict.append({na:a[i]})
+            table = [{na: [item if item is not None else '' for item in a][i] for i, na in enumerate(list(search_df.keys()))} for a in search_df.values]
+            return {"table": table,
                     "number_article": float(len(search_df.values)),
                     "file_name": file_name}
         
@@ -211,8 +240,14 @@ class GraphService:
         else:
             graph_table = graph_table.iloc[ranges[0]:ranges[1]]
         cursor.close()
-
-        graph_table["search_index"] = [" ".join(line) for line in graph_table.values]
+        conn.close()
+#         temp_table = [item if item is not None else '' for item in graph_table.values]
+        search_index = []
+        for line in graph_table.values:
+            line = [item if item is not None else '' for item in line]
+            search_index.append(" ".join(line))
+#             print(line)
+        graph_table["search_index"] = search_index
         graph_table["search_index"] = graph_table["search_index"].astype(str)
 
 
