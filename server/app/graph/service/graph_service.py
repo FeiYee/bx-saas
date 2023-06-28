@@ -28,7 +28,11 @@ class GraphService:
         self.temp_table = deepcopy(self.main_table)
         self.temp_graph = deepcopy(self.main_graph)
         self.cache_path = "temp"
+        self.conn = self.mysql_conn()
         
+        self.build_db2graph()
+        
+    def mysql_conn(self):
         conn = pymysql.connect(
             host='43.154.134.150',  # MySQL服务器地址
             port=3306,         # MySQL服务器端口号，默认为3306
@@ -38,16 +42,18 @@ class GraphService:
             charset='utf8mb4',  # 字符编码
             cursorclass=pymysql.cursors.DictCursor  # 游标类型
         )
-        self.build_db2graph(conn)
-        conn.close()
+        return conn
+    
+    def release(self):
         
-
-    def build_db2graph(self,db):
+#         self.cursor.close()
+        self.conn.close()
+        return True
+    
+    def build_db2graph(self):
 
         self.main_table = {}
         self.main_graph = {}
-
-        self.cursor = db.cursor()
         
         self.set_data()
         self.init_sec()
@@ -57,16 +63,17 @@ class GraphService:
 
     def set_data(self):
         query = "SELECT * FROM article;"
-
+        
+        cursor = self.conn.cursor()
         # 执行 SQL 查询语句
-        self.cursor.execute(query)
+        cursor.execute(query)
 
         # 获取查询结果
-        result = self.cursor.fetchall()
+        result = cursor.fetchall()
 
         # 获取查询结果中的列名
-        column_names = [i[0] for i in self.cursor.description]
-
+        column_names = [i[0] for i in cursor.description]
+        cursor.close()
         # 将查询结果转换为 DataFrame
         self.main_table = pd.DataFrame(result, columns=column_names).fillna("")
 
@@ -128,15 +135,16 @@ class GraphService:
                 elif "!" in text.split("#")[-1] or "！" in text.split("#")[-1]:
                     terminal = text.split("#")[-1].replace(" ", "").replace("!", "").replace("！", "")
                     terminal = [-int(terminal), None]
+#                     print(terminal)
                     text = text.split("#")[0]
                 else:
                     terminal = text.split("#")[-1].replace(" ", "")
                     terminal = [None, int(terminal)]
                     text = text.split("#")[0]
             else:
-                terminal = [None, 100]
+                terminal = [None, 30]
         except:
-            terminal = [None, 100]
+            terminal = [None, 30]
         return terminal, text
 
     def search_table(self, text, return_table = False):
@@ -204,23 +212,11 @@ class GraphService:
     def search_graph(self,text,db = None):
         text = text.lower()
         ranges, text = self.teminal(text)
-        # 建立连接
-        conn = pymysql.connect(
-            host='43.154.134.150',  # MySQL服务器地址
-            port=3306,         # MySQL服务器端口号，默认为3306
-            user='root',       # 用户名
-            password='Emzujju12!',  # 密码
-            database='bx_saas',  # 数据库名称
-            charset='utf8mb4',  # 字符编码
-            cursorclass=pymysql.cursors.DictCursor  # 游标类型
-        )
+
         node_properties = ['id', 'name', 'title', 'summary', 'author', 'molecular', 'journal', 'result', 'drugs', 'disease']
-
-
-        # 创建游标对象
-        cursor = conn.cursor()
         query = "SELECT * FROM graphs;"
         # 执行 SQL 查询语句
+        cursor = self.conn.cursor()
         cursor.execute(query)
 
         # 获取查询结果
@@ -230,17 +226,19 @@ class GraphService:
         column_names = [i[0] for i in cursor.description]
 
         # 将查询结果转换为 DataFrame
-        graph_table = pd.DataFrame(result, columns=column_names)
+        graph_table = pd.DataFrame(result, columns=column_names).sample(frac=1, random_state=42)
         if ranges[0] == None and ranges[1] == None:
             graph_table = graph_table
         elif ranges[0] == None:
-            graph_table = graph_table.head(ranges[1])
+            graph_table = graph_table.head(ranges[1] * 20)
         elif ranges[1] == None:
-            graph_table = graph_table.tail(graph_table.values.shape[0] - ranges[0])
+#             print(graph_table.values.shape[0],ranges[0])
+            graph_table = graph_table.tail( - ranges[0] * 20)
+#             print(graph_table)
         else:
             graph_table = graph_table.iloc[ranges[0]:ranges[1]]
         cursor.close()
-        conn.close()
+#         conn.close()
 #         temp_table = [item if item is not None else '' for item in graph_table.values]
         search_index = []
         for line in graph_table.values:
@@ -271,9 +269,9 @@ class GraphService:
             else:
                 size += 2
             
-            if size > 90:
-                size = 100
-            graph['nodes'].append({"data":{'id': node_id, 'name': node, 'size':size ,'color': nodes_size_dict[node]//30}})
+            if size > 80:
+                size = 80
+            graph['nodes'].append({"data":{'id': node_id, 'name': node, 'size':size ,'color': int(nodes_size_dict[node])%30}})
             
 
         total_article = []
