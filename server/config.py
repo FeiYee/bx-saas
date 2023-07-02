@@ -17,23 +17,22 @@ GRAPH_SERVER = 'http://43.154.134.150:7096'
 DATABASE_TYPE = 'mysql'
 # DATABASE_TYPE = 'sqlite'
 
-DATABASE_HOST = '43.154.134.150'
 DATABASE_PORT = '3306'
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = 'Emzujju12!'
 DATABASE_DB = 'bx_saas'
 
+# baix.ai
+DATABASE_HOST = '43.154.134.150'
+
 # wechat
-DATABASE_HOST = '152.136.129.64'
+# DATABASE_HOST = '152.136.129.64'
+
+# 药厂
+DATABASE_HOST = '116.198.202.249'
 
 # miniprogram
-DATABASE_HOST = 'database-1.cg2wude0gpbv.rds.cn-north-1.amazonaws.com.cn'
-
-# MINIO_HOST = 'minio'
-# MINIO_PORT = '7687'
-# MINIO_USER = 'minio'
-# MINIO_PASSWORD = 'Emzujju12!'
-
+# DATABASE_HOST = 'database-1.cg2wude0gpbv.rds.cn-north-1.amazonaws.com.cn'
 
 # NEO4J_HOST = 'neo4j'
 # NEO4J_HOST = '116.198.202.249'

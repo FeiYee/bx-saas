@@ -2,6 +2,8 @@ from pydantic import BaseModel
 
 
 class GraphSchema(BaseModel):
-    name: str
-    title: str
+    article_id: str
+    ent1: str
+    rela: str
+    ent2: str
 

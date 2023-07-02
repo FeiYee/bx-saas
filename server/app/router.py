@@ -9,6 +9,8 @@ from app.datum.controller import paper_controller
 from app.datum.controller import paper_datum_controller
 from app.datum.controller import datum_controller
 
+from app.graph.controller import graph_controller
+
 from app.search.controller import keyword_controller
 from app.search.controller import search_controller
 
@@ -28,6 +30,8 @@ router.include_router(article_extract_controller.router)
 router.include_router(paper_controller.router)
 router.include_router(paper_datum_controller.router)
 router.include_router(datum_controller.router)
+
+router.include_router(graph_controller.router)
 
 router.include_router(keyword_controller.router)
 router.include_router(search_controller.router)

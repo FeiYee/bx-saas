@@ -19,14 +19,14 @@ export default defineConfig({
     usePolling: true,
     proxy: {
       '/api': {
-        // target: 'http://127.0.0.1:8080',
-        target: 'http://43.154.134.150:8080',
+        target: 'http://127.0.0.1:8090',
+        // target: 'http://43.154.134.150:8080',
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, '/api')
       },
       '/file': {
-        // target: 'http://127.0.0.1:8080',
-        target: 'http://43.154.134.150:8080',
+        target: 'http://127.0.0.1:8090',
+        // target: 'http://43.154.134.150:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/file/, '')
       },

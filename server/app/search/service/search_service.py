@@ -74,7 +74,8 @@ class SearchService:
     def search_graph(self, keyword_text: str, current_user: User, db: Session) -> Any:
         self.search(keyword_text=keyword_text, current_user=current_user, db=db, search_type=0)
         try:
-            data = graph_service.search_graph(text=keyword_text, db=db)
+            # data = graph_service.search_graph(text=keyword_text, db=db)
+            data = graph_service.find_by_keyword(keyword=keyword_text, db=db)
             print(data)
         except Exception as err:
             print(err)

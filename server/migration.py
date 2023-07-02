@@ -11,6 +11,7 @@ import app.datum.model.article_datum
 import app.datum.model.paper
 import app.datum.model.paper_datum
 import app.datum.model.datum
+import app.graph.model.graph
 import app.search.model.keyword
 import app.search.model.search
 import app.search.model.search_record
