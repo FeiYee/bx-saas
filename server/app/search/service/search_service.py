@@ -75,16 +75,18 @@ class SearchService:
         self.search(keyword_text=keyword_text, current_user=current_user, db=db, search_type=0)
         try:
             # data = graph_service.search_graph(text=keyword_text, db=db)
+
             data = graph_service.find_by_keyword(keyword=keyword_text, db=db)
-            print(data)
+            print("图谱检索成功：",keyword_text)
         except Exception as err:
-            print(err)
+            print("图谱检索失败：",err,keyword_text)
             data = None
 
         return data
         # return simplejson.loads(simplejson.dumps(data, ignore_nan=True))
 
     def search_article(self, keyword_text: str, top_level: int, current_user: User, db: Session) -> Any:
+        print("search_article",keyword_text)
         self.search(keyword_text=keyword_text, current_user=current_user, db=db, search_type=0)
         articles = article_service.find_by_title(title=keyword_text, db=db)
         if top_level != 0:
@@ -92,6 +94,7 @@ class SearchService:
         return articles
 
     def search_paper(self, keyword_text: str, current_user: User, db: Session) -> Any:
+        print("search_paper",keyword_text)
         self.search(keyword_text=keyword_text, current_user=current_user, db=db, search_type=1)
         papers = paper_service.find_by_user(name=keyword_text, current_user=current_user, db=db)
         return papers
