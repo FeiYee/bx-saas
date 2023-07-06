@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from config import BASE_DIR
-
+from pandas import DataFrame
 from ..model.datum import Datum
 from ..service.article_service import article_service
 
@@ -28,10 +28,14 @@ class ExcelService:
         return file_path
 
     def write_excel(self, keyword: str, db: Session) -> str:
-        filename = ''
+        filename = 'search_result.xlsx'# 自定义
         file_path = self.get_file_path(filename=filename, write_path='article_datum_excel', write_sub_path=keyword)
         articles = article_service.find_by_title(title=keyword, db=db)
+        temp = []
+        for line in articles:
+            temp.append(line.__dict__)
 
+        DataFrame(temp).to_excel(file_path.as_posix())
 
         url = str('/' / file_path.relative_to(BASE_DIR)).replace('\\', '/')
         return url
