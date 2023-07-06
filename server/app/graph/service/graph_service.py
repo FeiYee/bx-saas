@@ -8,6 +8,7 @@ from ..model.graph import Graph
 from ..schema.graph_schema import GraphSchema
 
 from app.datum.service.article_service import article_service
+import re
 
 GraphModelType = TypeVar("GraphModelType", bound=Graph)
 
@@ -37,7 +38,9 @@ class GraphService:
             self.articles = articles_list
 
     def find_by_keyword(self, keyword: str, db: Session) -> List[tuple[Graph]]:
+        command_range, keyword = self.teminal(keyword)
         articles = article_service.find_by_title(title=keyword, db=db)
+
         self.gererate_articles(db)
         article_ids = []
         article_dict = {}
@@ -54,6 +57,19 @@ class GraphService:
 
         graphs = db.query(self.model).filter(*filters).all()
         # db.query(self.model).filter(self.model.ent1.like('%{keyword}%'.format(keyword=keyword))).all()
+
+        if command_range[0] == None and command_range[1] == None:
+            graphs = graphs
+        elif command_range[0] == None:
+            graphs = graphs[:command_range[1]]#graph_table.head(command_range[1] * 20)
+        elif command_range[1] == None:
+            #             print(graph_table.values.shape[0],ranges[0])
+            graphs = graphs[-command_range[1]:]
+        #             print(graph_table)
+        else:
+            graphs = graphs[command_range[0]:command_range[1]]
+
+
 
         graph_dict = []
         for graph in graphs:
@@ -148,6 +164,38 @@ class GraphService:
         return {"nodes": nodes, "links": links, "number_nodes": float(len(nodes)),
                 "number_links": float(len(links))}
 
+    def teminal(self, text):
+        '''
+        命令设计：
+            text#500    //前500
+            text#!500    //后500
+            text#500-600  //500-600
+            text#all   //所有
+            text    //前100条
+        '''
+        text = re.sub(r"\s+", " ", text)
+
+        command_range = [None, 30]
+
+        if "#" in text:
+            parts = text.split("#")
+            text = parts[0]
+
+            range_text = parts[-1].replace(" ", "").lower()
+
+            if "-" in range_text:
+                range_parts = range_text.split("-")
+                command_range = [int(range_parts[0]) if range_parts[0] else None,
+                                 int(range_parts[1]) if range_parts[1] else None]
+            elif range_text == "all":
+                command_range = [None, None]
+            elif "!" in range_text or "！" in range_text:
+                range_value = int(re.sub(r"[^0-9]", "", range_text))
+                command_range = [-range_value, None]
+            else:
+                command_range = [None, int(range_text)]
+
+        return command_range, text
 
 
 graph_service = GraphService(Graph)
