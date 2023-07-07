@@ -4,6 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from config import BASE_DIR
+from app.core.util import write_file
 from ..model.datum import Datum
 from ..schema.datum_schema import DatumSchema
 
@@ -20,20 +21,17 @@ class DatumService:
         datums = db.query(self.model).all()
         return datums
 
-    async def create(self, file: UploadFile, title: str, db: Session) -> Datum:
-        content = await file.read()
-        file_dir = BASE_DIR / 'asset' / 'datum'
-        if not file_dir.exists():
-            file_dir.mkdir()
-        file_path = file_dir / file.filename
-        file_path.write_bytes(content)
+    async def create(self, article_id: str, file: UploadFile, db: Session) -> Datum:
+        file_path = await write_file(file=file, write_path='datum', write_sub_path=article_id)
 
         datum = self.model()
-        datum.title = title
+        datum.article_id = article_id
+        datum.title = file.filename
+        datum.url = str('/' / file_path.relative_to(BASE_DIR)).replace('\\', '/')
         datum.file_name = file.filename
-        datum.url = str('/' / file_path.relative_to(BASE_DIR))
         datum.file_path = str(file_path)
-        # datum.file_size = file_path.stat().st_size()
+        datum.file_type = file.content_type
+        datum.file_size = file_path.stat().st_size()
 
         db.add(datum)
         db.commit()
@@ -62,13 +60,8 @@ class DatumService:
         db.commit()
         return datum
 
-    def download(self, *, title: str, db: Session) -> Datum:
-        datum = db.query(self.model).filter(self.model.title == title).first()
-        return datum
-
-    def download_excel(self, *, title: str) -> any:
-        datum = {"title", title}
-
+    def find_by_article(self, *, article_id: str, db: Session) -> Datum:
+        datum = db.query(self.model).filter(self.model.article_id == article_id).first()
         return datum
 
 

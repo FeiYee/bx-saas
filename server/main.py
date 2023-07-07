@@ -34,7 +34,7 @@ app.include_router(router, prefix='/api')
 
 
 def main():
-    uvicorn.run(app=app, host='0.0.0.0', port=8090, proxy_headers=True, forwarded_allow_ips='*')
+    uvicorn.run(app=app, host='0.0.0.0', port=9000, proxy_headers=True, forwarded_allow_ips='*')
 
 
 if __name__ == '__main__':

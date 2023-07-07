@@ -40,11 +40,12 @@
         </section>
       </div>
 
-      <div class="content-operate">
+      <!-- 药厂版本不显示 -->
+      <!-- <div class="content-operate">
         <div class="operate-btn" @click="onClickShow(1)">知识图谱</div>
         <div class="operate-btn" @click="onClickShow(2)">内容</div>
         <div class="operate-btn" @click="onClickShow(0)">内容 + 知识图谱</div>
-      </div>
+      </div> -->
 
       <div>
         <ul class="content-article-list">
@@ -126,7 +127,7 @@ import context from '../core/context'
 
 
 let isSearchDone = ref(false)
-const showType = ref(0); // 0->内容 + 知识图谱; 1->知识图谱; 2->内容
+const showType = ref(1); // 0->内容 + 知识图谱; 1->知识图谱; 2->内容
 const uploadRef = ref()
 
 let articleExtracts = ref([])
@@ -141,18 +142,28 @@ const articleDatum = reactive({
 const article = reactive({
   id: '',
   title: '',   // 文章名
-  author: '',   // 作者
-  abstract: '', // 摘要
-  drugs: '', // 药物
-  indicator: '', // 指标
-  molecular: '', // 机理
-  result: '',   // 结论
-  year: '',  // 发表年份
   name: '',
-  group: '', // 分组
-  pathway_target: '', // 通路/靶标
-  side_effect: '',  // 副作用
+  summary: '', // 摘要
+  content: '',
+  author: '',   // 作者
+  date: '',
+  molecular: '', // 机理
+  journal: '',
+  doi: '',
+  pmid: '',
+  relate_count: '',
+  result: '',   // 结论
+  effect: '',
   sample_count: '', // 样本量
+  indicator: '', // 指标
+  group: '', // 分组
+  drugs: '', // 药物
+  disease: '',
+  side_effect: '',  // 副作用
+  microbe: '',
+  cell: '',
+  gene: '',
+  pathway_target: '', // 通路/靶标
 })
 
 let articleCount = ref(0)
@@ -180,8 +191,6 @@ const onSearch = async (keyword) => {
       articleCount.value = data.number_article
       linkCount.value = data.number_links
       nodeCount.value = data.number_nodes
-      let nodesCount = data.nodes_count
-      let upData = data.up_date
 
       let relationData = getRelationData(data)
 
@@ -224,10 +233,14 @@ const onFileRemove = file => {
 }
 
 const onOriginalArticle = async () => {
-  if (article.title) {
-    console.log(article.title)
+  if (!article.id) {
+    console.log(article)
+    ElMessage({
+      message: '未找到原文',
+      type: 'warning',
+    })
   }
-  let data = await datumService.download(article.title)
+  let data = await datumService.getDatumByArticle(article.id)
   if (!data) {
     ElMessage({
       message: '未找到原文',
@@ -252,22 +265,31 @@ const onExport = () => {
 
 const handleNodeClick = (node) => {
   console.log(node)
+  article.id = node.article_id  // 文章ID
   article.title = node.title  // 文章名
   article.name = node.name
-  article.name = node.journal
-  article.abstract = node.abstract
-  article.year = node.year
+  article.summary = node.summary
+  article.content = node.content
   article.author = node.author
-  article.drugs = node.drugs // 药物
-  article.indicator = node.indicator // 指标
+  article.date = node.date
   article.molecular = node.molecular // 机理
+  article.journal = node.journal
+  article.doi = node.doi
+  article.pmid = node.pmid
+  article.relate_count = node.relate_count
   article.result = node.result   // 结论
-  article.group = node.group // 分组
-  article.pathway_target = node.pathway_target // 通路/靶标
-  article.side_effect = node.side_effect   // 副作用
+  article.effect = node.effect
   article.sample_count = node.sample_count // 样本量
-
-  articleDatum.article_id = node.id || '';
+  article.indicator = node.indicator // 指标
+  article.group = node.group // 分组
+  article.drugs = node.drugs // 药物
+  article.disease = node.disease
+  article.side_effect = node.side_effect   // 副作用
+  article.microbe = node.microbe
+  article.cell = node.cell
+  article.gene = node.gene
+  article.pathway_target = node.pathway_target // 通路/靶标
+  articleDatum.article_id = node.article_id || node.id || '';
 
   getArticleExtracts(node.id)
 };
@@ -306,39 +328,12 @@ const uploadArticleDatum = async () => {
   }
 };
 
-// const init = async () => {
-//   // await getKeywords()
-//   let keywordText = context.getKeyword()
-
-//   if (!keywordText && keywords.value.length) {
-//     keywordText = keywords.value[0].keyword
-//   }
-//   if (keywordText) {
-//     keyword.value = keywordText
-//     onSearch(keywordText)
-//   }
-// }
-
-
-
-onMounted(() => {
-  // chartRelationship = setChartRelation(null, chartRelationshipDomId, handleNodeClick)
-  // chartBar = setChartBar(chartBarDomId)
-  // chartPie = setChartPie(chartPieDomId)
-
-  // relationChart({}, handleNodeClick)
-
-  // getArticleExtracts('90d31f3b1662450d8943f28f204eec03')
-
-})
 
 onBeforeUnmount(() => {
   if (chartRelationship) {
     chartRelationship.dispose()
   }
 })
-
-// init()
 
 
 </script>

@@ -6,6 +6,11 @@ const datumService = {
     return this.prefix + url
   },
 
+  async getDatumByArticle(articleId) {
+    let url = this.getUrl(`/datum/article/${articleId}`)
+    return await http.get(url)
+  },
+
   async download(title) {
     let data = {
       title

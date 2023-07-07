@@ -12,9 +12,10 @@
     <el-row>
       <el-col :span="24">
         <el-table :data="datumList" border stripe style="width: 100%">
-          <el-table-column prop="title" label="标题" show-overflow-tooltip/>
-          <el-table-column prop="file_name" label="文件名" width="180" show-overflow-tooltip/>
-          <el-table-column prop="file_path" label="文件路径" width="180" show-overflow-tooltip/>
+          <!-- <el-table-column prop="title" label="标题" show-overflow-tooltip/> -->
+          <el-table-column prop="file_name" label="文件名" show-overflow-tooltip/>
+          <el-table-column prop="url" label="文件路径" width="180" show-overflow-tooltip/>
+          <el-table-column prop="file_type" label="文件类型" width="180" show-overflow-tooltip/>
           <el-table-column prop="file_size" label="文件大小" width="90" show-overflow-tooltip/>
           <el-table-column fixed="right" label="操作" width="98">
             <template #default="scope">

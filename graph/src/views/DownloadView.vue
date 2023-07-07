@@ -83,11 +83,12 @@ import { ElMessage, ElLoading } from 'element-plus'
 import Search from '../components/Search.vue'
 import Nav from '../components/Nav.vue'
 import searchService from '../services/search.js'
+import excelService from '../services/excel.js'
+
 import {downloadFile} from '../core/download.js'
 import context from '../core/context'
 
 const keyword = ref('')
-const articleExcel = ref('')
 const articles = ref([])
 const articleList = ref([])
 const articleOriginalList = ref([])
@@ -154,7 +155,6 @@ const search = async () => {
     articleCount.value = data.length
     articleOriginalList.value = data
     articleList.value = Array.from(articleOriginalList.value)
-    // articleExcel.value = data.file_name
     pageCount.value = data.length
 
     getArticles()
@@ -199,7 +199,24 @@ const onLastPage = () => {
 }
 
 const onDownload = async () => {
-  downloadFile(articleExcel.value, '搜索结果.xlsx')
+  const loading = ElLoading.service({
+    lock: true,
+    text: '下载中...',
+    background: 'rgba(255, 255, 255, 0.7)',
+  })
+  try {
+    const res = await excelService.getArticleExcelByKeyword(keyword.value);
+    downloadFile(res, `${keyword.value}-搜索结果.xlsx`)
+  } catch (err) {
+    console.log(err)
+    ElMessage({
+      message: '下载失败',
+      type: 'warning',
+    })
+  } finally {
+    loading.close()
+  }
+
 }
 
 const init = () => {

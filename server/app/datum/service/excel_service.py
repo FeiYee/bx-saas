@@ -29,7 +29,7 @@ class ExcelService:
 
     def write_excel(self, keyword: str, db: Session) -> str:
         filename = 'search_result.xlsx'# 自定义
-        file_path = self.get_file_path(filename=filename, write_path='article_datum_excel', write_sub_path=keyword)
+        file_path = self.get_file_path(filename=filename, write_path='article_excel', write_sub_path=keyword)
         articles = article_service.find_by_title(title=keyword, db=db)
         temp = []
         for line in articles:
@@ -38,6 +38,10 @@ class ExcelService:
         DataFrame(temp).to_excel(file_path.as_posix())
 
         url = str('/' / file_path.relative_to(BASE_DIR)).replace('\\', '/')
+        return url
+
+    def get_article_excel(self, keyword: str, db: Session) -> str:
+        url = self.write_excel(keyword=keyword, db=db)
         return url
 
 

@@ -59,7 +59,7 @@ class ArticleDatumService:
 
     def delete(self, *, article_datum_id: str, db: Session) -> ArticleDatum:
         article_datum = db.query(self.model).get(article_datum_id)
-        setattr(article_datum, 'deleted_at', func.now())
+        # setattr(article_datum, 'deleted_at', func.now())
         db.delete(article_datum)
         db.commit()
         return article_datum

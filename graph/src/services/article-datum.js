@@ -16,6 +16,11 @@ const articleDatumService = {
     return await http.postFormData(url, data)
   },
 
+  async deleteArticleDatum(articleDatumId) {
+    let url = this.getUrl(`/article/datum/${articleDatumId}`)
+    return await http.delete(url)
+  },
+
   async uploadArticleDatum(data) {
     let url = this.getUrl(`/article/datum/upload`)
     return await http.postFormData(url, data)

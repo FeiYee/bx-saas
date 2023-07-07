@@ -5,7 +5,6 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 import requests
 from app.system.model.user import User
-
 from ..model.article import Article
 from ..schema.article_schema import ArticleSchema
 

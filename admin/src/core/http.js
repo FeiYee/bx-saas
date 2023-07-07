@@ -4,7 +4,7 @@ import context from './context.js'
 
 const instance = axios.create({
   baseURL: '/api',
-  timeout: 6000,
+  timeout: 18000,
   headers: {
     'Authorization': `Bearer ${context.getToken()}`,
   }
