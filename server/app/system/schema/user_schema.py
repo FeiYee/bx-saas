@@ -15,3 +15,16 @@ class UserSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UserInfoSchema(BaseModel):
+    id: str | None = None
+    birthday: str | None = None
+    sex: str | None = None
+    email: str | None = None
+    school: str | None = None
+    major: str | None = None
+    company: str | None = None
+
+    class Config:
+        orm_mode = True

@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/paper/index",
     "pages/personal/index",
+    "pages/information/index",
     "pages/login/index",
     "pages/register/index"
   ],
@@ -19,8 +20,11 @@
     "van-col": "@vant/weapp/col/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index",
-    "van-empty": "@vant/weapp/empty/index"
-
+    "van-empty": "@vant/weapp/empty/index",
+    "van-field": "@vant/weapp/field/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-picker": "@vant/weapp/picker/index"
   },
   "tabBar": {
     "custom": true,

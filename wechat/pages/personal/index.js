@@ -21,5 +21,16 @@ Page({
     } else {
       this.getTabBar().showActionSheet();
     }
+  },
+
+  onInformationClick() {
+    let token = context.getToken();
+    if (!token) {
+      this.getTabBar().showActionSheet();
+      return;
+    }
+    wx.navigateTo({
+      url: '/pages/information/index',
+    })
   }
 })

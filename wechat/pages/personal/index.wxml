@@ -11,8 +11,8 @@
     </van-cell>
     <view>
       <van-cell-group title="账户">
-        <van-cell title="个人资料" value="" is-link/>
-        <van-cell title="修改密码" value="" label="" border="{{ false }}" is-link/>
+        <van-cell title="个人资料" value="" is-link bind:click="onInformationClick"/>
+        <!-- <van-cell title="修改密码" value="" label="" border="{{ false }}" is-link/> -->
       </van-cell-group>
     </view>
 

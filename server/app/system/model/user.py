@@ -16,3 +16,8 @@ class User(BaseModel):
     phone = Column(String(255), index=True, comment='手机号')
     is_admin = Column(Boolean, default=False, comment="是否管理员")
     domain = Column(String(255), index=True, comment='域')
+    birthday = Column(String(255), comment='出生日期')
+    sex = Column(String(255), comment='性别')
+    school = Column(String(255), comment='毕业院校')
+    major = Column(String(255), comment='专业')
+    company = Column(String(255), comment='工作单位')

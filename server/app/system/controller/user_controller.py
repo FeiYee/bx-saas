@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.dependence import get_db
-from ..schema.user_schema import UserSchema
+from ..schema.user_schema import UserSchema, UserInfoSchema
 from ..service.user_service import user_service
 
 
@@ -27,4 +27,8 @@ async def update(user_id: str, user_schema: UserSchema, db: Session = Depends(ge
 async def delete(user_id: str, db: Session = Depends(get_db)):
     return user_service.delete(user_id=user_id, db=db)
 
+
+@router.post("/user/information", response_model=UserInfoSchema, tags=["user"])
+async def update_information(user_info_schema: UserInfoSchema, db: Session = Depends(get_db)):
+    return user_service.update_information(user_info_schema=user_info_schema, db=db)
 

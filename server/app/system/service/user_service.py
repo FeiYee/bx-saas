@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from config import PASSWORD_DEFAULT
 from app.core.util import get_password_hash
 from ..model.user import User
-from ..schema.user_schema import UserSchema
+from ..schema.user_schema import UserSchema, UserInfoSchema
 
 UserModelType = TypeVar("UserModelType", bound=User)
 
@@ -77,6 +77,20 @@ class UserService:
         user = db.query(self.model).get(user_id)
         db.delete(user)
         db.commit()
+        return user
+
+    def update_information(self, user_info_schema: UserInfoSchema, db: Session) -> User:
+        exist_user = db.query(self.model).filter(self.model.id == user_info_schema.id).first()
+        if exist_user is None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="用户不存在.")
+
+        data = jsonable_encoder(user_info_schema, exclude_unset=True, exclude={'id', 'password'})
+        user = db.query(self.model).get(user_info_schema.id)
+        for field in data:
+            setattr(user, field, data[field])
+
+        db.commit()
+        db.refresh(user)
         return user
 
 

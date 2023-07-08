@@ -11,6 +11,12 @@ const context = {
   getUser() {
     return wx.getStorageSync('user')
   },
+  setUserInformation(userInformation) {
+    wx.setStorageSync('userInformation', userInformation)
+  },
+  getUserInformation() {
+    return wx.getStorageSync('userInformation')
+  },
 }
 
 module.exports = context;

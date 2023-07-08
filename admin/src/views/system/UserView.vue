@@ -31,8 +31,13 @@
           <el-table-column prop="username" label="用户名" width="180" />
           <!-- <el-table-column prop="password" label="密码" width="180" /> -->
           <el-table-column prop="name" label="名称" width="180" />
+          <el-table-column prop="phone" label="手机号" width="180" />
           <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
-          <el-table-column prop="domain" label="域" width="180" />
+          <el-table-column prop="birthday" label="出生日期" width="180" />
+          <el-table-column prop="sex" label="性别" width="180" />
+          <el-table-column prop="school" label="毕业院校" width="180" />
+          <el-table-column prop="major" label="专业" width="180" />
+          <el-table-column prop="company" label="工作单位" width="180" />
           <el-table-column prop="is_admin" label="管理员" width="70">
             <template #default="scope">
               <el-switch v-model="scope.row.is_admin" size="small" disabled/>
@@ -95,6 +100,11 @@ const user = reactive({
   // password: "",
   name: "",
   email: "",
+  birthday: "",
+  sex: "",
+  school: "",
+  major: "",
+  company: "",
   domain: "",
   is_admin: false
 })
@@ -111,6 +121,11 @@ const setUser = (data) => {
   // user.password = data ? data.password : ''
   user.name = data ? data.name : ''
   user.email = data ? data.email : ''
+  user.birthday = data ? data.birthday : ''
+  user.sex = data ? data.sex : ''
+  user.school = data ? data.school : ''
+  user.major = data ? data.major : ''
+  user.company = data ? data.company : ''
   user.domain = data ? data.domain : ''
   user.is_admin = data ? data.is_admin : false
 }
