@@ -10,7 +10,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "9090:9090"
+      - "9000:9000"
     networks:
       - net
     restart: always
@@ -78,7 +78,7 @@ services:
     volumes:
       - ./server:/app
     ports:
-      - "9000:9000"
+      - "9090:9090"
     hostname: server
     networks:
       - net

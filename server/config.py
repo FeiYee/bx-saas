@@ -32,7 +32,7 @@ DATABASE_HOST = '43.154.134.150'
 DATABASE_HOST = '116.198.202.249'
 
 # miniprogram
-# DATABASE_HOST = 'database-1.cg2wude0gpbv.rds.cn-north-1.amazonaws.com.cn'
+DATABASE_HOST = 'database-1.cg2wude0gpbv.rds.cn-north-1.amazonaws.com.cn'
 
 # NEO4J_HOST = 'neo4j'
 # NEO4J_HOST = '116.198.202.249'
