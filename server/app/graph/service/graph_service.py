@@ -74,7 +74,7 @@ class GraphService:
         graph_dict = []
         for graph in graphs:
             data = graph.__dict__
-            data['article'] = article_dict.get(graph.article_id)
+            # data['article'] = article_dict.get(graph.article_id)
             graph_dict.append(data)
         graph_dict = self.gererate_graph(graph_dict)
         graph_dict["links"], graph_dict["number_article"] = self.link_add_info(graph_dict["links"], self.articles)
@@ -98,22 +98,43 @@ class GraphService:
             if article:
                 link['data']['title'] = article['title']
                 link['data']['summary'] = article['summary']
-                link['data']['author'] = article['author']
-                link['data']['molecular'] = article['molecular']
+                link['data']['author'] = str(article['author']).replace(" ;@;","、")
+                # link['data']['molecular'] = str(article['molecular']).replace(" ;@;","、")
                 link['data']['journal'] = article['journal']
-                link['data']['result'] = article['result']
-                link['data']['drugs'] = article['drugs']
-                link['data']['disease'] = article['disease']
+                link['data']['result'] = str(article['result']).replace(" ;@;","、")
+                link['data']['drugs'] = str(article['drugs']).replace(" ;@;","、")
+                link['data']['disease'] = str(article['disease']).replace(" ;@;","、")
+                link['data']['indicator'] = str(article['indicator']).replace(" ;@;","、")
+                link['data']['pathway_target'] = str(article['pathway_target']).replace(" ;@;","、")
+                link['data']['side_effect'] = str(article['side_effect']).replace(" ;@;","、")
+                link['data']['sample_count'] = str(article['sample_count']).replace(" ;@;","、")
+                link['data']['date'] = str(article['date']).replace(" ;@;","、")
+
+                other = ""
+
+                if len(str(article['microbe']).replace(" ;@;","、")) > 1:
+                    other += "Microbe：" + str(article['microbe']).replace(" ;@;","、") + "\n"
+                if len(str(article['cell']).replace(" ;@;","、")) > 1:
+                    other += "Cell：" + str(article['cell']).replace(" ;@;","、") + "\n"
+                if len(str(article['gene']).replace(" ;@;","、")) > 1:
+                    other += "Gene：" + str(article['gene']).replace(" ;@;","、") + "\n"
+
+                link['data']['other'] = other
                 num_article += 1
             else:
-                link['data']['title'] = "NULL"
-                link['data']['summary'] = "NULL"
-                link['data']['author'] = "NULL"
-                link['data']['molecular'] = "NULL"
-                link['data']['journal'] = "NULL"
-                link['data']['result'] = "NULL"
-                link['data']['drugs'] = "NULL"
-                link['data']['disease'] = "NULL"
+                link['data']['title'] = "未知"
+                link['data']['summary'] = "未知"
+                link['data']['author'] = "未知"
+                # link['data']['molecular'] = "未知"
+                link['data']['journal'] = "未知"
+                link['data']['result'] = "未知"
+                link['data']['drugs'] = "未知"
+                link['data']['disease'] = "未知"
+                link['data']['indicator'] = "未知"
+                link['data']['side_effect'] = "未知"
+                link['data']['sample_count'] = "未知"
+                link['data']['pathway_target'] = "未知"
+                link['data']['other'] = "未知"
 
         return links,float(num_article)
 
@@ -138,7 +159,7 @@ class GraphService:
                 id_counter += 1
             else:
                 node1['data']['num'] += 1
-                node1['data']['size'] += 4
+                node1['data']['size'] += 10
                 if node1['data']['size'] > 80:
                     node1['data']['size'] = 80
 
@@ -150,7 +171,7 @@ class GraphService:
                 id_counter += 1
             else:
                 node2['data']['num'] += 1
-                node2['data']['size'] += 4
+                node2['data']['size'] += 10
                 if node2['data']['size'] > 80:
                     node2['data']['size'] = 80
 
