@@ -34,7 +34,7 @@ class GraphService:
             articles = article_service.find_by_title(title="", db=db)
             articles_list = []
             for article in articles:
-                articles_list.append(article.__dict__)
+                articles_list.append(article)
             self.articles = articles_list
 
     def find_by_keyword(self, keyword: str, db: Session) -> List[tuple[Graph]]:
@@ -42,12 +42,12 @@ class GraphService:
         articles = article_service.find_by_title(title=keyword, db=db)
 
         self.gererate_articles(db)
+
         article_ids = []
         article_dict = {}
         for article in articles:
-            article_ids.append(article.id)
-            article_dict[article.id] = article.__dict__
-
+            article_ids.append(article["id"])
+            article_dict[article["id"]] = article
         filters = [or_(
             self.model.article_id.in_(article_ids),
             self.model.ent1.like('%{keyword}%'.format(keyword=keyword)),
@@ -70,13 +70,13 @@ class GraphService:
             graphs = graphs[command_range[0]:command_range[1]]
 
 
-
         graph_dict = []
         for graph in graphs:
             data = graph.__dict__
             # data['article'] = article_dict.get(graph.article_id)
             graph_dict.append(data)
         graph_dict = self.gererate_graph(graph_dict)
+
         graph_dict["links"], graph_dict["number_article"] = self.link_add_info(graph_dict["links"], self.articles)
         return graph_dict
 
