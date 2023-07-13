@@ -21,28 +21,28 @@
                   <tr>
                     <th>主题</th>
                     <th>药物</th>
-                    <th>机理</th>
+                    <th>疾病</th>
                     <th>通路/靶标</th>
                     <th>指标</th>
                     <th>结论</th>
                     <th>副作用</th>
-                    <th>分组</th>
                     <th>样本量</th>
                     <th>期刊</th>
+                    <th>其他</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="article in articles" :key="article.id">
                     <td>{{article.title}}</td>
                     <td>{{article.drugs}}</td>
-                    <td>{{article.molecular}}</td>
+                    <td>{{article.disease}}</td>
                     <td>{{article.pathway_target}}</td>
                     <td>{{article.indicator}}</td>
                     <td>{{article.result}}</td>
                     <td>{{article.side_effect}}</td>
-                    <td>{{article.group}}</td>
                     <td>{{article.sample_count}}</td>
                     <td>{{article.journal}}</td>
+                    <td>{{article.other}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -208,3 +208,4 @@ const init = () => {
 
 init()
 </script>
+

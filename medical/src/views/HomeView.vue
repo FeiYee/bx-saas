@@ -58,14 +58,14 @@
                 </span>
                 <span>
                   <span class="info-title">刊名：</span>
-                  <span class="info-content__name" :title="article.name">{{ article.name }}</span></span>
+                  <span class="info-content__journal" :title="article.journal">{{ article.journal }}</span></span>
                 <span>
                   <span class="info-title">日期：</span>
-                  <span class="info-content__year" :title="article.year">{{ article.year }}</span>
+                  <span class="info-content__date" :title="article.date">{{ article.date }}</span>
                 </span>
               </div>
               <div class="article__summary">
-                {{ article.abstract }}
+                {{ article.summary }}
               </div>
               <div class="article__link">
                 <button @click="onOriginalArticle">原文获取</button>
@@ -74,25 +74,25 @@
                 <thead>
                   <tr>
                     <th>药物</th>
-                    <th>机理</th>
+                    <th>疾病</th>
                     <th>通路/靶标</th>
                     <th>指标</th>
                     <th>结论</th>
                     <th v-show="!!article.side_effect">副作用</th>
-                    <th v-show="!!article.group">分组</th>
                     <th v-show="!!article.sample_count">样本量</th>
+                    <th v-show="!!article.other">其他</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>{{ article.drugs }}</td>
-                    <td>{{ article.molecular }}</td>
+                    <td>{{ article.disease }}</td>
                     <td>{{ article.pathway_target}}</td>
                     <td>{{ article.indicator }}</td>
                     <td>{{ article.result }}</td>
                     <td v-show="!!article.side_effect">{{ article.side_effect}}</td>
-                    <td v-show="!!article.group">{{ article.group }}</td>
                     <td v-show="!!article.sample_count">{{ article.sample_count }}</td>
+                    <td v-show="!!article.other">{{ article.other }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -145,14 +145,15 @@ const article = reactive({
   abstract: '', // 摘要
   drugs: '', // 药物
   indicator: '', // 指标
-  molecular: '', // 机理
+  disease: '', // 疾病
   result: '',   // 结论
-  year: '',  // 发表年份
+  date: '',  // 发表日期
   name: '',
   group: '', // 分组
   pathway_target: '', // 通路/靶标
   side_effect: '',  // 副作用
   sample_count: '', // 样本量
+  other: '', // 其他信息
 })
 
 let articleCount = ref(0)
@@ -254,12 +255,12 @@ const handleNodeClick = (node) => {
   console.log(node)
   article.title = node.title  // 文章名
   article.name = node.name
-  article.abstract = node.abstract
-  article.year = node.year
+  article.summary = node.summary
+  article.date = node.date
   article.author = node.author
   article.drugs = node.drugs // 药物
   article.indicator = node.indicator // 指标
-  article.molecular = node.molecular // 机理
+  article.disease = node.disease // 疾病
   article.result = node.result   // 结论
   article.group = node.group // 分组
   article.pathway_target = node.pathway_target // 通路/靶标
@@ -341,3 +342,4 @@ onBeforeUnmount(() => {
 
 
 </script>
+
