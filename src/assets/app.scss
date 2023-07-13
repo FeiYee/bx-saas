@@ -1,0 +1,7 @@
+@use 'variable' as *;
+
+
+#app {
+  background-color: var(--color-background-primary, $color-background-primary);
+
+}
