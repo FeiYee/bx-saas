@@ -5,7 +5,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 import requests
 from app.system.model.user import User
-
+from sqlalchemy import or_
 from ..model.article import Article
 from ..schema.article_schema import ArticleSchema
 
@@ -34,7 +34,7 @@ class ArticleService:
         datums = db.query(self.model)\
             .filter(self.model.title.like('%{title}%'.format(title=title)))\
             .limit(page_size)\
-            .offset((page_number-1)*page_size)
+            .offset((page_number-1)*page_size).all()
         print("信息合并")
         datums = self.article_info_specification(datums)
         print("合并成功")
@@ -53,14 +53,28 @@ class ArticleService:
                 other += "Cell：" + str(line['cell']).replace(" ;@;", "、") + "\n"
             if len(str(line['gene']).replace(" ;@;", "、")) > 1:
                 other += "Gene：" + str(line['gene']).replace(" ;@;", "、") + "\n"
-            line["other"] = other
+            line["other"] = other.replace("None","无")
             datums_list.append(line)
-            return datums_list
+        return datums_list
 
 
     def find_by_title(self, title: str, db: Session) -> List[tuple[Article]]:
-        articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
-        print(articles)
+
+        conditions = or_(
+            self.model.title.ilike('%{title}%'.format(title=title)),
+            self.model.summary.ilike('%{title}%'.format(title=title)),
+            self.model.author.ilike('%{title}%'.format(title=title)),
+            self.model.drugs.ilike('%{title}%'.format(title=title)),
+            self.model.disease.ilike('%{title}%'.format(title=title)),
+            self.model.gene.ilike('%{title}%'.format(title=title)),
+            self.model.pathway_target.ilike('%{title}%'.format(title=title))
+        )
+
+        # 使用filter函数传入条件
+        articles = db.query(self.model).filter(conditions).all()
+        # articles = db.query(self.model).filter(self.model.title.like('%{title}%'.format(title=title))).all()
+        articles = self.article_info_specification(articles)
+        # print(articles)
         return articles
 
     def find_article_title(self, *, db: Session) -> List[str]:
